@@ -15,7 +15,7 @@ description: 関連Skillで、問題定義、前提監査、Context Packet、要
 - causal chainと未決選択を保持するSelection Gate
 - Context Packetと、比較根拠・提案status・review主体を分けたAI restatement
 - Requirement Catalogとend-to-end traceability
-- Windows / LinuxのPlatform Contextと必要なvalidation matrix
+- Windows / Linux / macOSのPlatform Contextと必要なvalidation matrix
 - 共通`decision`とengineering / release状態
 
 ## Reference Routing
@@ -27,17 +27,17 @@ description: 関連Skillで、問題定義、前提監査、Context Packet、要
 - 用語、context、概念、model境界を発見するときは`skills/mino-core/references/domain-discovery.md`を読む。
 - 責務、公開操作、分岐、命名、抽象化をコードへ落とすときは`skills/mino-core/references/code-design.md`を読む。
 - 既存挙動、legacy、migration、段階導入を変えるときは`skills/mino-core/references/change-safety.md`を読む。
-- filesystem、process、shell、toolchain、test実行、またはWindows / Linux対応を扱う前に`skills/mino-core/references/platform-compatibility.md`を読み、Platform Contextとplatform別検証結果を作る。
+- filesystem、process、shell、toolchain、test実行、またはWindows / Linux / macOS対応を扱う前に`skills/mino-core/references/platform-compatibility.md`を読み、Platform Contextとplatform別検証結果を作る。
 - Skill更新と`reproduction-test`だけで`skills/mino-core/references/benchmark.md`を読む。
-- Windowsでは`skills/mino-core/scripts/validate-suite.ps1`、Linuxでは`skills/mino-core/scripts/validate-suite.sh`でsuite構造を検証する。
-- validator契約を変更したときは、Windowsで`skills/mino-core/scripts/test-validator-fixtures.ps1`、Linuxで`skills/mino-core/scripts/test-validator-fixtures.sh`を実行し、共通のpositive / negative fixtureを検証する。
+- Windowsでは`skills/mino-core/scripts/validate-suite.ps1`、Linuxでは`skills/mino-core/scripts/validate-suite.sh`、macOSでは標準system Bashから同じBash validatorを実行してsuite構造を検証する。
+- validator契約を変更したときは、Windowsで`skills/mino-core/scripts/test-validator-fixtures.ps1`、Linux / macOSで`skills/mino-core/scripts/test-validator-fixtures.sh`を実行し、共通のpositive / negative fixtureを検証する。
 - 両validatorは`skills/mino-core/scripts/suite-manifest.txt`をversion、owner、Skill一覧のsource of truthとして読む。
 
-## Windows / Linux Compatibility
+## Platform Compatibility
 
-- problem、requirement、contract、canonical decisionは両OSで共有し、OS差を業務ruleへ混ぜない。
+- problem、requirement、contract、canonical decisionはrequired platform間で共有し、OS差を業務ruleへ混ぜない。
 - command実行前にPlatform Contextを作り、logical `skills/` pathとruntimeのphysical pathを分ける。
-- 両OS対応がrequiredならWindows / Linuxの結果を独立Evidenceとして保持し、一方の未実行を隠さない。
+- 複数platform対応がrequiredならWindows / Linux / macOSの結果を独立Evidenceとして保持し、未実行platformを隠さない。
 
 ## Routing Ownership
 
@@ -66,4 +66,4 @@ description: 関連Skillで、問題定義、前提監査、Context Packet、要
 
 ## Completion
 
-`skills/mino-core/references/shared-policies.md`のcanonical decisionを使う。専門Function固有の推奨案と、engineering / releaseの状態を一つのstatusへ混ぜない。両OS対応がrequiredなら、WindowsとLinuxの結果を分け、未実行platformを`verified`へ含めない。
+`skills/mino-core/references/shared-policies.md`のcanonical decisionを使う。専門Function固有の推奨案と、engineering / releaseの状態を一つのstatusへ混ぜない。複数platform対応がrequiredなら、platform別結果を分け、未実行platformを`verified`へ含めない。

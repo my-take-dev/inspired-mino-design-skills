@@ -265,6 +265,42 @@ try {
     $path = Join-Path $script:caseSkills 'mino-core/references/Upper.MD'
     [System.IO.File]::WriteAllText($path, 'no final newline', $utf8NoBom)
     Test-FixtureResult -Name 'uppercase-extension-format' -ExpectedStatus 1 -ExpectedText 'Text file must end with a newline'
+
+    foreach ($validUtf8Fixture in @(
+        @{ Name = 'utf8-valid-ascii'; Text = 'portable ASCII text' },
+        @{ Name = 'utf8-valid-japanese'; Text = '正しい日本語のUTF-8' },
+        @{ Name = 'utf8-valid-emoji'; Text = ('four-byte emoji ' + [char]::ConvertFromUtf32(0x1F600)) }
+    )) {
+        New-FixtureCopy -Name $validUtf8Fixture.Name
+        $path = Join-Path $script:caseSkills 'mino-core/scripts/utf8-probe.txt'
+        Write-Utf8Lf -Path $path -Content ($validUtf8Fixture.Text + "`n")
+        Test-FixtureResult -Name $validUtf8Fixture.Name -ExpectedStatus 0 -ExpectedText ''
+    }
+
+    $invalidUtf8Fixtures = @(
+        @{ Name = 'utf8-continuation-byte'; Bytes = [byte[]]@(0x80, 0x0A); ErrorCount = 1 },
+        @{ Name = 'utf8-truncated-sequence'; Bytes = [byte[]]@(0xE2, 0x82); ErrorCount = 2 },
+        @{ Name = 'utf8-overlong-sequence'; Bytes = [byte[]]@(0xC0, 0x80, 0x0A); ErrorCount = 1 },
+        @{ Name = 'utf8-surrogate-sequence'; Bytes = [byte[]]@(0xED, 0xA0, 0x80, 0x0A); ErrorCount = 1 },
+        @{ Name = 'utf8-above-unicode-maximum'; Bytes = [byte[]]@(0xF4, 0x90, 0x80, 0x80, 0x0A); ErrorCount = 1 }
+    )
+    foreach ($invalidUtf8Fixture in $invalidUtf8Fixtures) {
+        New-FixtureCopy -Name $invalidUtf8Fixture.Name
+        $path = Join-Path $script:caseSkills 'mino-core/scripts/utf8-probe.txt'
+        [System.IO.File]::WriteAllBytes($path, $invalidUtf8Fixture.Bytes)
+        Test-FixtureResult -Name $invalidUtf8Fixture.Name -ExpectedStatus 1 `
+            -ExpectedText 'Text file is not valid UTF-8' -ExpectedErrorCount $invalidUtf8Fixture.ErrorCount
+    }
+
+    New-FixtureCopy -Name 'utf8-bom'
+    $path = Join-Path $script:caseSkills 'mino-core/scripts/utf8-probe.txt'
+    [System.IO.File]::WriteAllBytes($path, [byte[]]@(0xEF, 0xBB, 0xBF, 0x61, 0x0A))
+    Test-FixtureResult -Name 'utf8-bom' -ExpectedStatus 1 -ExpectedText 'UTF-8 BOM is not allowed' -ExpectedErrorCount 1
+
+    New-FixtureCopy -Name 'crlf'
+    $path = Join-Path $script:caseSkills 'mino-core/scripts/utf8-probe.txt'
+    [System.IO.File]::WriteAllBytes($path, [byte[]]@(0x6C, 0x69, 0x6E, 0x65, 0x0D, 0x0A))
+    Test-FixtureResult -Name 'crlf' -ExpectedStatus 1 -ExpectedText 'CR or CRLF is not allowed' -ExpectedErrorCount 1
 } finally {
     Remove-Item -LiteralPath $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
 }

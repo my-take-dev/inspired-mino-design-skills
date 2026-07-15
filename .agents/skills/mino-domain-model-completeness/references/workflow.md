@@ -164,7 +164,7 @@ access_path:
   validation_or_translation_route: ""
   bypass_or_misinterpretation_risk: ""
   representation: ""
-  platform: windows | linux | common | not_applicable | unknown
+  platform: windows | linux | macos | common | not_applicable | unknown
   evidence:
     status: confirmed | inferred | assumption | unknown | contradiction
     sources: []

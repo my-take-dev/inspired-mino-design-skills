@@ -1,0 +1,113 @@
+name: Validate skill suite
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-current-bash:
+    name: Linux current Bash
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Record runtime evidence
+        run: |
+          printf 'GITHUB_SHA=%s\nRUNNER_OS=%s\nRUNNER_ARCH=%s\n' "$GITHUB_SHA" "$RUNNER_OS" "$RUNNER_ARCH"
+          uname -a
+          bash --version
+          locale
+          locale -a
+          for command_name in awk od mktemp find grep sed sort tail tr wc; do
+            command -v "$command_name"
+          done
+
+      - name: Reject non-portable Bash and GNU sed constructs
+        run: |
+          if grep -R -nE 'declare[[:space:]]+-A|mapfile|readarray|sed[[:space:]]+-i|0,/[^/]*/|-(mindepth|maxdepth)' .agents/skills/mino-core/scripts; then
+            exit 1
+          fi
+
+      - name: Validate shell syntax
+        run: |
+          for script_file in .agents/skills/mino-core/scripts/*.sh; do
+            bash -n "$script_file"
+          done
+
+      - name: Validate suite
+        run: bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
+
+      - name: Test validator fixtures
+        run: bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+
+  linux-bash-3-2:
+    name: Linux Bash 3.2.57
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      BASH32_IMAGE: bash:3.2.57
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Record immutable image evidence
+        run: |
+          printf 'GITHUB_SHA=%s\nRUNNER_OS=%s\nRUNNER_ARCH=%s\n' "$GITHUB_SHA" "$RUNNER_OS" "$RUNNER_ARCH"
+          docker pull "$BASH32_IMAGE"
+          docker image inspect --format '{{json .RepoDigests}}' "$BASH32_IMAGE"
+          docker run --rm "$BASH32_IMAGE" bash --version
+
+      - name: Validate suite with Bash 3.2
+        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace:ro" --workdir /workspace "$BASH32_IMAGE" bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
+
+      - name: Test validator fixtures with Bash 3.2
+        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace:ro" --workdir /workspace "$BASH32_IMAGE" bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+
+  native-macos-bin-bash:
+    name: Native macOS /bin/bash
+    runs-on: macos-15
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: /bin/bash -e {0}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Record native runtime evidence
+        run: |
+          printf 'GITHUB_SHA=%s\nRUNNER_OS=%s\nRUNNER_ARCH=%s\n' "$GITHUB_SHA" "$RUNNER_OS" "$RUNNER_ARCH"
+          printf 'ImageOS=%s\nImageVersion=%s\n' "${ImageOS:-unknown}" "${ImageVersion:-unknown}"
+          sw_vers
+          uname -a
+          uname -m
+          /bin/bash --version
+          locale
+          locale -a
+          for command_name in awk od mktemp find grep sed sort tail tr wc; do
+            command -v "$command_name"
+          done
+
+      - name: Reject non-portable Bash and GNU sed constructs
+        run: |
+          if grep -R -nE 'declare[[:space:]]+-A|mapfile|readarray|sed[[:space:]]+-i|0,/[^/]*/|-(mindepth|maxdepth)' .agents/skills/mino-core/scripts; then
+            exit 1
+          fi
+
+      - name: Validate shell syntax
+        run: |
+          for script_file in .agents/skills/mino-core/scripts/*.sh; do
+            /bin/bash -n "$script_file"
+          done
+
+      - name: Validate suite
+        run: /bin/bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
+
+      - name: Test validator fixtures
+        run: /bin/bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills

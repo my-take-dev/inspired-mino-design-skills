@@ -55,6 +55,7 @@ if (-not $SkillsRoot) {
 
 $errors = [System.Collections.Generic.List[string]]::new()
 $warnings = [System.Collections.Generic.List[string]]::new()
+$capabilityErrors = [System.Collections.Generic.List[string]]::new()
 
 function Get-UnicodeScalarCount {
     param([string]$Value)
@@ -235,7 +236,7 @@ if ($suiteVersion -cmatch '^(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9
     }
 }
 
-foreach ($requiredScript in @('validate-suite.ps1', 'validate-suite.sh', 'test-validator-fixtures.ps1', 'test-validator-fixtures.sh')) {
+foreach ($requiredScript in @('validate-suite.ps1', 'validate-suite.sh', 'validate-utf8.sh', 'test-validator-fixtures.ps1', 'test-validator-fixtures.sh')) {
     $scriptPath = Join-Path (Join-Path $SkillsRoot 'mino-core') (Join-Path 'scripts' $requiredScript)
     if (-not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) {
         $errors.Add("Missing platform validator: skills/mino-core/scripts/$requiredScript")
@@ -417,7 +418,12 @@ foreach ($dir in $skillDirs) {
 }
 
 $textExtensions = @('.md', '.yaml', '.yml', '.json', '.sh', '.ps1', '.py', '.txt', '.toml', '.xml', '.csv')
-$strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+$strictUtf8 = $null
+try {
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+} catch {
+    $capabilityErrors.Add("UTF-8 validation is unavailable: .NET backend initialization failed: $($_.Exception.Message)")
+}
 $forbiddenPathPattern = 'mino-doc' + '/|\.agents' + '/skills/|\$HOME/\.agents' + '/skills/|`\.\./|/home' + '/[^\s`]*'
 $textFiles = @(
     foreach ($dir in $skillDirs) {
@@ -425,11 +431,19 @@ $textFiles = @(
     }
 )
 foreach ($textFile in $textFiles) {
-    $bytes = [System.IO.File]::ReadAllBytes($textFile.FullName)
+    $bytes = $null
     try {
-        $null = $strictUtf8.GetString($bytes)
+        $bytes = [System.IO.File]::ReadAllBytes($textFile.FullName)
     } catch {
-        $errors.Add("Text file is not valid UTF-8: $($textFile.FullName)")
+        $capabilityErrors.Add("UTF-8 validation is unavailable: could not read $($textFile.FullName): $($_.Exception.Message)")
+        continue
+    }
+    if ($null -ne $strictUtf8) {
+        try {
+            $null = $strictUtf8.GetString($bytes)
+        } catch {
+            $errors.Add("Text file is not valid UTF-8: $($textFile.FullName)")
+        }
     }
     if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
         $errors.Add("UTF-8 BOM is not allowed: $($textFile.FullName)")
@@ -535,8 +549,14 @@ foreach ($errorMessage in $errors) {
 
 Write-Host "Validated $($skillDirs.Count) suite skills and $($markdownFiles.Count) markdown files from: $SkillsRoot"
 Write-Host "Suite version: $suiteVersion; Owner: $suiteOwner"
-Write-Host "Errors: $($errors.Count); Warnings: $($warnings.Count)"
+Write-Host "Errors: $($errors.Count); Warnings: $($warnings.Count); Capability errors: $($capabilityErrors.Count)"
 
+if ($capabilityErrors.Count -gt 0) {
+    foreach ($capabilityError in $capabilityErrors) {
+        [Console]::Error.WriteLine("ERROR: $capabilityError")
+    }
+    exit 2
+}
 if ($errors.Count -gt 0) {
     exit 1
 }

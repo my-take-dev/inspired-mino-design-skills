@@ -1,4 +1,5 @@
 suite_version=0.9.0
+suite_version=0.9.0
 owner=suite-maintainers
 skill=mino-architecture-quality-strategy
 skill=mino-core

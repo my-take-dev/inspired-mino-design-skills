@@ -6,7 +6,9 @@ usage() {
   cat <<'USAGE'
 Usage: validate-suite.sh [--skills-root PATH] [--manifest-file PATH]
 
-Validates the mino skill suite from a Linux environment.
+Validates the mino skill suite from a Linux or macOS Bash environment.
+The shared implementation supports Bash 3.2 or later. On macOS, invoke it
+with /bin/bash so the standard system shell is the runtime under test.
 When --skills-root is omitted, the installed skills directory is inferred
 from this script's location.
 When --manifest-file is omitted, suite-manifest.txt beside this script is used.
@@ -47,27 +49,21 @@ while (($# > 0)); do
   esac
 done
 
-script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P) || exit 2
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P) || exit 2
 if [[ -z $skills_root ]]; then
-  skill_dir=$(dirname -- "$script_dir")
-  skills_root=$(dirname -- "$skill_dir")
+  skill_dir=$(dirname "$script_dir")
+  skills_root=$(dirname "$skill_dir")
 fi
 
 if [[ ! -d $skills_root ]]; then
   echo "Skills root not found: $skills_root" >&2
   exit 2
 fi
-skills_root=$(cd -- "$skills_root" && pwd -P) || exit 2
-
-if command -v locale >/dev/null 2>&1; then
-  utf8_locale=$(locale -a 2>/dev/null | awk 'tolower($0) == "c.utf8" || tolower($0) == "c.utf-8" { print; exit }')
-  if [[ -n $utf8_locale ]]; then
-    export LC_ALL=$utf8_locale
-  fi
-fi
+skills_root=$(cd "$skills_root" && pwd -P) || exit 2
 
 errors=()
 warnings=()
+capability_errors=()
 
 add_error() {
   errors+=("$1")
@@ -77,8 +73,40 @@ add_warning() {
   warnings+=("$1")
 }
 
-if [[ -z ${utf8_locale:-} ]]; then
-  add_error "A UTF-8 locale is required for Unicode scalar length validation"
+add_capability_error() {
+  capability_errors+=("$1")
+}
+
+contains_value() {
+  local candidate=$1
+  shift
+  local existing
+  for existing in "$@"; do
+    if [[ $existing == "$candidate" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+utf8_validator="$script_dir/validate-utf8.sh"
+utf8_backend_ready=false
+if [[ ! -f $utf8_validator ]]; then
+  add_capability_error "UTF-8 validation is unavailable: backend helper is missing: $utf8_validator"
+elif [[ -z ${BASH:-} || ! -x $BASH ]]; then
+  add_capability_error "UTF-8 validation is unavailable: the current Bash executable cannot be resolved"
+else
+  utf8_valid_probe=$(printf '\101\343\201\202\360\237\230\200' | \
+    "$BASH" "$utf8_validator" --count-scalars - 2>&1)
+  utf8_valid_status=$?
+  utf8_invalid_probe=$(printf '\200' | "$BASH" "$utf8_validator" - 2>&1)
+  utf8_invalid_status=$?
+  if ((utf8_valid_status == 0)) && [[ $utf8_valid_probe == 3 ]] &&
+    ((utf8_invalid_status == 1)); then
+    utf8_backend_ready=true
+  else
+    add_capability_error "UTF-8 validation is unavailable: backend self-test failed (valid status=$utf8_valid_status output='$utf8_valid_probe'; invalid status=$utf8_invalid_status output='$utf8_invalid_probe')"
+  fi
 fi
 
 trim() {
@@ -124,7 +152,7 @@ validate_logical_path() {
   local segment
   local -a path_segments=()
   IFS='/' read -r -a path_segments <<<"$relative_path"
-  for segment in "${path_segments[@]}"; do
+  for segment in ${path_segments[@]+"${path_segments[@]}"}; do
     [[ -z $segment ]] && continue
     current_path="$current_path/$segment"
     if [[ -L $current_path ]]; then
@@ -142,7 +170,6 @@ suite_owner=""
 suite_skill_names=()
 suite_version_count=0
 suite_owner_count=0
-declare -A seen_skill_names=()
 if [[ ! -f $manifest_file ]]; then
   add_error "Missing suite manifest: skills/mino-core/scripts/suite-manifest.txt"
 else
@@ -182,10 +209,9 @@ else
       skill)
         if [[ ! $value =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
           add_error "Invalid suite skill name '$value': $manifest_file"
-        elif [[ ${seen_skill_names[$value]+present} ]]; then
+        elif contains_value "$value" ${suite_skill_names[@]+"${suite_skill_names[@]}"}; then
           add_error "Duplicate suite skill '$value': $manifest_file"
         else
-          seen_skill_names[$value]=true
           suite_skill_names+=("$value")
         fi
         ;;
@@ -231,7 +257,7 @@ if [[ $suite_version =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; 
       /^```yaml[[:space:]]*$/ {
         in_yaml = 1
         block_scalar = 0
-        delete seen
+        for (seen_key in seen) delete seen[seen_key]
         next
       }
       /^```[[:space:]]*$/ && in_yaml {
@@ -286,20 +312,20 @@ if [[ $suite_version =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; 
   done
 fi
 
-for required_script in validate-suite.ps1 validate-suite.sh test-validator-fixtures.ps1 test-validator-fixtures.sh; do
+for required_script in validate-suite.ps1 validate-suite.sh validate-utf8.sh test-validator-fixtures.ps1 test-validator-fixtures.sh; do
   if [[ ! -f "$skills_root/mino-core/scripts/$required_script" ]]; then
     add_error "Missing platform validator: skills/mino-core/scripts/$required_script"
   fi
 done
 
 skill_dirs=()
-for skill_name in "${suite_skill_names[@]}"; do
+for skill_name in ${suite_skill_names[@]+"${suite_skill_names[@]}"}; do
   skill_dir="$skills_root/$skill_name"
   if [[ ! -d $skill_dir ]]; then
     add_error "Missing suite skill: skills/$skill_name"
     continue
   fi
-  resolved_skill_dir=$(cd -- "$skill_dir" && pwd -P) || {
+  resolved_skill_dir=$(cd "$skill_dir" && pwd -P) || {
     add_error "Cannot resolve suite skill: skills/$skill_name"
     continue
   }
@@ -310,11 +336,12 @@ for skill_name in "${suite_skill_names[@]}"; do
   skill_dirs+=("$skill_dir")
 done
 
-while IFS= read -r -d '' discovered_skill_file; do
+for discovered_skill_file in "$skills_root"/*/SKILL.md; do
+  [[ -f $discovered_skill_file ]] || continue
   discovered_name=${discovered_skill_file%/SKILL.md}
   discovered_name=${discovered_name##*/}
   listed=false
-  for skill_name in "${suite_skill_names[@]}"; do
+  for skill_name in ${suite_skill_names[@]+"${suite_skill_names[@]}"}; do
     if [[ $skill_name == "$discovered_name" ]]; then
       listed=true
       break
@@ -323,11 +350,11 @@ while IFS= read -r -d '' discovered_skill_file; do
   if [[ $discovered_name == mino-* && $listed != true ]]; then
     add_error "Skill directory is not listed in suite manifest: skills/$discovered_name"
   fi
-done < <(find "$skills_root" -mindepth 2 -maxdepth 2 -type f -name SKILL.md -print0)
+done
 
 platform_reference='skills/mino-core/references/platform-compatibility.md'
 
-for skill_dir in "${skill_dirs[@]}"; do
+for skill_dir in ${skill_dirs[@]+"${skill_dirs[@]}"}; do
   skill_name=${skill_dir##*/}
   if ((${#skill_name} > 64)) ||
     [[ ! $skill_name =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
@@ -394,9 +421,15 @@ for skill_dir in "${skill_dirs[@]}"; do
     add_error "SKILL.md exceeds 500 lines: $skill_file"
   fi
 
-  if find "$skill_dir" -maxdepth 1 -type f -iname 'README.md' -print -quit | grep -q .; then
-    add_error "README.md is not allowed in a skill directory: $skill_dir"
-  fi
+  for root_file in "$skill_dir"/*; do
+    [[ -f $root_file ]] || continue
+    case ${root_file##*/} in
+      [Rr][Ee][Aa][Dd][Mm][Ee].[Mm][Dd])
+        add_error "README.md is not allowed in a skill directory: $skill_dir"
+        break
+        ;;
+    esac
+  done
 
   for required_heading in '## Outcome Contract' '## Reference Routing' '## Workflow' '## Completion'; do
     if ! grep -Fxq "$required_heading" "$skill_file"; then
@@ -415,7 +448,10 @@ for skill_dir in "${skill_dirs[@]}"; do
   if [[ ! -f $agent_file ]]; then
     add_error "Missing agents/openai.yaml: skills/$skill_name"
   else
-    mapfile -t agent_lines <"$agent_file"
+    agent_lines=()
+    while IFS= read -r agent_line || [[ -n $agent_line ]]; do
+      agent_lines+=("$agent_line")
+    done <"$agent_file"
     display_name_pattern='^  display_name:[[:space:]]*"[^"]+"$'
     short_description_pattern='^  short_description:[[:space:]]*"[^"]+"$'
     default_prompt_pattern='^  default_prompt:[[:space:]]*"[^"]+"$'
@@ -438,9 +474,17 @@ for skill_dir in "${skill_dirs[@]}"; do
     if [[ -z $short_description ]]; then
       add_error "Quoted short_description not found: $agent_file"
     else
-      short_description_length=$(printf '%s' "$short_description" | wc -m | tr -d '[:space:]')
-      if ((short_description_length < 25 || short_description_length > 64)); then
-        add_error "short_description must be 25-64 Unicode scalar values: $agent_file"
+      if [[ $utf8_backend_ready == true ]]; then
+        short_description_length=$(printf '%s' "$short_description" | \
+          "$BASH" "$utf8_validator" --count-scalars - 2>&1)
+        short_description_status=$?
+        if ((short_description_status == 0)) && [[ $short_description_length =~ ^[0-9]+$ ]]; then
+          if ((short_description_length < 25 || short_description_length > 64)); then
+            add_error "short_description must be 25-64 Unicode scalar values: $agent_file"
+          fi
+        elif ((short_description_status != 1)); then
+          add_capability_error "UTF-8 validation is unavailable: Unicode scalar count failed for $agent_file (status=$short_description_status output='$short_description_length')"
+        fi
       fi
     fi
     if [[ -z $default_prompt ]]; then
@@ -452,36 +496,46 @@ for skill_dir in "${skill_dirs[@]}"; do
 
   reference_root="$skill_dir/references"
   if [[ -d $reference_root ]]; then
-    while IFS= read -r -d '' reference_file; do
+    for reference_file in "$reference_root"/*; do
+      [[ -f $reference_file ]] || continue
       reference_name=${reference_file##*/}
+      case $reference_name in
+        *.[Mm][Dd]) ;;
+        *) continue ;;
+      esac
       logical_path="skills/$skill_name/references/$reference_name"
       if ! grep -Fq "\`$logical_path\`" "$skill_file"; then
         add_error "SKILL.md must directly route bundled reference '$logical_path': $skill_file"
       fi
-    done < <(find "$reference_root" -maxdepth 1 -type f -iname '*.md' -print0)
+    done
   fi
 done
 
 text_files=()
-for skill_dir in "${skill_dirs[@]}"; do
+for skill_dir in ${skill_dirs[@]+"${skill_dirs[@]}"}; do
   while IFS= read -r -d '' text_file; do
-    text_files+=("$text_file")
-  done < <(find "$skill_dir" -type f \( \
-    -iname '*.md' -o -iname '*.yaml' -o -iname '*.yml' -o -iname '*.json' -o \
-    -iname '*.sh' -o -iname '*.ps1' -o -iname '*.py' -o -iname '*.txt' -o \
-    -iname '*.toml' -o -iname '*.xml' -o -iname '*.csv' \
-  \) -print0)
+    case ${text_file##*/} in
+      *.[Mm][Dd] | *.[Yy][Aa][Mm][Ll] | *.[Yy][Mm][Ll] | *.[Jj][Ss][Oo][Nn] | \
+        *.[Ss][Hh] | *.[Pp][Ss]1 | *.[Pp][Yy] | *.[Tt][Xx][Tt] | \
+        *.[Tt][Oo][Mm][Ll] | *.[Xx][Mm][Ll] | *.[Cc][Ss][Vv])
+        text_files+=("$text_file")
+        ;;
+    esac
+  done < <(find "$skill_dir" -type f -print0)
 done
 
-if ! command -v iconv >/dev/null 2>&1; then
-  add_error "iconv is required to validate UTF-8 text files"
-fi
-
 forbidden_path_pattern='mino-doc''/|\.agents''/skills/|\$HOME/\.agents''/skills/|`\.\./|/home''/[^[:space:]`]*'
-for text_file in "${text_files[@]}"; do
-  if command -v iconv >/dev/null 2>&1 &&
-    ! iconv -f UTF-8 -t UTF-8 "$text_file" >/dev/null 2>&1; then
-    add_error "Text file is not valid UTF-8: $text_file"
+for text_file in ${text_files[@]+"${text_files[@]}"}; do
+  if [[ $utf8_backend_ready == true ]]; then
+    utf8_file_output=$("$BASH" "$utf8_validator" "$text_file" 2>&1)
+    utf8_file_status=$?
+    case $utf8_file_status in
+      0) ;;
+      1) add_error "Text file is not valid UTF-8: $text_file" ;;
+      *)
+        add_capability_error "UTF-8 validation is unavailable: backend failed for $text_file (status=$utf8_file_status output='$utf8_file_output')"
+        ;;
+    esac
   fi
 
   byte_prefix=$(od -An -tx1 -N3 "$text_file" | tr -d '[:space:]')
@@ -503,13 +557,15 @@ for text_file in "${text_files[@]}"; do
 done
 
 markdown_files=()
-for skill_dir in "${skill_dirs[@]}"; do
+for skill_dir in ${skill_dirs[@]+"${skill_dirs[@]}"}; do
   while IFS= read -r -d '' markdown_file; do
-    markdown_files+=("$markdown_file")
-  done < <(find "$skill_dir" -type f -iname '*.md' -print0)
+    case ${markdown_file##*/} in
+      *.[Mm][Dd]) markdown_files+=("$markdown_file") ;;
+    esac
+  done < <(find "$skill_dir" -type f -print0)
 done
 
-for markdown_file in "${markdown_files[@]}"; do
+for markdown_file in ${markdown_files[@]+"${markdown_files[@]}"}; do
   while IFS= read -r skill_reference; do
     [[ -z $skill_reference ]] && continue
     referenced_name=${skill_reference#\$}
@@ -562,18 +618,25 @@ for markdown_file in "${markdown_files[@]}"; do
   fi
 done
 
-for warning in "${warnings[@]}"; do
+for warning in ${warnings[@]+"${warnings[@]}"}; do
   printf 'WARNING: %s\n' "$warning" >&2
 done
-for error_message in "${errors[@]}"; do
+for error_message in ${errors[@]+"${errors[@]}"}; do
   printf 'ERROR: %s\n' "$error_message" >&2
+done
+for capability_error in ${capability_errors[@]+"${capability_errors[@]}"}; do
+  printf 'ERROR: %s\n' "$capability_error" >&2
 done
 
 printf 'Validated %d suite skills and %d markdown files from: %s\n' \
   "${#skill_dirs[@]}" "${#markdown_files[@]}" "$skills_root"
 printf 'Suite version: %s; Owner: %s\n' "$suite_version" "$suite_owner"
-printf 'Errors: %d; Warnings: %d\n' "${#errors[@]}" "${#warnings[@]}"
+printf 'Errors: %d; Warnings: %d; Capability errors: %d\n' \
+  "${#errors[@]}" "${#warnings[@]}" "${#capability_errors[@]}"
 
+if ((${#capability_errors[@]} > 0)); then
+  exit 2
+fi
 if ((${#errors[@]} > 0)); then
   exit 1
 fi

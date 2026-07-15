@@ -1,6 +1,6 @@
-# Windows and Linux compatibility
+# Platform compatibility
 
-filesystem、process、shell、toolchain、test実行を伴うFunctionは、WindowsとLinuxの差をimplementation detailとして管理し、同じ要件と契約を両platformで検証する。
+filesystem、process、shell、toolchain、test実行を伴うFunctionは、Windows、Linux、macOSの差をimplementation detailとして管理し、同じ要件と契約をrequired platformごとに検証する。
 
 ## Contents
 
@@ -18,7 +18,7 @@ filesystem、process、shell、toolchain、test実行を伴うFunctionは、Wind
 - file、directory、path、permission、symlink、temporary resourceを扱う
 - child process、signal、environment variable、shell commandを扱う
 - formatter、test、build、static analysis、migrationを実行する
-- WindowsとLinuxの両方で動作する成果物または運用手順を設計・検証する
+- Windows、Linux、macOSのうち複数platformで動作する成果物または運用手順を設計・検証する
 
 業務ruleをOSごとに再定義するためには使わない。OS差分はCore、domain contract、public boundaryを上書きせず、implementationまたは明示されたenvironment conditionへ翻訳する。
 
@@ -28,9 +28,9 @@ command実行前に、推測ではなくruntime evidenceから次を記録する
 
 ```yaml
 platform_context:
-  host_platform: windows | linux | unknown
-  process_platform: windows | linux | unknown
-  artifact_filesystem: native_ntfs | linux_filesystem | wsl_linux_via_unc | other | unknown
+  host_platform: windows | linux | macos | unknown
+  process_platform: windows | linux | macos | unknown
+  artifact_filesystem: native_ntfs | linux_filesystem | native_macos_filesystem | wsl_linux_via_unc | other | unknown
   target_platforms: []
   shell: powershell | bash | other | none
   architecture: ""
@@ -46,17 +46,18 @@ platform_context:
 ```
 
 - `host_platform`は作業をorchestrateする環境、`process_platform`は検証commandが動くruntime、`artifact_filesystem`は検査対象artifactの保存先を表す。同じ値と仮定しない。
-- WindowsではPowerShellのruntime情報、Linuxでは`uname`など、その環境で取得可能な観測結果をEvidenceにする。
+- WindowsではPowerShellのruntime情報、Linuxでは`uname`とshell / toolchain version、macOSでは`sw_vers`、`uname`、system Bash versionなど、その環境で取得可能な観測結果をEvidenceにする。
+- `native_macos_filesystem`はnative macOS checkout上のartifactであることを表す。filesystem実装を観測せず`apfs`等へ具体化しない。
 - WSL、container、remote runnerでは、操作対象のfilesystemとprocessが属するplatformをhost名だけで決めない。
 - 実行を伴わないdesign / reviewでは、targetを記録し、hostで未確認の挙動を`unknown`または未実行検証として残す。
 
 ## Evidence layers
 
-同じ「Windows / Linux検証」へ異なる強さのEvidenceを混ぜない。各validation recordへ次のlayerを付ける。
+同じ「cross-platform検証」へ異なる強さのEvidenceを混ぜない。各validation recordへ次のlayerを付ける。
 
 - `structural_validator`: package、metadata、logical path、text format、validator runtime compatibilityを検査する。Windows PowerShell processがWSL UNC上のartifactを読んだ結果はこのlayerであり、native NTFSまたはapplication runtime Evidenceではない。
-- `native_filesystem`: native Windows checkout / NTFSまたはLinux filesystem上で、case、permission、junction / symlink、lock、rename、delete等のfilesystem behaviorを検査する。
-- `application_runtime`: 対象applicationについて同じrequirement、contract、verification、oracleをWindows / Linuxで実行する。
+- `native_filesystem`: native Windows checkout / NTFS、Linux filesystem、またはnative macOS filesystem上で、case、permission、junction / symlink、lock、rename、delete等のfilesystem behaviorを検査する。
+- `application_runtime`: 対象applicationについて同じrequirement、contract、verification、oracleをrequired platformごとに実行する。
 
 あるlayerのpassを別layerへ継承しない。required layerが未実行なら、必要runner、artifact filesystem、command、ownerを`unexecuted`へ残す。
 
@@ -64,18 +65,18 @@ platform_context:
 
 1. Skill内部の論理pathは常に`skills/`をrootとし、物理pathへ解決するときだけruntimeのpath APIを使う。
 2. pathを文字列連結しない。言語標準のpath API、PowerShellのpath cmdlet、またはLinux toolへ引数を分けて渡す。
-3. 共通workflowへ一方のshell構文を埋め込まない。shellが必要ならWindows用PowerShellとLinux用Bashを分け、同じ入出力契約を持たせる。
+3. 共通workflowへ一方のshell構文を埋め込まない。shellが必要ならWindows用PowerShellとLinux / macOS用Bashを分け、同じ入出力契約を持たせる。Linux / macOS共用scriptはrequired runtimeの最小Bash versionで実行できるsubsetへ制限する。
 4. shellを介さず実行可能なtoolchain commandを優先する。外部入力をcommand文字列へ連結しない。
 5. path separator、drive / root、予約名、case sensitivity、Unicode、最大path長を暗黙に固定しない。
 6. CRLF / LF、final newline、encodingを意味の差として扱わない。意味がある場合だけ契約へ昇格する。
-7. Linuxのpermission / executable bit / symlinkと、WindowsのACL / file lock / junction等の差を必要範囲で検証する。
+7. Linux / macOSのpermission / executable bit / symlinkと、WindowsのACL / file lock / junction等の差を必要範囲で検証する。
 8. temporary directory、home directory、environment variableはruntime APIから取得し、固定physical pathを使わない。
 9. process終了、signal、file locking、atomic replace、timezoneの差がfailure stateやrecoveryへ影響する場合は、platform別scenarioを作る。
 10. platform固有scriptを対で提供する場合は、入力、検査項目、exit status、主要messageを同じ契約に保つ。
 
 ## Cross-platform verification
 
-WindowsとLinuxの両対応を要件に含む場合、同じrequirement IDとtest oracleを使い、platformごとに実行結果を分ける。
+複数platform対応を要件に含む場合、同じrequirement IDとtest oracleを使い、platformごとに実行結果を分ける。
 
 各platform recordは、実行したcommandだけでなく、共通のrequirement、contract、verification、oracleへの参照を保持する。識別子を後から説明文で推測せず、実行前に記録したstable IDを使う。
 
@@ -89,7 +90,7 @@ WindowsとLinuxの両対応を要件に含む場合、同じrequirement IDとtes
 - file lock、rename、delete、temporary resource cleanup
 - failure、retry、cancellation、recovery
 
-一方のplatformだけで成功しても、両対応を`verified`にしない。利用できないplatformは、実行予定command、必要runner、owner、未実行理由を分離して`unexecuted`へ残す。platform非依存の静的確認は補助Evidenceであり、未実行platformのruntime Evidenceを代替しない。
+一部platformだけで成功しても、required platform全体を`verified`にしない。利用できないplatformは、実行予定command、必要runner、owner、未実行理由を分離して`unexecuted`へ残す。platform非依存の静的確認は補助Evidenceであり、未実行platformのruntime Evidenceを代替しない。
 
 ## Output and gate
 
@@ -97,10 +98,10 @@ WindowsとLinuxの両対応を要件に含む場合、同じrequirement IDとtes
 platform_validation:
   required_platforms: []
   executed:
-    - platform: windows | linux
+    - platform: windows | linux | macos
       evidence_layer: structural_validator | native_filesystem | application_runtime
-      process_platform: windows | linux | unknown
-      artifact_filesystem: native_ntfs | linux_filesystem | wsl_linux_via_unc | other | unknown
+      process_platform: windows | linux | macos | unknown
+      artifact_filesystem: native_ntfs | linux_filesystem | native_macos_filesystem | wsl_linux_via_unc | other | unknown
       requirement_ids: []
       contract_ids: []
       verification_ids: []
@@ -114,10 +115,10 @@ platform_validation:
       result: pass | fail
       evidence: []
   unexecuted:
-    - platform: windows | linux
+    - platform: windows | linux | macos
       evidence_layer: structural_validator | native_filesystem | application_runtime
-      process_platform: windows | linux | unknown
-      artifact_filesystem: native_ntfs | linux_filesystem | wsl_linux_via_unc | other | unknown
+      process_platform: windows | linux | macos | unknown
+      artifact_filesystem: native_ntfs | linux_filesystem | native_macos_filesystem | wsl_linux_via_unc | other | unknown
       requirement_ids: []
       contract_ids: []
       verification_ids: []
@@ -143,6 +144,6 @@ platform_validation:
 - required platformでcommandまたはtestが失敗した場合はverification gateをpassにしない。
 - required platformが未実行なら`parity_result: incomplete`とし、両対応を検証済みと表現しない。
 - `structural_validator`のpassを`native_filesystem`または`application_runtime`へ流用せず、Windows processが`wsl_linux_via_unc`上でpassした結果をnative NTFS Evidenceと表現しない。
-- `parity_result: pass`は、全required platformがpassし、各recordの`requirement_ids`、`contract_ids`、`verification_ids`、`oracle_refs`を正規化した集合が一致する場合だけ許可する。applicableな識別子を空配列で省略せず、非該当なら対象と理由を`trace_not_applicable`へ残す。
+- `parity_result: pass`は、全required platformがpassし、各recordの`requirement_ids`、`contract_ids`、`verification_ids`、`oracle_refs`を正規化した集合が一致する場合だけ許可する。macOS対応を意図した実装でもnative macOS recordが未実行なら`incomplete`とする。applicableな識別子を空配列で省略せず、非該当なら対象と理由を`trace_not_applicable`へ残す。
 - OS差分がpublic contractへ漏れる場合は、明示要件とownerがない限りboundary findingにする。
 - OS差分から業務rule、data meaning、品質優先度を推測しない。
