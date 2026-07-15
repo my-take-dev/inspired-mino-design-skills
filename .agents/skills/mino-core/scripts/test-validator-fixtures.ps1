@@ -101,6 +101,22 @@ try {
     New-FixtureCopy -Name 'positive'
     Test-FixtureResult -Name 'positive' -ExpectedStatus 0 -ExpectedText ''
 
+    New-FixtureCopy -Name 'unrelated-skill-ignored'
+    $path = Join-Path $script:caseSkills 'unrelated-skill/SKILL.md'
+    $null = New-Item -ItemType Directory -Path (Split-Path -Parent $path)
+    [System.IO.File]::WriteAllText($path, "not part of the mino suite`r`n", $utf8NoBom)
+    Test-FixtureResult -Name 'unrelated-skill-ignored' -ExpectedStatus 0 -ExpectedText ''
+
+    New-FixtureCopy -Name 'unlisted-mino-skill'
+    $path = Join-Path $script:caseSkills 'mino-unlisted/SKILL.md'
+    $null = New-Item -ItemType Directory -Path (Split-Path -Parent $path)
+    Write-Utf8Lf -Path $path -Content "not listed in the suite manifest`n"
+    Test-FixtureResult `
+        -Name 'unlisted-mino-skill' `
+        -ExpectedStatus 1 `
+        -ExpectedText 'Skill directory is not listed in suite manifest: skills/mino-unlisted' `
+        -ExpectedErrorCount 1
+
     $validator = Join-Path (Join-Path $SkillsRoot 'mino-core') (Join-Path 'scripts' 'validate-suite.ps1')
     $missingRoot = Join-Path $tempRoot 'does-not-exist'
     $previousPreference = $ErrorActionPreference

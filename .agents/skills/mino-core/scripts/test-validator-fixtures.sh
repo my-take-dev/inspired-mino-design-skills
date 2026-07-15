@@ -101,6 +101,17 @@ check_result() {
 prepare_case positive
 check_result positive 0 ''
 
+prepare_case unrelated-skill-ignored
+mkdir -p -- "$case_skills/unrelated-skill"
+printf 'not part of the mino suite\r\n' >"$case_skills/unrelated-skill/SKILL.md"
+check_result unrelated-skill-ignored 0 ''
+
+prepare_case unlisted-mino-skill
+mkdir -p -- "$case_skills/mino-unlisted"
+printf 'not listed in the suite manifest\n' >"$case_skills/mino-unlisted/SKILL.md"
+check_result unlisted-mino-skill 1 \
+  'Skill directory is not listed in suite manifest: skills/mino-unlisted' '' 1
+
 missing_output=$(bash "$skills_root/mino-core/scripts/validate-suite.sh" \
   --skills-root "$tmp_root/does-not-exist" 2>&1)
 missing_status=$?

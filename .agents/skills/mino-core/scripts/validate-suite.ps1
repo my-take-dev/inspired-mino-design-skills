@@ -5,6 +5,8 @@ function Show-Usage {
 Usage: validate-suite.ps1 [-SkillsRoot PATH] [-ManifestFile PATH]
 
 Validates the mino skill suite from a Windows PowerShell environment.
+Detailed validation is limited to manifest-listed suite skills. Other installed
+skills are ignored, while unlisted mino-* skills are reported.
 '@
 }
 
@@ -265,7 +267,7 @@ foreach ($discoveredSkillFile in Get-ChildItem -LiteralPath $SkillsRoot -Recurse
         continue
     }
     $discoveredName = $discoveredSkillFile.Directory.Name
-    if ($suiteSkillNames -notcontains $discoveredName) {
+    if ($discoveredName.StartsWith('mino-', [System.StringComparison]::Ordinal) -and $suiteSkillNames -notcontains $discoveredName) {
         $errors.Add("Skill directory is not listed in suite manifest: skills/$discoveredName")
     }
 }
@@ -417,7 +419,12 @@ foreach ($dir in $skillDirs) {
 $textExtensions = @('.md', '.yaml', '.yml', '.json', '.sh', '.ps1', '.py', '.txt', '.toml', '.xml', '.csv')
 $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
 $forbiddenPathPattern = 'mino-doc' + '/|\.agents' + '/skills/|\$HOME/\.agents' + '/skills/|`\.\./|/home' + '/[^\s`]*'
-foreach ($textFile in Get-ChildItem -LiteralPath $SkillsRoot -Recurse -File | Where-Object { $textExtensions -contains $_.Extension.ToLowerInvariant() }) {
+$textFiles = @(
+    foreach ($dir in $skillDirs) {
+        Get-ChildItem -LiteralPath $dir.FullName -Recurse -File | Where-Object { $textExtensions -contains $_.Extension.ToLowerInvariant() }
+    }
+)
+foreach ($textFile in $textFiles) {
     $bytes = [System.IO.File]::ReadAllBytes($textFile.FullName)
     try {
         $null = $strictUtf8.GetString($bytes)
