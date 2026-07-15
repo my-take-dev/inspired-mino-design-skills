@@ -1,0 +1,6 @@
+interface:
+  display_name: "Design by Contract"
+  short_description: "自然言語要件を契約・失敗保証・所有者・契約テスト仕様へ変換する"
+  default_prompt: "Use $mino-design-by-contract to derive traceable contracts and test specifications, implementing tests only when explicitly requested."
+policy:
+  allow_implicit_invocation: true

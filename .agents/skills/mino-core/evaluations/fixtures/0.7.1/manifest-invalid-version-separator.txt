@@ -1,0 +1,9 @@
+suite_version=0x7x0
+owner=suite-maintainers
+skill=mino-architecture-quality-strategy
+skill=mino-core
+skill=mino-design-by-contract
+skill=mino-domain-model-completeness
+skill=mino-interface-implementation-separation
+skill=mino-problem-framing
+skill=mino-reproducible-development

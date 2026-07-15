@@ -1,0 +1,6 @@
+interface:
+  display_name: "Problem Framing"
+  short_description: "前提と意味を監査し、問題・目的・成功条件をEvidence付きで整理する"
+  default_prompt: "Use $mino-problem-framing to separate evidence, premises, problems, purposes, and candidate means before solution design."
+policy:
+  allow_implicit_invocation: true
