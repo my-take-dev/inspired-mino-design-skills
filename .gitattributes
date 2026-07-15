@@ -1,0 +1,3 @@
+# Normalize every detected text file to LF. A CRLF override requires the
+# documented, narrowly scoped Windows constraint defined in AGENTS.md.
+* text=auto eol=lf

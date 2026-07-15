@@ -1,0 +1,6 @@
+interface:
+  display_name: "Interface / Implementation Separation"
+  short_description: "利用者の目的・契約を内部実装から分離し、技術漏出と過剰抽象を防ぐ"
+  default_prompt: "Use $mino-interface-implementation-separation to design a purpose-oriented boundary, expose leakage, and validate only evidence-backed change scenarios."
+policy:
+  allow_implicit_invocation: true

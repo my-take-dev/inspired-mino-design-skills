@@ -1,0 +1,6 @@
+interface:
+  display_name: "Architecture Quality Strategy"
+  short_description: "プロダクト価値から品質portfolio・投資判断・段階移行を設計する"
+  default_prompt: "Use $mino-architecture-quality-strategy to connect product value and investment to quality scenarios, options, target authority, transition, and recovery."
+policy:
+  allow_implicit_invocation: true

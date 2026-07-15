@@ -1,0 +1,6 @@
+interface:
+  display_name: "Shared Core"
+  short_description: "公開入口を持たず、問題定義・証拠・判断gateを他Skillへ提供する内部基盤"
+  default_prompt: "Use $mino-core only as the internal foundation of another mino skill; hand public Problem Frame requests to $mino-problem-framing."
+policy:
+  allow_implicit_invocation: false

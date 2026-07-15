@@ -1,0 +1,6 @@
+interface:
+  display_name: "Domain Model Completeness"
+  short_description: "用語とcontextから必要な概念・制約・状態・失敗・authorityを監査する"
+  default_prompt: "Use $mino-domain-model-completeness to discover or audit the terms, concepts, constraints, states, failures, authorities, writers, and readers required by this use case."
+policy:
+  allow_implicit_invocation: true
