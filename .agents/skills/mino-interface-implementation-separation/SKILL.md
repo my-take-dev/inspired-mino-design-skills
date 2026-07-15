@@ -18,7 +18,7 @@ consumerが知る意味と、知らなくてよい実現方法を分ける。成
 - applicableなdeadline、retry、idempotency、duplicate、ambiguous outcomeのpolicy / owner
 - Evidenceのあるchange scenario、過剰抽象化の棄却、既存caller向けcompatibility / migration
 - `subject_verdict: separated | leaky | overabstracted | not_applicable | indeterminate`とcanonical `decision`
-- platform差が公開境界へ漏れ得る場合だけ、Platform ContextとWindows / Linux adapter validation
+- platform差が公開境界へ漏れ得る場合だけ、Platform ContextとWindows / Linux / macOS adapter validation
 
 非該当semanticsの詳細recordを空欄埋めのために展開しない。理由とEvidence、またはunknownの確認方法と影響を残す。
 
@@ -51,10 +51,10 @@ consumerが知る意味と、知らなくてよい実現方法を分ける。成
 7. ambiguous outcome、reconciliation、forward recoveryの責務と、boundary-localなownerをEvidence付きで記録する。
 8. Evidenceのあるchange scenarioで境界を検証し、既存利用者がある場合は小さい互換stepと旧path削除条件を設計する。
 
-## Windows / Linux Compatibility
+## Platform Compatibility
 
 - consumerがOS差を必要としない限り、separator、shell command、platform固有型をinterface partへ公開しない。
-- Windows用とLinux用のadapterは同じpurpose、operation、failure、side effectと、applicableなsemanticsを実装する。
+- Windows、Linux、macOS用のadapterは同じpurpose、operation、failure、side effectと、applicableなsemanticsを実装する。
 - 実在するplatform variant要件またはEvidenceがない場合、将来用のOS abstractionを追加しない。
 
 ## Hard Gates
@@ -69,7 +69,7 @@ consumerが知る意味と、知らなくてよい実現方法を分ける。成
 - pure functionやread-only operationへschema充足のためのidempotency key、deduplication、mutation retryを作る、またはdeterministicな同一入力同一出力とmutation idempotencyを混同している。
 - add / change variant scenarioにEvidenceがないのにselection boundaryを作り、`not_applicable`理由を残していない。
 - state transitionをvariant abstractionへ逃がしている。
-- 一方のOS実装だけを検証してplatform-neutral boundaryと判定している。
+- 一部platform実装だけを検証してplatform-neutral boundaryと判定している。
 - public contract変更、service分割、data移動を自動実行している。
 - applicableなdomain contractまたはconsumer semantic operation contractのどちらもない。domain contract非適用なら理由とEvidenceがない。
 
@@ -80,6 +80,6 @@ consumerが知る意味と、知らなくてよい実現方法を分ける。成
 - implementation型、provider固有手順、transport retry機構がconsumerへ漏れず、semantic policyのownerは契約に残る。
 - boundary-localなsemantic / invariant reference、contract / state authority、failure / recovery / operational ownerと、上位Architecture / Contract成果物との関係が参照またはobligationとして明示される。
 - Evidenceのあるvariantだけselection boundaryを持ち、change scenarioと`not_applicable`理由を再判定できる。
-- 両OS対応がrequiredなら、Windows / Linux adapterが同じconsumer contractを満たすEvidenceまたは未実行事項がある。
+- 複数platform対応がrequiredなら、Windows / Linux / macOS adapterが同じconsumer contractを満たすEvidenceまたは未実行事項がある。
 - 既存callerまたは公開契約を変える場合はChange Safetyとtemporary path削除契約を同じpackageに保持する。
 - `subject_verdict`、unknown、未実行検証、overdesign棄却をcanonical readinessと分離する。

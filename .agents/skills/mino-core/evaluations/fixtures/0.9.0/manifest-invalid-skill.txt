@@ -7,3 +7,4 @@ skill=mino-domain-model-completeness
 skill=mino-interface-implementation-separation
 skill=mino-problem-framing
 skill=mino-reproducible-development
+skill=../external/mino-core

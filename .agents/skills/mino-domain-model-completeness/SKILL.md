@@ -51,11 +51,11 @@ description: 対象ユースケースに必要な業務用語・context・概念
 8. model coverageとgapを計算し、必要なcontract / test obligationを作る。
 9. 対象の`subject_verdict`と、監査artifactのcanonical readiness、次phaseの可否を分けて返す。
 
-## Windows / Linux Compatibility
+## Platform Compatibility
 
 - path separator、case sensitivity、line ending、permissionをdomain conceptと混同せず、representationまたはenvironment constraintとして扱う。
 - file import、watcher、process連携等でOS差がstateやfailureを変える場合だけ、platform別writer / reader / failureをinventoryへ含める。
-- 両OS対応がrequiredなら、一方でのみ到達できるinvalid stateやalternate writerを未監査のままpassにしない。
+- 複数platform対応がrequiredなら、一部platformでのみ到達できるinvalid stateやalternate writerを未監査のままpassにしない。
 
 ## Hard Gates
 
@@ -82,5 +82,5 @@ description: 対象ユースケースに必要な業務用語・context・概念
 - applicableなcontext relationshipはupstream / downstream context、fact owner、integration、consistency、retry、duplicate、ambiguous outcome、failure ownerをEvidence付きで持ち、unknownには確認方法と影響がある。
 - invalid stateを公開writerから生成できないか、gapとして報告される。
 - discoveryがapplicableならcanonical Domain Discovery Packageを保持し、非適用またはunknownには理由、確認方法、影響、Evidenceがある。
-- platform要件がある場合、Windows / Linux固有のrepresentation、writer、reader、failureを監査済みまたは未実行として分ける。
+- platform要件がある場合、Windows / Linux / macOS固有のrepresentation、writer、reader、failureを監査済みまたは未実行として分ける。
 - `subject_verdict`、unknown、scope外、未実行検証を隠さず、canonical artifact readinessと分離する。

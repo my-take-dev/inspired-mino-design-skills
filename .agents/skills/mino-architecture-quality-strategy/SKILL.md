@@ -55,11 +55,11 @@ product valueを成立させる品質portfolioを選び、責務、依存、data
 8. ADRと、deploy order、exit criteria、irreversible point、abort、rollback / forward recovery、旧path削除を持つtransition phaseを設計する。
 9. valueからvalidationまでIDでtraceし、scenarioを実行・simulationするか、oracle、owner、実行条件のある未実行planを残す。
 
-## Windows / Linux Compatibility
+## Platform Compatibility
 
 - platformをdeployment environmentと品質scenarioの一部として扱い、OS名自体をarchitecture目的にしない。
 - case sensitivity、permission、file lock、process終了、container / WSL境界の差は、品質や移行判断を分岐させる場合だけoption比較へ含める。
-- 両OS対応がrequiredなら、target / transition / recoveryをplatform別に検証し、一方の結果で全体をpassにしない。
+- 複数platform対応がrequiredなら、target / transition / recoveryをplatform別に検証し、一部の結果で全体をpassにしない。
 
 ## Hard Gates
 
@@ -87,5 +87,5 @@ product valueを成立させる品質portfolioを選び、責務、依存、data
 - targetとtransition、migration、deploy order、exit criteria、irreversible point、abort、rollback / forward recovery、old path removalがある。
 - temporary pathがある場合、各pathのowner、introduced_at、purpose、metric / log、removal condition、removal phaseがある。
 - valueからvalidationまでのtraceが`covered | partial | missing | contradictory`を隠さない。
-- Windows / Linux要件がある場合、platform別scenario、Evidence、未実行事項が分離される。
+- Windows / Linux / macOS要件がある場合、platform別scenario、Evidence、未実行事項が分離される。
 - `subject_verdict`、validation result、counterevidence、再評価trigger、residual riskをcanonical readinessと分離する。
