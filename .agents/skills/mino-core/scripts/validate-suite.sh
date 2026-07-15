@@ -10,6 +10,8 @@ Validates the mino skill suite from a Linux environment.
 When --skills-root is omitted, the installed skills directory is inferred
 from this script's location.
 When --manifest-file is omitted, suite-manifest.txt beside this script is used.
+Detailed validation is limited to manifest-listed suite skills. Other installed
+skills are ignored, while unlisted mino-* skills are reported.
 USAGE
 }
 
@@ -318,7 +320,7 @@ while IFS= read -r -d '' discovered_skill_file; do
       break
     fi
   done
-  if [[ $listed != true ]]; then
+  if [[ $discovered_name == mino-* && $listed != true ]]; then
     add_error "Skill directory is not listed in suite manifest: skills/$discovered_name"
   fi
 done < <(find "$skills_root" -mindepth 2 -maxdepth 2 -type f -name SKILL.md -print0)
@@ -461,13 +463,15 @@ for skill_dir in "${skill_dirs[@]}"; do
 done
 
 text_files=()
-while IFS= read -r -d '' text_file; do
-  text_files+=("$text_file")
-done < <(find "$skills_root" -type f \( \
-  -iname '*.md' -o -iname '*.yaml' -o -iname '*.yml' -o -iname '*.json' -o \
-  -iname '*.sh' -o -iname '*.ps1' -o -iname '*.py' -o -iname '*.txt' -o \
-  -iname '*.toml' -o -iname '*.xml' -o -iname '*.csv' \
-\) -print0)
+for skill_dir in "${skill_dirs[@]}"; do
+  while IFS= read -r -d '' text_file; do
+    text_files+=("$text_file")
+  done < <(find "$skill_dir" -type f \( \
+    -iname '*.md' -o -iname '*.yaml' -o -iname '*.yml' -o -iname '*.json' -o \
+    -iname '*.sh' -o -iname '*.ps1' -o -iname '*.py' -o -iname '*.txt' -o \
+    -iname '*.toml' -o -iname '*.xml' -o -iname '*.csv' \
+  \) -print0)
+done
 
 if ! command -v iconv >/dev/null 2>&1; then
   add_error "iconv is required to validate UTF-8 text files"
