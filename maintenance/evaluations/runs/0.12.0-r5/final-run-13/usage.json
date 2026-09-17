@@ -1,0 +1,21 @@
+{
+  "skill_files_read": [
+    {
+      "path": "skills/mino-interface-implementation-separation/SKILL.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/shared-policies.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    }
+  ],
+  "reread_occurred": false,
+  "read_output_omitted": false,
+  "usability_notes": [
+    "局所guardにもoperationの5項目screeningが並ぶため、適用範囲を項目ごとに判断する必要があった。短いguardを維持し、正本packageの依頼がなければschemaを読まない規則は明確だった。"
+  ]
+}

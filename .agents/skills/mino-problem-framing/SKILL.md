@@ -1,71 +1,38 @@
 ---
 name: mino-problem-framing
-description: 技術案先行、曖昧な要件、前提・意味・目的・成功条件の不一致を、観測・解釈・問題・候補手段に分け、具体と抽象を往復してProblem FrameとContext Packetへ変換するときに使う。専門model設計、契約抽出、統合実装、approvedまたはfrozenなbaselineに従う機械変更には使わない。
+description: 技術案先行、曖昧な要件、用語・前提・目的・成功条件の不一致を整理し、Problem FrameとContext Packetを作るときに使う。専門契約、モデル設計、実装全体、承認済みの機械変更には使わない。
 ---
 
 # Problem Framing
 
-解決策を選ぶ前に、誰のどの問題を、どの意味・根拠・成功条件で扱うかをEvidence状態付きで記録する。このSkillはread-onlyであり、model、contract、architecture、implementationを確定しない。
-
 ## Outcome Contract
 
-主成果物として`Problem Framing Package`を作る。通常は次の最小構成を返し、詳細schemaはworkflow referenceへ置く。
-
-- decision scope、actor、context、観測された阻害要因、目的、損失
-- 観測、解釈、前提、仮説、unknown、contradictionの分離
-- 技術の引力を受けた候補を未選択の`candidate_means`へ退避した記録
-- 具体Evidence → 目的 / 損失 → 成功・拒否・検証の`reasoning_trace`
-- Context Packet、AI restatement、成功条件、変更境界
-- 未決選択を候補、判定条件、Evidence取得方法、ownerへ接続したSelection Gate
-- `problem_readiness.subject_verdict: ready | conditional | blocked`、必要な次成果物、canonical `decision`
-- platform差が問題やEvidenceを分岐させる場合だけ、Platform Contextと未実行を含むvalidation record
+技術案・曖昧な要件を、技術語に依存しない問題、目的、成功・拒否条件、未決選択へ整理する。正式な引継ぎではProblem FrameとContext Packetを作る。
+正本packageのrootは`problem_framing_package`。
+対応mode: design, review。
 
 ## Reference Routing
 
-- 内部pathは、配置先にかかわらず、インストールされた`skills/` directoryを参照rootとして解決する。
-- 最初に`skills/mino-core/references/core.md`と`skills/mino-core/references/shared-policies.md`を読み、共通Evidence、権限、routing、canonical decisionを再定義しない。
-- standalone固有の成果物と判定では`skills/mino-problem-framing/references/workflow.md`を読む。
-- 後続へ渡す要求を正規化するときだけ`skills/mino-core/references/requirements-and-traceability.md`を読む。
-- 用語、context、暗黙conceptの発見が結果を分岐させるときだけ`skills/mino-core/references/domain-discovery.md`を読む。
-- filesystem、process、shell、toolchain、test実行、Windows / Linux / macOS差がEvidenceに関係するときだけ`skills/mino-core/references/platform-compatibility.md`を読み、platformごとの事実と未実行事項を分ける。
-- standalone依頼が複数の専門成果物、実装、独立検証まで求める場合は`$mino-reproducible-development`へ一度hand offする。
-- routerまたはpeer Skillからscoped artifactを依頼された場合は再routingせず、Problem Framing Packageと未解決obligationだけをcallerへ返す。
-- 原則やschemaの出自を説明するときは、Context Packet、Selection Gate、restatement review schemaをsuite operationalizationとして扱う。
+- 初回は`skills/mino-core/references/shared-policies.md`を読み、Evidence・承認・判定を適用する。同じcontextで既読なら再読しない。通常の判断は本体とこの共通規則で行う。
+- 用語の意味境界を詳しく発見するときは`skills/mino-core/references/domain-discovery.md`を読み、例・反例とcontextの差を作る。
+- 対象systemのfile/process/test実行・複数OS要件がある場合は`skills/mino-core/references/platform-compatibility.md`を読み、host・対象・検証層を分ける。単なる回答記録の保存では追加読込しない。
+- 正本packageの作成・更新・引継ぎを依頼された場合だけ`skills/mino-problem-framing/schemas/package.md`を読み、必須fieldと実在参照を保持する。
 
 ## Workflow
 
-1. 今回決めること、決めないこと、actor、owner、可逆性、変更境界について確認可能な項目を特定する。未確認項目は`unknown`または`contradiction`として保持する。
-2. 依頼原文、仕様、code、test、計測から観測と解釈を分ける。
-3. 結果を分岐させる重要語と前提だけを対象に、別解釈、識別Evidence、反証条件、誤り時の影響を監査する。
-4. 提示技術を`candidate_means`へ退避し、技術語なしでproblemを記述する。
-5. `つまり`で具体から目的へ遡り、`たとえば`で目的から成功・拒否・検証へ戻る。
-6. Context PacketとAI restatementを作り、statement、comparison basis、proposed status、differences、review主体を分ける。
-7. `ready | conditional | blocked`を判定し、必要な次成果物とobligationだけを指定する。未作成artifact IDを作らない。
-
-## Platform Compatibility
-
-- OS名やshellをproblemの目的へ置き換えず、観測されたplatform差だけをenvironment Evidenceまたはconstraintへ置く。
-- 一方のplatformの挙動から他方を推測しない。
-- runtime検証が必要だが行えない場合は、runner、command、oracle、未実行理由を残す。
+1. 原文、仕様、観測、code、既存承認からactor・context・今回決める範囲を固定する。資料一覧は探索候補であり、全資料の提出待ちにしない。
+2. 観測、評価、原因仮説、候補手段を分ける。既存障害・負債なら因果を調べ、未確定原因はunknownと確認手順を残す。新規能力なら需要Evidenceと未充足能力を示し、存在しない誤責務や原因を作らない。
+3. 技術をcandidate_meansへ戻し、具体Evidence→目的・損失→成功条件→拒否条件→検証をつなぐ。抽象化は候補を比較できる高さ、具体化は第三者が反証できる深さで止める。
+4. 結果を分岐させる用語・前提だけについて別解釈と反証条件を出す。同じ入力の具体例・反例で関係者の期待を比較し、説明用仮例は実業務の根拠と区別する。
+5. AI restatementにstatement、comparison_basis、proposed_status、differencesを残す。matchedは比較提案であり承認ではない。高impactな意味照合と確認済みbaselineの再利用には共通規則を適用する。意味照合は人間所有の採用判断を代行しない。
+6. 未決選択は候補、識別Evidence、確認方法、owner、影響をSelection Gateへ置く。追加指示は差分へ反映し、なお有効な観測・承認を作り直さない。
 
 ## Hard Gates
 
-以下のいずれかに該当する場合は、依存する設計・実装へ進まず、`conditional`または`blocked`として不足Evidenceと確認方法を返す。
-
-- actor、目的、観測可能な阻害要因、成功条件のいずれかが判定に必要なのに特定できない。
-- 技術語を除くと問題を説明できない。
-- 結果を分岐させる重要語・前提に、別解釈、識別Evidence、反証条件、または安全なSelection Gateがない。
-- 具体Evidenceから目的へ遡るだけ、または目的から検証へ降りるだけの片道分析である。
-- 新規能力なのに既存の構造原因を捏造する、または既存障害なのに因果調査を省略する。
-- 人間所有の価値、業務上の意味、公開契約、不可逆なtrade-offをAIが確定する。
-- 可逆性または既存問題 / 新規能力の区別が未確認なのに、`reversible`または確定済みcausal chainへ丸める。
-- schema、一般論、人物名、AIの自己説明だけでproblemを`ready`にする。
+- 技術語を除くと問題が消える、重要前提の反証方法がない、Evidenceから成功・拒否条件へ辿れない場合は補う。
+- 意味差分がmismatched / blockedでも、差分を安全に報告する現在のdesign / reviewは完了できる。依存する選択・実装だけを止める。
+- 次の成果物は種別とobligationまで示す。未作成のmodel・contract・test IDや、対象systemの変更を追加しない。
 
 ## Completion
 
-- problem、Context Packet、reasoning trace、AI restatementが同じactor、意味、目的、変更境界を保つ。
-- candidate meansは未選択のまま、目的、品質、制約、検証で比較可能である。
-- 新規能力では未充足capability、既存問題では症状からrule / owner / 構造原因への因果をEvidence付きで扱う。
-- high-risk unknown、contradiction、未実行platform確認、人間判断を隠さない。
-- conditionalな選択は候補、predicate、Evidence取得、ownerを持つSelection Gateへ接続し、`pending`を選択済みと表現しない。
-- 次のSkillへ渡す場合は必要artifactとobligationだけを指定し、未作成IDを捏造せず、canonical `decision`で現在のframing artifactを判定する。
+目的・意味・成功条件と必要な選択が揃えばsubject_verdictはready。選択肢と確認条件を示せればconditional。安全な問題記述自体が作れなければblocked。現在artifactの完成とは分け、問題解決・実装成功を主張しない。

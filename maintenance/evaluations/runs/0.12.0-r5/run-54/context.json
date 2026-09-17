@@ -1,0 +1,479 @@
+{
+  "artifact_handle": "context-v1",
+  "revision": "1",
+  "evidence": [
+    {
+      "id": "E1",
+      "source": "input.yaml#/confirmed_evidence/0",
+      "status": "confirmed",
+      "statement": "owner承認済みR1: display_quantityは整数0〜99を2桁文字列に変換する。R2: 範囲外整数はValueError。整数以外は今回対象外。"
+    },
+    {
+      "id": "E2",
+      "source": "input.yaml#/confirmed_evidence/1",
+      "status": "confirmed",
+      "statement": "consumerは帳票。目的は表示形式を統一すること。保存、外部I/O、時間依存、既存callerの移行はない。"
+    },
+    {
+      "id": "E3",
+      "source": "input.yaml#/confirmed_evidence/2",
+      "status": "confirmed",
+      "statement": "業務意味と今回の範囲は承認済み。実装とtest実行は今回の依頼に含まない。"
+    },
+    {
+      "id": "E4",
+      "source": "input.yaml#/prohibited_changes/0",
+      "status": "confirmed",
+      "statement": "対象systemのcode・設定・運用dataを変更しない。"
+    }
+  ],
+  "core_result": {
+    "decision_maturity": {
+      "status": "approved",
+      "owner": "input.yamlに記載された業務owner",
+      "scope": [
+        "R1",
+        "R2",
+        "今回の業務意味と範囲"
+      ],
+      "evidence_status": "confirmed",
+      "approval_evidence": [
+        "context-v1#E1",
+        "context-v1#E3"
+      ],
+      "baseline_version": "未固定",
+      "change_control": "今回の承認済み要件を変更する依頼はない。"
+    },
+    "problem_readiness": "ready",
+    "problem_frame": {
+      "actor": "帳票consumerと後続実装者",
+      "context": "数量表示の統一",
+      "desired_state": "承認済みR1/R2を満たす数量変換を同じ公開操作から利用できる。",
+      "observed_barrier": "障害や既存実装の欠陥は提示されていない。契約とconsumer境界を正本へまとめる依頼。",
+      "impact": "実装・利用側で成功形式と失敗応答を照合できる。"
+    },
+    "interpretations": [
+      {
+        "id": "I1",
+        "statement": "2桁文字列は十進数量を左ゼロ埋めした表現として具体化する。例: 0→00、9→09、10→10、99→99。",
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ],
+        "evidence_status": "inferred",
+        "decision_maturity": "proposed",
+        "basis": "整数の数量表示を2桁で統一するという承認済み要件の操作的表現。追加の数値範囲や丸め規則は導入しない。"
+      }
+    ],
+    "premises": [
+      {
+        "statement": "保存、外部I/O、時間依存、既存caller移行は存在しない。",
+        "evidence": [
+          "context-v1#E2"
+        ],
+        "falsification": "後続実装が状態・外部サービス・clockへ依存する。",
+        "impact_if_false": "失敗保証とboundary semanticsを再設計する。",
+        "evidence_status": "confirmed",
+        "assessment": "現在の設計範囲では成立"
+      }
+    ],
+    "causal_chain": {
+      "applicability": "not_applicable",
+      "reason": "障害原因分析の依頼ではなく、承認済み要求の契約・境界設計である。",
+      "demand_evidence": [
+        "context-v1#E1",
+        "context-v1#E2"
+      ],
+      "success_condition_ids": [
+        "context-v1#R1",
+        "context-v1#R2"
+      ]
+    },
+    "candidate_means": [],
+    "abstraction_ladder": {
+      "concrete_start": "display_quantity",
+      "levels": [
+        "数量変換の公開操作"
+      ],
+      "stop_reason": "decision_useful"
+    },
+    "context_packet": {
+      "actors": [
+        "帳票consumer",
+        "input.yamlに記載された業務owner",
+        "後続実装者"
+      ],
+      "problem": "数量変換の契約とconsumer境界の正本を保存する。",
+      "purposes": [
+        {
+          "id": "P1",
+          "statement": "帳票の数量表示形式を統一する。",
+          "evidence": [
+            "context-v1#E2"
+          ]
+        }
+      ],
+      "success_conditions": [
+        {
+          "id": "G1",
+          "statement": "正常値の表示と範囲外整数の公開失敗応答がR1/R2に一致する。",
+          "requirement_ids": [
+            "context-v1#R1",
+            "context-v1#R2"
+          ]
+        }
+      ],
+      "context": {
+        "time_or_state": [
+          "時間・永続状態に依存しない。"
+        ],
+        "business_background": [
+          "数量表示の統一"
+        ],
+        "technical_background": [
+          "実装言語・code・既存testは未指定。"
+        ]
+      },
+      "terminology": [
+        {
+          "term": "数量",
+          "meaning": "今回扱う整数入力。成功範囲は0〜99。",
+          "alternative_meanings": [],
+          "evidence": [
+            "context-v1#E1"
+          ]
+        },
+        {
+          "term": "display_quantity",
+          "meaning": "帳票consumerに数量の2桁表示を提供する操作。",
+          "alternative_meanings": [],
+          "evidence": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "id": "RULE1",
+          "statement": "R1/R2に従う。",
+          "kind": "policy",
+          "owner": "input.yamlに記載された業務owner",
+          "evidence_status": "confirmed"
+        }
+      ],
+      "quality_lens": {
+        "definitions": [],
+        "primary_ids": [],
+        "secondary_ids": [],
+        "constraint_ids": [],
+        "intentionally_not_optimized_ids": [],
+        "tradeoff_decisions": []
+      },
+      "change_boundary": {
+        "must_preserve": [
+          "R1",
+          "R2",
+          "整数以外は対象外"
+        ],
+        "may_change": [
+          "依頼された設計artifactのみ"
+        ],
+        "must_not_change": [
+          "対象systemのcode",
+          "設定",
+          "運用data"
+        ],
+        "out_of_scope": [
+          "実装",
+          "test実行",
+          "保存・外部I/O・時間依存",
+          "既存callerの移行",
+          "整数以外の振る舞い"
+        ]
+      },
+      "evidence": {
+        "confirmed": [
+          "context-v1#E1",
+          "context-v1#E2",
+          "context-v1#E3",
+          "context-v1#E4"
+        ],
+        "inferred": [
+          "context-v1#I1"
+        ],
+        "assumptions": [],
+        "unknowns": [],
+        "contradictions": []
+      }
+    },
+    "selection_gates": [],
+    "platform_context": {
+      "$ref": "context-v1#/platform_context"
+    },
+    "platform_validation": {
+      "$ref": "context-v1#/platform_validation"
+    },
+    "traceability_seed": [],
+    "reasoning_traces": [
+      {
+        "id": "RT1",
+        "concrete_evidence": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ],
+        "actor_or_owner": "帳票consumer",
+        "purpose_or_loss": "数量の表示形式を統一する。",
+        "violated_rule_or_quality": "現在の違反は未提示。設計ではR1/R2を保持する。",
+        "decision_or_obligation": "契約をconsumerへ公開し、変換algorithmを内部に置く。",
+        "falsifier_or_counterexample": "9→9、100→00、consumerに桁埋め手順を要求する。",
+        "validation": [
+          "contract-v1#T1",
+          "contract-v1#T2",
+          "contract-v1#T3",
+          "spec-v1#V1"
+        ],
+        "stop_reason": "decision_useful"
+      }
+    ],
+    "ai_restatement": {
+      "statement": "承認済みR1/R2から契約とconsumer境界を作成し、後続実装用の正本として保存する。",
+      "comparison_basis": [
+        "input.yaml#/raw_request",
+        "context-v1#E1",
+        "context-v1#E3"
+      ],
+      "proposed_status": "matched",
+      "differences": [],
+      "reviewed_by": {
+        "kind": "unresolved",
+        "identity": "独立review未実施",
+        "review_status": "unresolved",
+        "evidence": []
+      }
+    },
+    "blockers": []
+  },
+  "requirement_catalog": [
+    {
+      "id": "R1",
+      "actor": "帳票consumer",
+      "context": "数量を2桁で表示する。",
+      "trigger": "display_quantityに0〜99の整数を渡す。",
+      "expected_result": "入力数量に対応する2桁文字列を返す。",
+      "prohibited_results": [
+        "1桁の文字列",
+        "3桁以上の文字列",
+        "異なる数量の文字列",
+        "正常範囲でのValueError"
+      ],
+      "quality_constraint_ids": [],
+      "evidence": {
+        "status": "confirmed",
+        "sources": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ]
+      },
+      "acceptance": [
+        "0→00、1→01、9→09、10→10、98→98、99→99。",
+        "0〜99の全入力で契約の期待値表に一致する。"
+      ]
+    },
+    {
+      "id": "R2",
+      "actor": "帳票consumer",
+      "context": "整数入力の範囲外処理",
+      "trigger": "display_quantityに0未満または99超の整数を渡す。",
+      "expected_result": "ValueErrorを送出する。",
+      "prohibited_results": [
+        "丸め・clamp・剰余による正常値の返却",
+        "Noneや空文字列による代用",
+        "範囲外整数を正常値として受理"
+      ],
+      "quality_constraint_ids": [],
+      "evidence": {
+        "status": "confirmed",
+        "sources": [
+          "context-v1#E1"
+        ]
+      },
+      "acceptance": [
+        "-1と100でValueError。",
+        "境界から離れた負数と正数でもValueError。"
+      ]
+    }
+  ],
+  "authority_records": [
+    {
+      "id": "A1",
+      "kind": "semantic_owner",
+      "owner": "input.yamlに記載された業務owner",
+      "scope": [
+        "R1",
+        "R2"
+      ],
+      "evidence": [
+        "context-v1#E1",
+        "context-v1#E3"
+      ]
+    },
+    {
+      "id": "A2",
+      "kind": "contract_owner",
+      "owner": "display_quantityの公開契約担当（役割名）",
+      "scope": [
+        "公開操作の適合性・互換性。要件の意味はA1を参照する。"
+      ],
+      "decision_maturity": "proposed",
+      "evidence": [
+        "context-v1#E1"
+      ]
+    },
+    {
+      "id": "A3",
+      "kind": "invariant_owner",
+      "owner": "display_quantityの実装責務",
+      "scope": [
+        "成功値の表現と範囲外応答を単一の呼出境界で保証する。"
+      ],
+      "decision_maturity": "proposed",
+      "evidence": [
+        "context-v1#E1"
+      ]
+    }
+  ],
+  "platform_context": {
+    "host_platform": "windows",
+    "process_platform": "windows",
+    "artifact_filesystem": "unknown",
+    "target_platforms": [],
+    "shell": "powershell",
+    "architecture": "未観測。設計内容に影響しない。",
+    "filesystem": {
+      "case_sensitive": "unknown",
+      "path_style": "windows",
+      "executable_bit": "unknown"
+    },
+    "toolchain": {
+      "commands": [
+        "PowerShell Get-Content",
+        "PowerShell ConvertFrom-Json",
+        "System.IO.File.WriteAllText"
+      ],
+      "versions": []
+    },
+    "platform_requirements": [],
+    "unknowns": [
+      {
+        "subject": "filesystem形式・CPU architecture・filesystem特性",
+        "impact_if_unresolved": "今回の論理契約に影響しない。native filesystem検証を主張しない。",
+        "confirmation_method": "後続でplatform要件が生じた時にhostと保存先を観測する。",
+        "owner": "後続実装者"
+      }
+    ]
+  },
+  "platform_validation": {
+    "required_platforms": [],
+    "executed": [
+      {
+        "platform": "windows",
+        "evidence_layer": "structural_validator",
+        "process_platform": "windows",
+        "artifact_filesystem": "unknown",
+        "requirement_ids": [],
+        "contract_ids": [],
+        "verification_ids": [
+          "spec-v1#V2"
+        ],
+        "oracle_refs": [
+          "spec-v1#V2"
+        ],
+        "trace_not_applicable": [
+          {
+            "target_kind": "contract",
+            "target_id_or_scope": "対象systemの実装適合性",
+            "reason": "今回のcheckは保存artifactの構造・参照・text形式だけを対象とする。",
+            "evidence": [
+              "context-v1#E3"
+            ]
+          }
+        ],
+        "commands": [
+          "PowerShell: System.IO.File.ReadAllBytes + strict UTF8 decode + ConvertFrom-Json + exact-content comparison",
+          "functions JavaScript: artifact handle/local ID/JSON Pointer/verifies reference check"
+        ],
+        "result": "pass",
+        "evidence": [
+          "validation.json"
+        ]
+      }
+    ],
+    "unexecuted": [],
+    "parity_result": "not_applicable",
+    "platform_specific_risks": [
+      "required_platformsは空。OS間のapplication runtime parityは要求外であり、検証済みとはしない。"
+    ]
+  },
+  "decision": {
+    "status": "pass",
+    "artifact_readiness": "ready",
+    "engineering_status": "planned",
+    "release_status": "not_applicable",
+    "decision_maturity": {
+      "status": "proposed",
+      "owner": "後続実装者へ引き継ぐ設計作成者",
+      "scope": [
+        "条件分割",
+        "test plan",
+        "consumer境界の技術構成"
+      ],
+      "evidence_status": "confirmed",
+      "approval_evidence": [],
+      "baseline_version": "未固定",
+      "change_control": "artifact revisionで管理し、意味の変更時は元の要件承認へ戻る。"
+    },
+    "next_phase": {
+      "name": "後続実装者への仕様引継ぎ",
+      "status": "allowed",
+      "reasons": [
+        "設計成果物は揃っている。対象systemの変更・test実行は今回の権限外であり、次の実装依頼で実施範囲を定める。"
+      ],
+      "human_approvals_required": []
+    },
+    "evidence": [
+      "context-v1#E1",
+      "context-v1#E2",
+      "context-v1#E3"
+    ],
+    "assumptions": [],
+    "unknowns": [],
+    "contradictions": [],
+    "failed_gates": [],
+    "unexecuted_validation": [
+      {
+        "id": "UV1",
+        "reason": "design依頼であり、実装とtest実行が明示的に対象外。対象codeとtest runnerも未指定。",
+        "required_runner": "後続実装の言語・実装pathに対応する単体test runner",
+        "planned_commands": [],
+        "command_resolution": "後続実装者がT1〜T3を実装し、実際のrunnerとcommandを確定してから実行記録へ追記する。現時点では実行可能commandを捏造しない。",
+        "owner": "後続実装者",
+        "evidence": [
+          "context-v1#E3"
+        ],
+        "verification_ids": [
+          "contract-v1#T1",
+          "contract-v1#T2",
+          "contract-v1#T3"
+        ]
+      }
+    ],
+    "platform_validation": {
+      "$ref": "context-v1#/platform_validation"
+    },
+    "residual_risks": [
+      "実装の適合性・testの実行成功は未確認。対象言語で整数として扱う具体的な型は後続実装で確定する。整数以外の公開応答は本仕様の対象外。"
+    ],
+    "human_approvals_required": []
+  }
+}

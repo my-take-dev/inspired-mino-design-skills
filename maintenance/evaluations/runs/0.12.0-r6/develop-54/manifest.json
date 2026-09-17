@@ -1,0 +1,39 @@
+{
+  "run_id": "develop-54",
+  "case_id": "C54",
+  "variant": "develop",
+  "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\develop-54",
+  "suite_artifact_sha256": "bfade6fb5fd0b06459da4d29fb6c5a3d644ac24184f1f792da954e4d53140070",
+  "solver_input_sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5",
+  "agent": "solver_h",
+  "fork_turns": "none",
+  "model_requested": "inherit",
+  "effective_model": null,
+  "effective_settings": null,
+  "counted": false,
+  "evaluation_status": "selected_semantic_gates_observed",
+  "artifacts": [
+    {
+      "path": "implementation-spec.json",
+      "bytes": 130683,
+      "sha256": "c4372a345c0f129c5d5151588df8c4647e51ac3b54ad65596e9046190ccd30ce"
+    },
+    {
+      "path": "input.yaml",
+      "bytes": 842,
+      "sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5"
+    },
+    {
+      "path": "output.md",
+      "bytes": 350,
+      "sha256": "86df641f52cb107dae691e67bf64b94be46d4b44d9815c6e58a8c4b2c196f7a6"
+    }
+  ],
+  "solver_output_sha256": "86df641f52cb107dae691e67bf64b94be46d4b44d9815c6e58a8c4b2c196f7a6",
+  "output_digest_scope": "solverが保存した回答artifactのraw bytes。tool transcript全体ではない",
+  "evaluation_scope": "r6 oracleの該当caseにある意味gateを親evaluatorが出力読了後に照合。全schema fieldの意味同等性やrelease passではない。",
+  "semantic_observation": "承認済みR1/R2を再利用したContractとBoundaryの正本を保存。4つのrequired condition、保証責任、operation、oracle付きtestと未実行状態へ追跡できた。",
+  "known_differences": [
+    "developは同一文書のJSON pointerとartifact_version、candidateはhandle・revision・JSON pointerを使う。test件数の一致は要件にしない。"
+  ]
+}

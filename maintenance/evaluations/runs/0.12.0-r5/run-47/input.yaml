@@ -1,0 +1,12 @@
+mode: "review"
+required_platforms: []
+raw_request: "固定した表示用変換の3要件についてmodelの必要情報を監査してください。"
+confirmed_evidence:
+  - "3要件は同じ静的文字列を別の表示形式へ変換する。保存・外部I/O・時刻依存はない。"
+  - "入力語の意味が確定している要件が2件、未確定の要件が1件ある。"
+known_unknowns:
+  - "3件目の語の意味。"
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

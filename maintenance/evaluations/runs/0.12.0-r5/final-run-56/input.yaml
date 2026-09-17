@@ -1,0 +1,13 @@
+mode: "review"
+required_platforms: []
+raw_request: "数量値のmodelを監査し、確認できる欠陥と未確認を短いメモにしてください。"
+confirmed_evidence:
+  - "R1: 数量は整数0〜9。公開set_quantity(-1)で-1が保存されることを実測した。"
+  - "R2: 表示ラベルの意味は未確定。"
+  - "対象はこの数量値と表示だけ。永続化・外部I/O・時刻依存はない。"
+known_unknowns:
+  - "R2の表示意味と意味owner。"
+allowed_assumptions:
+  - "説明用の名前と現在成果物のlocal IDのみ。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

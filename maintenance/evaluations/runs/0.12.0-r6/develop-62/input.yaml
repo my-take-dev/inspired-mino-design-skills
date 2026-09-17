@@ -1,0 +1,15 @@
+mode: "design"
+required_platforms: []
+raw_request: "$mino-architecture-quality-strategy で次四半期の設計投資案を比較してください。意思決定者の会議へ渡す短い案が必要です。"
+confirmed_evidence:
+  - "商品推薦はcoreという事業ownerの分類があり、独自の推薦結果が選定理由。毎週ルール変更があり、条件が散在して変更漏れが続く。"
+  - "請求照合はsupportingという会計ownerの分類があり、差別化はしない。変更は少ないが、二重計上が発生し会計上の正確性と復旧が必要。"
+  - "勤務日カレンダーはgenericという事業ownerの分類があり差別化はしない。標準的な休日判定だけが必要で、購入可能な部品と社内再利用部品が候補にある。"
+  - "社内参照一覧はsupporting。利用者が少なく変更予定もなく、障害時は元台帳を参照でき、現行は必要品質を満たすという運用記録がある。"
+  - "投資の採用ownerは事業責任者。金額と工数の見積りはまだない。"
+known_unknowns:
+  - "remediation_costと各案の調達・維持費、会議での重み付け。"
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

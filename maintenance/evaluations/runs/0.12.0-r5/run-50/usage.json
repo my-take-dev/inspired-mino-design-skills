@@ -1,0 +1,78 @@
+{
+  "skill_reads": [
+    {
+      "path": "skills/mino-problem-framing/SKILL.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    },
+    {
+      "path": "skills/mino-core/references/shared-policies.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    },
+    {
+      "path": "skills/mino-core/references/platform-compatibility.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    },
+    {
+      "path": "skills/mino-problem-framing/schemas/package.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    },
+    {
+      "path": "skills/mino-core/schemas/core.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    },
+    {
+      "path": "skills/mino-core/schemas/decision.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    },
+    {
+      "path": "skills/mino-core/schemas/platform.md",
+      "range": "全文",
+      "read_count": 1,
+      "reread": false,
+      "output_omitted": false,
+      "output_truncated": false
+    }
+  ],
+  "reread_occurred": false,
+  "output_omission_occurred": false,
+  "output_truncation_occurred": false,
+  "non_skill_inputs": [
+    "input.yaml",
+    "catalog.txt"
+  ],
+  "selected_skill": "mino-problem-framing",
+  "usability_notes": [
+    "正本packageの作成では、package schemaからcore・decision・platform schemaへ読み進める必要があり、必須fieldの照合先が分散していた。",
+    "package schema末尾のdecision・platformへのroutingが重複していた。",
+    "Problem FrameとContext Packetの意味を共有しつつ、未知recordをdecisionにも保存する必要があり、同じ情報の一貫性を保つ作業が必要だった。"
+  ],
+  "artifacts": [
+    "problem-framing-package.json",
+    "output.md"
+  ],
+  "verification": "JSON読戻し、必須top-level field、未知record field、selection gate・candidate参照、UTF-8 BOMなし・LF・final newlineを確認した。独立review・対象system実行検証は未実施。"
+}

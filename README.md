@@ -8,22 +8,29 @@
 
 ```text
 Status: Experimental / Preview
-Suite version: 0.9.0
-Structural validation: fail on the native macOS fixture runner; pass on executed Linux and PowerShell-over-WSL layers
-macOS structural support: implemented; native macOS /bin/bash executed / fail (run 29397674053, exit 2)
-Targeted behavioral evidence: not executed
+Suite version: 0.12.0
+Evaluation revision: 0.12.0-r6
+Structural validation: 5 CI jobs pass for head d5be04a (merge fcd7e61); documentation correction not rerun in CI
+Targeted behavioral evidence: 4 paired inputs against 0.8.0 (180ca1f) and 1 candidate-only negative (9 runs); effective model/settings unobserved
+Comparison against PR base develop 0.9.0 (9a2af5e): not run
 Behavioral release: not ready
 ```
 
-ここでいうbehavioral release（行動再現性を確認した安定版判定）は、権限を持つevaluation ownerが`frozen`にしたversioned caseと隔離oracleをfresh contextで繰り返し実行し、代表case・negative case・回帰・required platformのRelease gateを満たした状態です。Experimental / Previewとして配布可能であることと、stable releaseとして承認済みであることを分けます。権限を持つmaintainerが全Evidenceを確認するまでstable releaseとは扱いません。
+suite versionの正本は[suite-manifest.txt](maintenance/scripts/suite-manifest.txt)。評価入力は独立した改訂番号で管理し、現行は62ケースの0.12.0-r6。旧0.12.0と0.12.0-r2 / r3 / r4 / r5のcase / oracleも保持し、入力の意味を上書きしない。同じsuite versionでもruntime digestが異なる実行結果を流用しない。
 
-プロダクト価値（利用者・事業が得る成果）と品質portfolio（優先する品質、制約、意図的に最適化しない品質の組合せ）の最終判断も、AIではなく権限を持つ人間が所有します。
+behavioral releaseは、権限を持つevaluation ownerが`frozen`にしたcaseと隔離oracleをfresh contextで繰り返し実行し、代表・negative・回帰・required platformのRelease gateを満たした状態です。現在のcounted runは0件で、設計規則の有用性や全OSの動作を構造passだけで保証しません。
 
-native macOS Evidenceは、head `e47aaafb74a27cf2cc7d4bc9c64f74d1933f10db`のworkflow run `29397674053`、job `Native macOS /bin/bash`（job ID `87294760529`）で取得済みです。環境はmacOS 15.7.7、image `macos-15-arm64` version `20260706.0213.1`、`RUNNER_ARCH=ARM64`でした。`validate-suite.sh`はpassしましたが、fixture runnerは`solver-nested-metadata`のportable rewriteで失敗し、jobはexit `2`でした。
-
-macOSはBash構造validator、fixture runner、text-format検査を対応範囲に含めます。共用scriptは標準`/bin/bash` 3.2で実行できるsubsetへ制限しています。上記failureを修正したheadでnative macOS jobがgreenになるまで、platform parityやreleaseをpassにしません。
+今回の検証範囲と未実行事項、head `d5be04a`に対する全5 CI jobs成功は[Evaluation 0.12.0-r6](maintenance/evaluations/0.12.0-r6.md)に記録する。r5の全5 CI jobs成功と途中版を含む8試行は[旧評価記録](maintenance/evaluations/0.12.0-r5.md)へ残し、現行runtimeのEvidenceへ継承しない。
 
 ## クイックスタート
+
+### 依頼の大きさに合わせた使い方
+
+短い説明では、判断・根拠・未知・検証状態を返す。回答をメモへ保存するだけなら、完全な設計packageを追加しない。後続の実装者が正本として使う成果物を依頼した場合は、必須fieldと参照を備えたpackageを保存する。
+
+7 Skillは判断手順と固有gateを入口へ持ち、初回に短い共通規則を読む。通常の回答でschemaを読まず、正本packageを作る場合だけ独立したschemaを読む。共通規則は同じcontextで再読しない。既存のEvidenceと承認を再利用し、許可済みの修正・test実装は検証まで進める。設計専用Functionは対象systemの編集をcallerへ引き継ぐ。未決判断があっても、それに依存しない分析を完成させる。
+
+品質比較だけの依頼に移行計画を加えず、局所reviewに架空のinterfaceを加えない。検証は変更の影響と必須checkに合わせ、新差分・failure・未解決の懸念がある場合に範囲を広げる。
 
 ### Skill routingの適用
 
@@ -39,7 +46,8 @@ When a request matches multiple Skills:
 - Use the Skill that best matches the primary outcome as the basic workflow.
 - Add only relevant language-, framework-, or tool-specific Skills to supplement that workflow.
 - Let the basic Skill control scope, changes, validation, and the final response; specialized Skills provide their domain-specific guidance.
-- Preserve every applicable Skill's exclusions, hard gates, and safety constraints.
+- Apply relevant exclusions and gates to the requested mode; distinguish artifact completion from downstream approval.
+- Follow system and developer constraints, then explicit user instructions over Skill defaults.
 - Follow the user's explicitly named Skills and do not add unrelated Skills.
 ```
 
@@ -96,9 +104,11 @@ AIに同じ依頼をしても、実装の形は毎回変わり得ます。形が
 | [`mino-design-by-contract`](.agents/skills/mino-design-by-contract/SKILL.md) | 自然言語要件を事前条件、事後条件、不変条件、失敗保証、契約テストへ変換するとき | Contract Package |
 | [`mino-interface-implementation-separation`](.agents/skills/mino-interface-implementation-separation/SKILL.md) | caller側の分岐や技術漏出を見つけ、目的と契約を中心に境界を設計するとき | Boundary Package |
 | [`mino-architecture-quality-strategy`](.agents/skills/mino-architecture-quality-strategy/SKILL.md) | 複数module、data ownership、system-wideな品質trade-off、移行・復旧を設計するとき | Architecture Strategy Package |
-| [`mino-reproducible-development`](.agents/skills/mino-reproducible-development/SKILL.md) | 中規模以上の設計・実装・レビュー・再現性検証で、複数の専門成果物と独立検証を統合するとき | Implementation Spec、Verified Change、Review Result、またはReproduction Report |
+| [`mino-reproducible-development`](.agents/skills/mino-reproducible-development/SKILL.md) | 二つ以上の専門成果物、または要件から実装・review・検証へのend-to-end traceを統合するとき。設計のみ・reviewのみも対象 | Implementation Spec、Verified Change、Review Result、またはReproduction Report |
 
 小さなrenameや、問題・契約・data meaningが承認済みbaselineとして記録された機械変更には、このsuiteを起動する必要はありません。単一の成果物が欲しい場合は、統合Skillではなく対応する専門Skillを使います。
+
+短い相談や局所レビューでは、必要な判断・根拠・未知・検証状態を簡潔に返します。回答をメモとして保存するだけなら、完全な設計packageは作りません。後続の設計・実装で正本として使うpackageを求めた場合は、引継ぎに必要なfieldと参照を保持します。
 
 ### 資料からruntime Skillへの配置
 
@@ -117,7 +127,7 @@ AIに同じ依頼をしても、実装の形は毎回変わり得ます。形が
 
 公開資料に明示された主張と、owner schema、canonical status、3-run benchmarkなどSkill化のための操作的解釈は同じ強さの「本人の主張」として扱いません。runtimeでは対象systemのEvidenceで判断し、保守時には`mino-doc`とevaluationの対応を再監査します。
 
-保守時のtraceは「資料テーマ → 判断規則 → 主成果物 → hard gate → case / oracle → evaluation」の順で確認します。0.9.0では、solverへ渡すexact fence payloadを[`cases/0.9.0.md`](.agents/skills/mino-core/evaluations/cases/0.9.0.md)、runner metadataと期待gateを[`oracles/0.9.0.md`](.agents/skills/mino-core/evaluations/oracles/0.9.0.md)へ分離し、実行済み・未実行を[`Evaluation 0.9.0`](.agents/skills/mino-core/evaluations/0.9.0.md)へ記録します。counted runにはmodel / setting、suite / input / output digest、workspace隔離Evidenceが必要です。資料名だけ、schemaの存在だけ、AIの説明だけでは、判断規則が再現されたEvidenceにしません。
+保守時のtraceは「資料テーマ → 判断規則 → 主成果物 → hard gate → case / oracle → evaluation」の順で確認します。0.12.0では、solverへ渡すexact fence payloadを[`cases/0.12.0-r6.md`](maintenance/evaluations/cases/0.12.0-r6.md)、runner metadataと期待gateを[`oracles/0.12.0-r6.json`](maintenance/evaluations/oracles/0.12.0-r6.json)へ分離し、実行済み・未実行を[`Evaluation 0.12.0-r6`](maintenance/evaluations/0.12.0-r6.md)へ記録します。counted runにはmodel / setting、suite / input / output digest、workspace隔離Evidenceが必要です。資料名だけ、schemaの存在だけ、AIの説明だけでは、判断規則が再現されたEvidenceにしません。
 
 ## 使い方
 
@@ -179,47 +189,44 @@ $mino-reproducible-development の review mode で、この変更が要件から
 - user-wide（Linux）: `$HOME/.agents/skills/`
 - user-wide（macOS）: `$HOME/.agents/skills/`
 
-同名Skillがすでにある場合は上書きせず、先に差分とversionを確認してください。`mino-core`は他のSkillが共有するため、専門Skillだけでなくsuite一式を同じ`skills` rootへ配置するのが基本です。
+同名Skillがすでにある場合は、差分とversion、配布inventoryを確認してからsuite一式を更新してください。旧版だけのfileは退避し、新版と混在させないでください。利用者が追加した無関係Skillは変更しません。`mino-core`は他のSkillが共有するため、専門Skillだけでなくsuite一式を同じ`skills` rootへ配置するのが基本です。
 
-suite version、owner、配布対象Skill一覧の正本は[`suite-manifest.txt`](.agents/skills/mino-core/scripts/suite-manifest.txt)です。Skill directoryだけを個別に抜き出すのではなく、同じmanifest versionのsuite一式を配置してください。
+suite version、owner、配布対象Skill一覧の正本は[`suite-manifest.txt`](maintenance/scripts/suite-manifest.txt)です。Skill directoryだけを個別に抜き出すのではなく、同じmanifest versionのsuite一式を配置してください。
 
 Skill内の`skills/...`という記述は、実際の保存先名ではなく、インストール済みSkill群の論理的な参照rootです。repository-localとuser-wideのどちらでも動くよう、このpathを`.agents/skills/...`や絶対pathへ書き換えないでください。
+
+## 実行用と保守用の分離
+
+配布するのは`.agents/skills/`の7 directoryだけ（34 files、約91 KB）。作成判断、人物・生成モデルの説明、評価履歴、case/oracle、検証script、配布manifestは`maintenance/`と`mino-doc/`へ置く。Skillから保守資料への参照はない。`mino-*`という既存呼出名は互換性のため維持する。
+
+通常回答は判断・根拠・未知・検証状態で完結する。正式な引継ぎではschemaの必須fieldと実在IDを保持し、同じ内容はartifact参照で再利用する。保存先の拡張子ではなく、後続が正本として使うかで選ぶ。
 
 ## ディレクトリ構成
 
 ```text
 .
-├── AGENTS.md                 # Skill作成・更新を行うagent向けの規則
-├── README.md                 # この利用者向けガイド
-├── .github/workflows/
-│   └── validate-suite.yml    # Linux current / Bash 3.2 / native macOS構造検証
-├── mino-doc/                 # 公開資料から整理した調査・設計ノウハウ
-└── .agents/skills/           # 配布可能なSkill suite
-    ├── mino-core/
-    │   ├── evaluations/
-    │   │   ├── 0.9.0.md             # 現versionのrun結果、未実行事項、残存risk
-    │   │   ├── cases/0.9.0.md       # exact fence bodyとして渡すsolver入力
-    │   │   ├── oracles/0.9.0.md     # runner metadata、input digest、evaluator-only gate
-    │   │   └── fixtures/0.9.0/      # validator parity用のversioned negative fixture
-    │   ├── references/platform-compatibility.md
-    │   └── scripts/
-    │       ├── suite-manifest.txt   # version、owner、Skill一覧
-    │       ├── validate-suite.ps1         # Windows
-    │       ├── validate-suite.sh          # Linux / macOS
-    │       ├── validate-utf8.sh           # locale非依存のstrict UTF-8 helper
-    │       ├── test-validator-fixtures.ps1 # Windows validator回帰
-    │       └── test-validator-fixtures.sh  # Linux / macOS validator回帰
+├── AGENTS.md / README.md
+├── .github/                         # native OS別の検証job
+├── mino-doc/                        # 調査資料・既存の作成判断
+├── maintenance/
+│   ├── design-decisions/            # runtime分離の根拠と変更履歴
+│   ├── evaluations/                 # 旧入力を保持。現行0.12.0-r6
+│   ├── suite-contract.json          # 責務・enum・評価revision
+│   ├── package-shapes.json          # 維持するschema field
+│   ├── benchmark.md                 # suite release条件
+│   └── scripts/                     # manifest・inventory・validator・fixture
+└── .agents/skills/
+    ├── mino-core/                   # 共通規則・条件付きreference・schema
     ├── mino-problem-framing/
     ├── mino-domain-model-completeness/
     ├── mino-design-by-contract/
     ├── mino-interface-implementation-separation/
     ├── mino-architecture-quality-strategy/
     └── mino-reproducible-development/
+        # 各Skill: SKILL.md、agents/openai.yaml、必要時だけ読むschemas/
 ```
 
-`mino-doc/`はSkillを作るための根拠資料です。完成したSkillは`mino-doc/`を実行時に読まず、インストールされた`skills/` directory内のファイルだけで完結します。この制約により、元リポジトリを伴わずにSkillだけを配布できます。
-
-調査資料の目的、対象範囲、基準日、文書一覧は[`mino-doc/README.md`](mino-doc/README.md)を参照してください。
+正確な配布file一覧は[suite-files.txt](maintenance/scripts/suite-files.txt)です。完成Skillの参照はインストール済みskills内で完結します。[mino-docの資料一覧](mino-doc/README.md)と[公式ガイドの反映記録](mino-doc/31-practicality-refresh-20260910.md)は保守用で、実行時には読みません。
 
 ## Skillを作成・更新する
 
@@ -235,90 +242,60 @@ Skillを更新するagentが守る詳細規則は[`AGENTS.md`](AGENTS.md)にあ�
 
 ## 検証レベルと現在の状態
 
-このrepositoryでは、Skillの「読み込めること」と「期待する判断を安定して返すこと」を分けて判定します。`behavioral release`は一般規格名ではなく、このsuiteのversion判定に使うrepository内の用語です。
-
-| 検証レベル | 確認すること | 0.9.0の状態 |
+| 検証レベル | 対象 | 状態 |
 |---|---|---|
-| structural validation | package、front matter、metadata、内部参照、UTF-8 / LF、Linux / macOS BashとPowerShell runtime | Linux Bash 5.3 / 3.2.57とWSL UNC上のPowerShellはpass。native macOSはvalidator pass、fixture runner fail（run `29397674053`、exit `2`）。native Windows checkout / NTFSは未実行 |
-| targeted behavioral evidence | 代表的なforward testで、問題定義、Evidence、過剰抽象化拒否、status分離が働くか | not executed。C1〜C15のprovenance付きfresh runは0件 |
-| behavioral release | versioned case / oracle、最低3 fresh-context run、代表・negative case、過去回帰、required platformの全Release gate | not ready |
-| application runtime correctness | Skillを適用した対象applicationのtest、failure injection、migration rehearsal、実platform動作 | 対象applicationごとに別途検証 |
+| 構造検査 | 参照・metadata・mode・schema・文字形式・評価整合 | head `d5be04a`の仮マージ`fcd7e61`で全5 CI jobs成功。Windows PowerShell 5.1ログは1038 checks・87 fixtures成功、skip 0。ローカルWindowsの86 pass / 1 symlink skipとは別Evidence。今回の文書訂正後のCIは未実行 |
+| 対象を絞った試用 | 通常回答と正式package、未知・契約・境界・品質 | 独立contextの試用。対象digestと読込量を個別記録 |
+| behavioral release | 全ケース・最低3 fresh-context run・required platform | not ready。counted runは0 |
+| application runtime | 利用対象のcode・test・移行・復旧 | 対象applicationごとに別途検証 |
 
-platform Evidenceを一つの「cross-platform対応済み」へまとめません。現在の確認状況はruntimeとfilesystemの層ごとに記録します。
+991 fieldの保持は主にfield名の存在確認であり、意味・必須条件・判断規則・全入口への適用の同等性は証明しない。r5の約81〜82%削減はPR中間版とのファイル量比較で、developとの直接比較や実測の高速化率ではない。r6の重要case対応と4入力のpaired smokeは旧0.8.0（`180ca1f`）との限定比較で、PR base / developの0.9.0（`9a2af5e`）との比較は未実行。既存runのSHA・digestを保持し、全62ケースなどの未実行事項を[現行評価記録](maintenance/evaluations/0.12.0-r6.md)へ分ける。全体の非劣化とbehavioral releaseは未証明。
 
-| Platform evidence | 0.9.0の状態 |
-|---|---|
-| Linux current Bash validator on WSL Linux filesystem | pass。UTF-8 backend self-testとBash fixture 40 / 40を含む |
-| Linux Bash 3.2 validator | pass。Docker Official Image `bash:3.2.57`のLinux rootfsでvalidatorとBash fixture 40 / 40を実行。native macOS Evidenceではない |
-| Windows PowerShell 5.1 validator over the same WSL UNC artifact | pass。PowerShell fixture 37 / 37。PowerShell compatibilityの確認であり、native NTFS Evidenceではない |
-| Native Windows checkout / NTFS validator and fixture runner | not executed |
-| Native macOS `/bin/bash` validator and fixture runner | executed / fail。run `29397674053`、job `87294760529`、macOS 15.7.7、image `macos-15-arm64` `20260706.0213.1`、ARM64。validatorはpass、fixture runnerは`solver-nested-metadata`でexit `2` |
-| Application runtime with the same requirement / contract / oracle on required platforms | not executed |
+### 必要なruntime
 
-構造validatorのpassだけでbehavioral releaseや対象applicationの正しさを宣言しません。一部caseのpassはその範囲のEvidenceですが、全体の代用にはしません。0.9.0の実行結果、未実行事項、残存riskは[`Evaluation 0.9.0`](.agents/skills/mino-core/evaluations/0.9.0.md)、全release条件は[`Reproducibility benchmark`](.agents/skills/mino-core/references/benchmark.md#release-gate)を参照してください。
+構造validator、fixture、oracle生成は**Python 3.10+標準library**を使います。追加pip packageは不要です。Skillの本文を使うだけならPythonは不要です。Bash launcherは3.2以降、Windows launcherはPowerShell 5.1 / 7を対象とします。
 
-### Windowsで構造を検証する
+Windowsは`MINO_PYTHON`の指定、なければ`py -3`、`python`の順に実行可能なPythonを確認します。Linux / macOSは`MINO_PYTHON`、なければ`python3`を使います。Windowsアプリ実行aliasの存在だけではPythonを利用可能と判定しません。
 
-Windows PowerShellでは、repository rootから次を実行します。
+### Windowsで検証する
+
+repository rootから実行します。必要なら`$env:MINO_PYTHON`へインストール済みPython executableのpathを設定してください。
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .agents\skills\mino-core\scripts\validate-suite.ps1 -SkillsRoot .agents\skills
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File maintenance/scripts/validate-suite.ps1 -SkillsRoot .agents/skills
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File maintenance/scripts/test-validator-fixtures.ps1 -SkillsRoot .agents/skills
 ```
 
-PowerShell 7を利用する場合は次を実行します。
+PowerShell 7では`powershell.exe`を`pwsh`へ置き換えます。検査fixtureはfileのencodingとLFを明示し、Python子プロセスとのPIPE通信もUTF-8へそろえる。OSのfile I/O既定encodingをUTF-8へ変更せずに実行できる。
+
+### Linux / macOSで検証する
+
+```bash
+bash maintenance/scripts/validate-suite.sh --skills-root .agents/skills
+bash maintenance/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+```
+
+macOSでは`bash`を標準`/bin/bash`へ置き換えます。必要なら`MINO_PYTHON`へPython executableのpathを設定します。過去のshell単独UTF-8 helperは使用せず、共通Python engineがstrict UTF-8を検査します。
+
+### 評価oracleを更新する
+
+入力や採点の意味を変えるときは新しい評価revisionを作り、旧case / oracleを保持します。正本JSONからMarkdownを生成し、構造validatorで一致を確認します。
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File .agents/skills/mino-core/scripts/validate-suite.ps1 -SkillsRoot .agents/skills
+python -B maintenance/scripts/render_evaluation_oracle.py
 ```
 
-### Linuxで構造を検証する
+この共通Python commandの`python`は実行可能なPythonを指定します。Linux / macOSでは通常`python3`です。PowerShellの出力redirectへ依存せず、scriptがUTF-8/LFで保存します。
 
-repository rootから次を実行します。実行権限の有無に依存しないよう、Bashを明示します。shared `.sh` contractの最小runtimeはBash 3.2です。
+### CIと検査範囲
 
-```bash
-bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
-```
+[CI workflow](.github/workflows/validate-suite.yml)はLinux current Bash、Pythonを含めたLinux Bash 3.2 image、native macOS標準Bash、native Windows PowerShell 5.1 / 7を別jobで検査します。job定義の存在を実行済みEvidenceとせず、実行runを別に記録します。Bash 3.2 imageにはPythonを明示的に追加し、base digestと実行versionを記録します。
 
-### macOSで構造を検証する
+validatorはmanifest、配布inventory、front matter、metadata、mode、subject verdict、内部参照、共通enum、評価revision・digest・JSON/Markdown oracleの一致を確認します。内部参照はコードスパン、inline Markdownリンク、参照定義から抽出し、path・存在・論理境界・到達性を共通に検査する。構造validatorのexitは0=pass、1=内容違反、2=runtime不足またはI/Oによる検査不能です。fixture runnerのexit 0は全実行fixtureの期待結果一致を表し、skip数は別に報告します。
 
-repository rootから標準`/bin/bash`を明示して実行します。Homebrew等の別BashをPATHから選び直しません。
+保守領域のactive case / oracle JSON / oracle Markdownも、生bytesのUTF-8（BOMなし）・LF・final newlineを検査する。改行を正規化せず、case本文のexact digestとoracle生成物のbyte一致を照合する。CRLF・CR保存は内容違反として拒否する。
 
-```bash
-/bin/bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
-/bin/bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
-```
-
-macOSで必要な外部commandは、標準環境にある`awk`、`od`、`mktemp`、`find`、`grep`、`sed`、`sort`、`tail`、`tr`、`wc`です。strict UTF-8判定は同梱helperでbyte列を検査し、`iconv`実装名やUTF-8 locale名へ依存しません。
-
-CIは[`.github/workflows/validate-suite.yml`](.github/workflows/validate-suite.yml)で、Linux current Bash、Docker Official ImageのBash 3.2.57、native macOSの標準`/bin/bash`を別jobとして定義しています。validatorとfixture runnerも別named stepで実行します。run `29397674053`のnative macOS failureをpassへ読み替えず、修正後headのgreen rerunを新しいEvidenceとして記録します。
-
-validatorは、主に次を確認します。詳細検査とtext-format検査はmanifest記載Skillに限定し、同じrootへインストールされた無関係なSkillは無視します。一方、manifestにない`mino-*` Skillはsuiteの登録漏れとして報告します。
-
-- manifestに記録したversion、owner、Skill一覧と、実際のSkill directoryが一致すること。
-- manifestのscalarが一意、versionがleading zeroなしの3-part SemVer、Skill名が一意かつSkillsRoot直下であること。
-- manifest versionに対応するsolver case、evaluator oracle、evaluation recordのheadingとbenchmark参照が一致し、solver caseのtop-level fieldがallowlist内であること。
-- suiteを構成するSkillと必須section・fileが揃っていること。
-- required headingと100行超referenceの`## Contents`が末尾空白なしの完全一致であること。
-- front matterがexact delimiterと`name` / `description`一意性を満たし、directory名と一致すること。
-- agent metadataが所定の階層とfieldだけを持ち、default prompt内のSkill名、implicit invocation policyが整合すること。
-- 内部pathが`skills/`をrootとし、bare filename、absolute path、親参照、SkillsRoot外参照がないこと。
-- `$<skill-name>`によるSkill間参照が解決できること。
-- 全Skillがplatform compatibility referenceをroutingしていること。
-- Windows用PowerShell validatorとLinux / macOS共用Bash validator、strict UTF-8 helperが同梱されていること。
-- Skill directoryが配布に不要なREADMEへ依存していないこと。
-- suite内のtext fileがUTF-8（BOMなし）、LF、final newlineありであること。
-
-validator自体を変更した場合は、通常の構造検証に加えて次の共通fixtureを実行します。
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .agents\skills\mino-core\scripts\test-validator-fixtures.ps1 -SkillsRoot .agents\skills
-```
-
-```bash
-bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
-```
-
-構造validatorの合格は、対象アプリケーションがrequired platformで正しく動作する証明ではありません。application runtime対応を完了とするには、同じrequirementとcontract testを各required platformで実行します。
+同じskills rootにある無関係Skillは検査しません。構造検査は記述の意味やモデルの判断を証明しないため、[benchmark](maintenance/benchmark.md)に従った独立評価を別途行います。未実行platform、必要runner・command、残存riskは[Evaluation 0.12.0-r6](maintenance/evaluations/0.12.0-r6.md)へ残します。
 
 ## 大切にしていること
 

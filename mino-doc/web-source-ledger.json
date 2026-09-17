@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "previous_research_cutoff": "2026-07-10",
+  "scan_attempted_through": "2026-09-08",
+  "coverage": "partial",
+  "next_scan_inclusive_from": "2026-07-10",
+  "source_date_policy": "Null means unverified; check dates are not publication dates. Revisit every pending item even when its URL was already seen.",
+  "sources": [
+    {
+      "id": "W28-01",
+      "url": "https://levtech.jp/media/article/event/030/",
+      "kind": "organizer_announcement",
+      "published_on": "2026-07-27",
+      "updated_on": "2026-08-25",
+      "event_dates": [
+        "2026-08-27"
+      ],
+      "retrieval": "body_verified",
+      "adoption": "theme_only",
+      "next_action": "Check for the event report or speaker transcript; do not infer delivered content.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-02",
+      "url": "https://corp.qiita.com/releases/2026/09/qiita-conference-2026-autumn-2/",
+      "kind": "organizer_announcement",
+      "published_on": "2026-09-08",
+      "updated_on": null,
+      "event_dates": [
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ],
+      "retrieval": "body_verified",
+      "adoption": "pending_future_content",
+      "next_action": "Revisit after publication of actual presentation materials.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-03",
+      "url": "https://findy-code.io/events/oL_F93x5PyetR",
+      "kind": "organizer_event_overview",
+      "published_on": null,
+      "updated_on": null,
+      "event_dates": [
+        "2026-09-30"
+      ],
+      "retrieval": "body_verified",
+      "adoption": "date_unknown_theme_only",
+      "next_action": "Resolve publication date, archive label and time inconsistency; obtain full presentation.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-04",
+      "url": "https://lapras.connpass.com/event/404994/",
+      "kind": "event_candidate",
+      "published_on": null,
+      "updated_on": null,
+      "event_dates": [],
+      "retrieval": "body_unavailable",
+      "adoption": "not_adopted",
+      "next_action": "Verify search-snippet event date 2026-09-15 against primary body; check report and slides.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-05",
+      "url": "https://x.com/MinoDriven/status/2095795781588652272",
+      "kind": "social_post_candidate",
+      "published_on": null,
+      "updated_on": null,
+      "event_dates": [],
+      "retrieval": "search_snippet_only",
+      "adoption": "not_adopted",
+      "next_action": "Verify full post and method links; snippet date 2026-09-04 is not a confirmed publication date.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-06",
+      "url": "https://x.com/MinoDriven/status/2087679060290032090",
+      "kind": "social_post_candidate",
+      "published_on": null,
+      "updated_on": null,
+      "event_dates": [],
+      "retrieval": "body_unavailable",
+      "adoption": "not_adopted",
+      "next_action": "Verify full post and context; snippet date 2026-08-12 is unconfirmed.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-07",
+      "url": "https://speakerdeck.com/minodriven/ai-refactoring-approach",
+      "kind": "author_presentation",
+      "published_on": "2026-06-30",
+      "updated_on": null,
+      "event_dates": [],
+      "retrieval": "listed_in_previous_corpus",
+      "adoption": "existing_baseline",
+      "next_action": "Compare future content updates; do not count the unchanged URL as a new article.",
+      "checked_on": "2026-09-08"
+    },
+    {
+      "id": "W28-08",
+      "url": "https://levtech.jp/media/article/column/detail_759/",
+      "kind": "interview",
+      "published_on": "2025-11-20",
+      "updated_on": "2026-03-09",
+      "event_dates": [],
+      "retrieval": "body_verified",
+      "adoption": "outside_window",
+      "next_action": "Exclude sidebar dates when checking future updates.",
+      "checked_on": "2026-09-08"
+    }
+  ],
+  "coverage_gaps": [
+    {
+      "platform": "Zenn",
+      "state": "retrieval_error"
+    },
+    {
+      "platform": "note",
+      "state": "insufficient_article_index"
+    },
+    {
+      "platform": "Qiita author index",
+      "state": "index_read_is_not_full_article_audit"
+    },
+    {
+      "platform": "X and some connpass pages",
+      "state": "full_body_unavailable"
+    }
+  ],
+  "resume_watermark": "2026-07-10",
+  "watermark_advanced": false,
+  "watermark_scope": "Previous documented research baseline; not an assertion of whole-Web completeness."
+}

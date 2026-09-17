@@ -1,0 +1,57 @@
+{
+  "mino-core/schemas/core.md": {
+    "preserved_fields": 120,
+    "missing": [],
+    "added": []
+  },
+  "mino-core/schemas/discovery.md": {
+    "preserved_fields": 89,
+    "missing": [],
+    "added": []
+  },
+  "mino-core/schemas/requirements.md": {
+    "preserved_fields": 42,
+    "missing": [],
+    "added": []
+  },
+  "mino-core/schemas/change-safety.md": {
+    "preserved_fields": 43,
+    "missing": [],
+    "added": []
+  },
+  "mino-core/schemas/platform.md": {
+    "preserved_fields": 48,
+    "missing": [],
+    "added": []
+  },
+  "mino-problem-framing/schemas/package.md": {
+    "preserved_fields": 48,
+    "missing": [],
+    "added": []
+  },
+  "mino-domain-model-completeness/schemas/package.md": {
+    "preserved_fields": 163,
+    "missing": [],
+    "added": []
+  },
+  "mino-design-by-contract/schemas/package.md": {
+    "preserved_fields": 93,
+    "missing": [],
+    "added": []
+  },
+  "mino-interface-implementation-separation/schemas/package.md": {
+    "preserved_fields": 88,
+    "missing": [],
+    "added": []
+  },
+  "mino-architecture-quality-strategy/schemas/package.md": {
+    "preserved_fields": 181,
+    "missing": [],
+    "added": []
+  },
+  "mino-reproducible-development/schemas/package.md": {
+    "preserved_fields": 76,
+    "missing": [],
+    "added": []
+  }
+}

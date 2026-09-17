@@ -1,0 +1,34 @@
+{
+  "run_id": "develop-11",
+  "case_id": "C11",
+  "variant": "develop",
+  "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\develop-11",
+  "suite_artifact_sha256": "bfade6fb5fd0b06459da4d29fb6c5a3d644ac24184f1f792da954e4d53140070",
+  "solver_input_sha256": "ca76920a90d2a6a09941e90d4a647e86aec63c15c3bd7a0c3f7973b5845644e5",
+  "agent": "solver_i",
+  "fork_turns": "none",
+  "model_requested": "inherit",
+  "effective_model": null,
+  "effective_settings": null,
+  "counted": false,
+  "evaluation_status": "selected_semantic_gates_observed",
+  "artifacts": [
+    {
+      "path": "input.yaml",
+      "bytes": 637,
+      "sha256": "ca76920a90d2a6a09941e90d4a647e86aec63c15c3bd7a0c3f7973b5845644e5"
+    },
+    {
+      "path": "output.md",
+      "bytes": 17000,
+      "sha256": "8c8fa1e0b2258e9d9c8ffa09dac4bdc7a7fecbf9b90e840776fc0572d0719155"
+    }
+  ],
+  "solver_output_sha256": "8c8fa1e0b2258e9d9c8ffa09dac4bdc7a7fecbf9b90e840776fc0572d0719155",
+  "output_digest_scope": "solverが保存した回答artifactのraw bytes。tool transcript全体ではない",
+  "evaluation_scope": "r6 oracleの該当caseにある意味gateを親evaluatorが出力読了後に照合。全schema fieldの意味同等性やrelease passではない。",
+  "semantic_observation": "外部成功と保存失敗を区別し、取消済みとせず、retry/duplicate/曖昧結果とrecovery owner/期限の未決を保持した。",
+  "known_differences": [
+    "対象verdictはdevelopがinsufficient、candidateがindeterminate。共通gateでは未決を隠さず依存実装を停止する意味を照合し、版固有の語彙一致は採点しない。"
+  ]
+}

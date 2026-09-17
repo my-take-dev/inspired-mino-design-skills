@@ -1,0 +1,742 @@
+{
+  "contract_package": {
+    "id": "CP1",
+    "revision": "1",
+    "artifact_handle": "contract-package.json",
+    "subject": "check_nameの文字列入力に対する名前検証契約",
+    "mode": "design",
+    "scope": {
+      "input_domain": "文字列",
+      "observable_results": [
+        "受理",
+        "NameError"
+      ],
+      "non_goals": [
+        "対象systemのcode・設定・運用data変更",
+        "非文字列入力の挙動",
+        "既存挙動の推測",
+        "成功値の型やNameErrorを伝える言語構文の新規決定"
+      ],
+      "representation_note": "成功の具体的な戻り値や例外構文は要件にないため固定しない。後続実装者は対象の公開面へ受理/NameErrorを写像し、R1/R2の意味を保持する。"
+    },
+    "evidence": [
+      {
+        "id": "E1",
+        "status": "confirmed",
+        "artifact_handle": "input.yaml",
+        "revision": "提供時の入力",
+        "location": "confirmed_evidence[0]",
+        "statement": "owner承認済みR1: check_nameは空文字を拒否し、それ以外の文字列を受理する。正規化しない。",
+        "decision_maturity": "approved"
+      },
+      {
+        "id": "E2",
+        "status": "confirmed",
+        "artifact_handle": "input.yaml",
+        "revision": "提供時の入力",
+        "location": "confirmed_evidence[1]",
+        "statement": "R2: 空文字にはNameErrorを返し、副作用を起こさない。",
+        "decision_maturity": "unknown",
+        "note": "提供要件として確認済み。R1と同じowner承認済みという表示は付けない。"
+      },
+      {
+        "id": "E3",
+        "status": "confirmed",
+        "artifact_handle": "input.yaml",
+        "revision": "提供時の入力",
+        "location": "confirmed_evidence[2]",
+        "statement": "操作はpureで外部I/O・時間依存なし。"
+      },
+      {
+        "id": "E4",
+        "status": "confirmed",
+        "artifact_handle": "input.yaml",
+        "revision": "提供時の入力",
+        "location": "confirmed_evidence[2]",
+        "statement": "既存の実装とtestは未提供。"
+      },
+      {
+        "id": "E5",
+        "status": "confirmed",
+        "artifact_handle": "input.yaml",
+        "revision": "提供時の入力",
+        "location": "mode / required_platforms / prohibited_changes",
+        "statement": "modeはdesign。required_platformsは空。対象systemのcode・設定・運用data変更は禁止。"
+      },
+      {
+        "id": "E6",
+        "status": "confirmed",
+        "statement": "この成果物の読書きは指定directoryでWindows PowerShellから行った。filesystem形式、CPU architecture、対象application runtimeは検査していない。"
+      }
+    ],
+    "platform_context": {
+      "host_platform": "windows",
+      "process_platform": "windows",
+      "artifact_filesystem": "unknown",
+      "target_platforms": [],
+      "shell": "powershell",
+      "architecture": "unknown",
+      "filesystem": {
+        "case_sensitive": "unknown",
+        "path_style": "windows",
+        "executable_bit": "unknown"
+      },
+      "toolchain": {
+        "commands": [
+          "Get-Content",
+          "成果物のUTF-8/LF保存"
+        ],
+        "versions": []
+      },
+      "platform_requirements": [],
+      "unknowns": [
+        {
+          "subject": "保存先filesystem形式・case sensitivity・executable bit・CPU architecture",
+          "impact": "今回のpure操作の論理契約には影響しない。native filesystem互換性の証明には使わない。",
+          "confirmation_method": "将来filesystem要件が生じた時点でrunner上の実値を検査する。",
+          "evidence": [
+            "E5",
+            "E6"
+          ]
+        }
+      ]
+    },
+    "platform_validation": {
+      "required_platforms": [],
+      "executed": [],
+      "unexecuted": [],
+      "parity_result": "not_applicable",
+      "platform_specific_risks": [
+        "required_platformsは空であり、対象applicationのOS別動作を検証したEvidenceはない。"
+      ]
+    },
+    "change_safety": {
+      "applicability": "not_applicable",
+      "package": null,
+      "not_applicable_reason": "既存公開契約・実装を変更する依頼ではなく、提供済み要件の契約設計のみ。",
+      "confirmation_method": "該当なし。",
+      "impact_if_unresolved": "該当なし。",
+      "evidence": {
+        "status": "confirmed",
+        "sources": [
+          "E1",
+          "E2",
+          "E4",
+          "E5"
+        ]
+      }
+    },
+    "requirements": [
+      {
+        "id": "R1",
+        "statement": "check_nameは空文字を拒否し、それ以外の文字列を受理する。正規化しない。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1"
+          ]
+        },
+        "decision_maturity": "approved"
+      },
+      {
+        "id": "R2",
+        "statement": "空文字にはNameErrorを返し、副作用を起こさない。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E2"
+          ]
+        },
+        "decision_maturity": "unknown"
+      },
+      {
+        "id": "R3",
+        "statement": "操作はpureで外部I/O・時間依存がない。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E3"
+          ]
+        },
+        "decision_maturity": "unknown"
+      }
+    ],
+    "operations": [
+      {
+        "id": "OP1",
+        "name": "check_name",
+        "caller": "文字列の名前を検証したい呼出元",
+        "boundary": "check_nameの公開呼出境界",
+        "contract_owner": "E1に示されたowner（個人名は未提供）",
+        "initial_state": "永続状態・domain状態を持たないpure操作。外部状態によらない。",
+        "inputs": [
+          {
+            "name": "name",
+            "domain": "文字列",
+            "normalization": "なし",
+            "note": "説明用の引数名。非文字列への応答は今回の契約外。空文字は公開された失敗入力として扱い、callerの違反だけにしない。"
+          }
+        ],
+        "expected_result": "nameが空文字ならNameError。それ以外の文字列なら受理。",
+        "side_effects": [],
+        "failures": [
+          {
+            "input": "空文字",
+            "result": "NameError",
+            "state_after": "domain/persisted stateと外部状態を変更しない。"
+          }
+        ],
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1",
+            "E2",
+            "E3"
+          ]
+        }
+      }
+    ],
+    "contract_items": [
+      {
+        "id": "CI1",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R1"
+        ],
+        "domain_obligation_ids": [],
+        "kind": "postcondition",
+        "statement": "入力文字列が空文字でなければ受理する。空白のみ、Unicode、制御文字を理由に拒否しない。",
+        "applicability": {
+          "status": "required",
+          "rationale": "文字列の名前検証について入力で明示された保証。",
+          "confirmation_method": "該当なし。確認済みの要求に基づく。",
+          "impact_if_unresolved": "該当なし。"
+        },
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "check_nameの実装責務",
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "pureな単一操作の契約設計であり、別のUI・writer・永続化層は対象にない。",
+          "entries": []
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1"
+          ]
+        }
+      },
+      {
+        "id": "CI2",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "domain_obligation_ids": [],
+        "kind": "failure_guarantee",
+        "statement": "入力文字列が空文字なら受理せず、NameErrorを公開結果とする。",
+        "applicability": {
+          "status": "required",
+          "rationale": "文字列の名前検証について入力で明示された保証。",
+          "confirmation_method": "該当なし。確認済みの要求に基づく。",
+          "impact_if_unresolved": "該当なし。"
+        },
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "check_nameの実装責務",
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "pureな単一操作の契約設計であり、別のUI・writer・永続化層は対象にない。",
+          "entries": []
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1",
+            "E2"
+          ]
+        }
+      },
+      {
+        "id": "CI3",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R1"
+        ],
+        "domain_obligation_ids": [],
+        "kind": "invariant",
+        "statement": "名前の判定対象は渡された文字列そのものとし、判定前後にtrim・大小文字変換・Unicode正規化などの正規化を行わない。",
+        "applicability": {
+          "status": "required",
+          "rationale": "文字列の名前検証について入力で明示された保証。",
+          "confirmation_method": "該当なし。確認済みの要求に基づく。",
+          "impact_if_unresolved": "該当なし。"
+        },
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "check_nameの実装責務",
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "pureな単一操作の契約設計であり、別のUI・writer・永続化層は対象にない。",
+          "entries": []
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1"
+          ]
+        }
+      },
+      {
+        "id": "CI4",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R2",
+          "R3"
+        ],
+        "domain_obligation_ids": [],
+        "kind": "invariant",
+        "statement": "成功・NameErrorのどちらでもdomain/persisted stateおよび外部状態を変更しない。",
+        "applicability": {
+          "status": "required",
+          "rationale": "文字列の名前検証について入力で明示された保証。",
+          "confirmation_method": "該当なし。確認済みの要求に基づく。",
+          "impact_if_unresolved": "該当なし。"
+        },
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "check_nameの実装責務",
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "pureな単一操作の契約設計であり、別のUI・writer・永続化層は対象にない。",
+          "entries": []
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E2",
+            "E3"
+          ]
+        }
+      },
+      {
+        "id": "CI5",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R3"
+        ],
+        "domain_obligation_ids": [],
+        "kind": "invariant",
+        "statement": "検証結果は時刻に依存せず、同じ入力文字列に同じ意味の結果を返す。",
+        "applicability": {
+          "status": "required",
+          "rationale": "文字列の名前検証について入力で明示された保証。",
+          "confirmation_method": "該当なし。確認済みの要求に基づく。",
+          "impact_if_unresolved": "該当なし。"
+        },
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "check_nameの実装責務",
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "pureな単一操作の契約設計であり、別のUI・writer・永続化層は対象にない。",
+          "entries": []
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E3"
+          ]
+        }
+      },
+      {
+        "id": "CI6",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R3"
+        ],
+        "domain_obligation_ids": [],
+        "kind": "invariant",
+        "statement": "検証操作は外部I/Oを行わない。読み取りも含めて外部I/Oに依存しない。",
+        "applicability": {
+          "status": "required",
+          "rationale": "文字列の名前検証について入力で明示された保証。",
+          "confirmation_method": "該当なし。確認済みの要求に基づく。",
+          "impact_if_unresolved": "該当なし。"
+        },
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "check_nameの実装責務",
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "pureな単一操作の契約設計であり、別のUI・writer・永続化層は対象にない。",
+          "entries": []
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E3"
+          ]
+        }
+      }
+    ],
+    "applicability_assessments": [
+      {
+        "subject": "precondition",
+        "status": "not_applicable",
+        "rationale": "入力domainは文字列に固定されている。空文字以外をcallerの呼出条件とする追加制約はない。空文字はCI2の公開失敗契約で扱う。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1",
+            "E2"
+          ]
+        }
+      },
+      {
+        "subject": "environment_condition",
+        "status": "not_applicable",
+        "rationale": "外部I/O・時間依存なし。OS・外部systemへの成立条件は要求されていない。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E3",
+            "E5"
+          ]
+        }
+      },
+      {
+        "subject": "prohibited_transition / concurrency / cancel / timeout / partial success",
+        "status": "not_applicable",
+        "rationale": "状態遷移・非同期外部操作・永続更新を持たないpure操作。これらの機構や失敗を新設しない。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E3"
+          ]
+        }
+      },
+      {
+        "subject": "technical failure / recovery",
+        "status": "not_applicable",
+        "rationale": "このscopeに外部技術失敗の要件はない。指定された業務失敗は空文字のNameError。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E2",
+            "E3"
+          ]
+        }
+      }
+    ],
+    "idempotency_assessments": [
+      {
+        "operation_id": "OP1",
+        "applicability": "not_applicable",
+        "rationale": "副作用を持たないpure操作なので、副作用の重複排除・retry・idempotency keyは不要。同一入力の決定性はCI5で扱う。",
+        "confirmation_method": "該当なし。",
+        "impact_if_unresolved": "該当なし。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E3"
+          ]
+        },
+        "contract_item_ids": []
+      }
+    ],
+    "public_contract_changes": [],
+    "tests": [
+      {
+        "id": "T1",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R1",
+          "R2",
+          "R3"
+        ],
+        "verifies": [
+          "CI2",
+          "CI4",
+          "CI6"
+        ],
+        "given": "入力は空文字。副作用・外部I/Oの観測器と呼出前状態を用意する。",
+        "when": "check_nameを1回呼ぶ。",
+        "then": [
+          "結果はNameErrorであり受理ではない。",
+          "前後の状態が一致する。副作用・外部I/O呼出数は0。"
+        ],
+        "oracle": "空文字受理、別error、error前の副作用を失敗とする。",
+        "environment_conditions": [
+          "対象実装に合わせたtest adapterを後続実装者が用意する。OS依存条件は要求されていない。"
+        ],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          {
+            "status": "confirmed",
+            "sources": [
+              "E4"
+            ],
+            "statement": "実装と既存testは未提供。ここにはtest設計を保存した。"
+          }
+        ]
+      },
+      {
+        "id": "T2",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R1"
+        ],
+        "verifies": [
+          "CI1"
+        ],
+        "given": "入力集合は1文字のa、半角空白、tab、改行、全角空白、合成済みé、分解形e+結合accent、NULを含む文字列、複数文字の名前。長さ0はT1へ分ける。",
+        "when": "各文字列についてcheck_nameを呼ぶ。",
+        "then": [
+          "すべて受理する。"
+        ],
+        "oracle": "len(name)>0の全例が受理。境界の0/1と、空白拒否・文字種制限・trim後判定による拒否を識別する。",
+        "environment_conditions": [
+          "対象実装に合わせたtest adapterを後続実装者が用意する。OS依存条件は要求されていない。"
+        ],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          {
+            "status": "confirmed",
+            "sources": [
+              "E4"
+            ],
+            "statement": "実装と既存testは未提供。ここにはtest設計を保存した。"
+          }
+        ]
+      },
+      {
+        "id": "T3",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R1"
+        ],
+        "verifies": [
+          "CI3"
+        ],
+        "given": "正規化で変化する文字列として前後空白、大小文字混在、分解形Unicodeを用意する。入力から判定に用いる値への導出を検査できるadapterまたは実装照合を用意する。",
+        "when": "check_nameの判定までの値の流れと正規化処理の有無を観測する。",
+        "then": [
+          "判定対象は入力と同じ文字列列である。",
+          "正規化処理が存在しない。"
+        ],
+        "oracle": "元入力と判定対象が異なる、またはtrim/case変換/Unicode正規化を実行したら失敗。受理結果だけでは非空性を維持する正規化を検出できないため、受理だけのtestをこのCIの証明にしない。",
+        "environment_conditions": [
+          "対象実装に合わせたtest adapterを後続実装者が用意する。OS依存条件は要求されていない。"
+        ],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          {
+            "status": "confirmed",
+            "sources": [
+              "E4"
+            ],
+            "statement": "実装と既存testは未提供。ここにはtest設計を保存した。"
+          }
+        ]
+      },
+      {
+        "id": "T4",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "R2",
+          "R3"
+        ],
+        "verifies": [
+          "CI4",
+          "CI5",
+          "CI6"
+        ],
+        "given": "空文字と非空文字列を用意し、前後状態・外部I/O・clock参照を観測する。異なる時刻設定と反復呼出を用意する。",
+        "when": "各入力を各時刻設定で繰り返し呼ぶ。",
+        "then": [
+          "同一入力は毎回同じ受理/NameErrorになる。",
+          "domain/persisted stateと外部状態が不変。外部I/O・clock参照は0。"
+        ],
+        "oracle": "時刻による結果分岐、副作用、外部I/Oを失敗とする。繰り返しの結果一致を副作用冪等性の証明に流用しない。",
+        "environment_conditions": [
+          "対象実装に合わせたtest adapterを後続実装者が用意する。OS依存条件は要求されていない。"
+        ],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          {
+            "status": "confirmed",
+            "sources": [
+              "E4"
+            ],
+            "statement": "実装と既存testは未提供。ここにはtest設計を保存した。"
+          }
+        ]
+      }
+    ],
+    "traceability": [
+      {
+        "requirement_id": "R1",
+        "domain_obligation_ids": [],
+        "operation_ids": [
+          "OP1"
+        ],
+        "contract_item_ids": [
+          "CI1",
+          "CI2",
+          "CI3"
+        ],
+        "test_ids": [
+          "T1",
+          "T2",
+          "T3"
+        ],
+        "status": "covered"
+      },
+      {
+        "requirement_id": "R2",
+        "domain_obligation_ids": [],
+        "operation_ids": [
+          "OP1"
+        ],
+        "contract_item_ids": [
+          "CI2",
+          "CI4"
+        ],
+        "test_ids": [
+          "T1",
+          "T4"
+        ],
+        "status": "covered"
+      },
+      {
+        "requirement_id": "R3",
+        "domain_obligation_ids": [],
+        "operation_ids": [
+          "OP1"
+        ],
+        "contract_item_ids": [
+          "CI4",
+          "CI5",
+          "CI6"
+        ],
+        "test_ids": [
+          "T1",
+          "T4"
+        ],
+        "status": "covered"
+      }
+    ],
+    "coverage": {
+      "requirement": {
+        "denominator": 3,
+        "numerator": 3,
+        "uncovered_ids": []
+      },
+      "contract": {
+        "denominator": 6,
+        "numerator": 6,
+        "incomplete_item_ids": []
+      },
+      "test": {
+        "denominator": 6,
+        "numerator": 6,
+        "uncovered_item_ids": []
+      },
+      "execution": {
+        "denominator": 6,
+        "numerator": 0,
+        "unverified_item_ids": [
+          "CI1",
+          "CI2",
+          "CI3",
+          "CI4",
+          "CI5",
+          "CI6"
+        ]
+      },
+      "unknown_item_ids": [],
+      "counting_notes": "requirementはR1〜R3から条件への追跡、contractはrequired CIの定義充足、testはrequired CIへのoracle付き設計coverage。executionは実行で成功を確認したCI数。設計coverageは実装の正しさを示さない。除外したrequired CIはない。"
+    },
+    "subject_verdict": "sufficient",
+    "verdict_scope": "提供された文字列入力の論理契約設計についてsufficient。対象実装の正しさは未評価。",
+    "decision": {
+      "status": "pass",
+      "artifact_readiness": "ready",
+      "engineering_status": "planned",
+      "release_status": "not_applicable",
+      "decision_maturity": {
+        "status": "proposed",
+        "owner": "契約owner",
+        "scope": [
+          "CP1 revision 1の契約整理・test設計。R1の承認状態を変更しない。"
+        ],
+        "evidence_status": "confirmed",
+        "approval_evidence": [
+          "E1はR1だけの承認根拠。生成package全体の採用Evidenceではない。"
+        ],
+        "baseline_version": "該当なし。比較baselineとして凍結していない。",
+        "change_control": "将来の変更はrevisionを更新し、R1/R2/R3・CI・test oracleを一緒に追跡する。"
+      },
+      "next_phase": {
+        "name": "契約に従う実装・test adapter作成（後続依頼の範囲内）",
+        "status": "allowed",
+        "reasons": [
+          "提供された要件について契約とoracle設計を保存した。",
+          "この依頼では対象systemの変更を実行しない。言語固有の表現を決める際も受理/NameErrorの意味を保持する。"
+        ],
+        "human_approvals_required": []
+      },
+      "evidence": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5"
+      ],
+      "assumptions": [
+        {
+          "subject": "引数名nameとCP1/R3/E*/CI*/T*/UV1",
+          "status": "assumption",
+          "rationale": "説明用の名前と現在成果物のlocal IDのみ。入力のallowed_assumptions内。"
+        }
+      ],
+      "unknowns": [],
+      "contradictions": [],
+      "failed_gates": [],
+      "unexecuted_validation": [
+        {
+          "id": "UV1",
+          "reason": "design依頼で、対象実装・言語・test runnerが未提供。T1〜T4は設計のみ。",
+          "required_runner": "後続で選定する対象言語のtest runner。T3には入力から空判定への値の流れを検証する計測または実装照合が必要。",
+          "planned_commands": [],
+          "command_resolution": "実装とrunner受領後にT1〜T4を実行する具体commandを登録する。現時点で実在しないcommandは作らない。",
+          "owner": "後続実装者",
+          "evidence": [
+            "E4"
+          ]
+        }
+      ],
+      "platform_validation": {
+        "required_platforms": [],
+        "executed": [],
+        "unexecuted": [],
+        "parity_result": "not_applicable",
+        "platform_specific_risks": [
+          "required_platformsは空であり、対象applicationのOS別動作を検証したEvidenceはない。"
+        ]
+      },
+      "residual_risks": [
+        "全testはplanned/not_run。実装欠陥を検証していない。",
+        "T3の計測または実装照合が未提供。受理/拒否だけのblack-box testでは、非空性を変えない正規化の不存在を証明できない。"
+      ],
+      "human_approvals_required": []
+    }
+  }
+}

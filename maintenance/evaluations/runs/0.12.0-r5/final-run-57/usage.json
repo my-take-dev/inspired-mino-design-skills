@@ -1,0 +1,55 @@
+{
+  "selected_skills": [
+    "mino-design-by-contract"
+  ],
+  "read_skill_files": [
+    {
+      "path": "skills/mino-design-by-contract/SKILL.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/shared-policies.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-design-by-contract/schemas/package.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/schemas/decision.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/schemas/platform.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/platform-compatibility.md",
+      "range": "全文",
+      "reread": false,
+      "output_omitted": false
+    }
+  ],
+  "non_skill_inputs": [
+    "input.yaml",
+    "catalog.txt"
+  ],
+  "reread": false,
+  "output_omitted": false,
+  "usability_notes": [
+    "正本package指定によりpackage・decision・platform schemaへの経路は明確だった。",
+    "単なる保存ではplatform referenceの追加読込不要とSKILL本文にあるが、package schemaからplatform schemaを経由するとplatform referenceへの照合指示がある。今回は照合のため全文を読んだ。",
+    "未提供の言語・runnerについてplanned_commandsを埋める具体commandは作れないため、空配列とcommand解決手順を別fieldで残した。",
+    "正規化禁止は受理/拒否だけでは一部を識別できないため、T3に計測または実装照合の必要性を明記した。"
+  ]
+}
