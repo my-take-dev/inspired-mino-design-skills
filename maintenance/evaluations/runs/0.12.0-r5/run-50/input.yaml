@@ -1,0 +1,12 @@
+mode: "design"
+required_platforms: []
+raw_request: "検索待ちの問題を整理し、後続の設計担当が正本として使うProblem Framing Packageを保存してください。利用者への説明は短くしてください。"
+confirmed_evidence:
+  - "受付担当はピーク時の検索待ちで接客を中断する。平常時は支障がない。"
+  - "現在は問題整理だけが依頼範囲。"
+known_unknowns:
+  - "遅延箇所と許容待ち時間。"
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

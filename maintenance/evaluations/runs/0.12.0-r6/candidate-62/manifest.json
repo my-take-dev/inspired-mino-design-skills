@@ -1,0 +1,32 @@
+{
+  "run_id": "candidate-62",
+  "case_id": "C62",
+  "variant": "candidate",
+  "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-62",
+  "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+  "solver_input_sha256": "3038e638fa01a573c158d7ca7066820ccb7b8870a9821fe0d0ade032c65cd847",
+  "agent": "solver_c",
+  "fork_turns": "none",
+  "model_requested": "inherit",
+  "effective_model": null,
+  "effective_settings": null,
+  "counted": false,
+  "evaluation_status": "selected_semantic_gates_observed",
+  "artifacts": [
+    {
+      "path": "input.yaml",
+      "bytes": 1356,
+      "sha256": "3038e638fa01a573c158d7ca7066820ccb7b8870a9821fe0d0ade032c65cd847"
+    },
+    {
+      "path": "output.md",
+      "bytes": 5739,
+      "sha256": "cecae545834d032a8095b8494a3286c1e9020f5ab9c3cba2846ba599d9a380c5"
+    }
+  ],
+  "solver_output_sha256": "cecae545834d032a8095b8494a3286c1e9020f5ab9c3cba2846ba599d9a380c5",
+  "output_digest_scope": "solverが保存した回答artifactのraw bytes。tool transcript全体ではない",
+  "evaluation_scope": "r6 oracleの該当caseにある意味gateを親evaluatorが出力読了後に照合。全schema fieldの意味同等性やrelease passではない。",
+  "semantic_observation": "高変更coreのmodel/契約/test、高risk supportingの会計・復旧、genericの購入/再利用/単純実装、低riskの現状維持を5要因と未見積りへ接続した。",
+  "known_differences": []
+}

@@ -1,0 +1,40 @@
+{
+  "kind": "design_artifact_validation",
+  "result": "pass",
+  "checks": {
+    "checked_artifacts": 4,
+    "unique_ids": {
+      "context-v1": 15,
+      "contract-v1": 7,
+      "boundary-v1": 16,
+      "spec-v1": 7
+    },
+    "resolved_reference_count": 274,
+    "duplicate_ids": [],
+    "unresolved_references": [],
+    "invalid_test_verifies": [],
+    "boundary_semantics_count": 5
+  },
+  "persisted_content": {
+    "files": [
+      "context.json",
+      "contract.json",
+      "boundary.json",
+      "implementation-spec.json"
+    ],
+    "json_parse": "pass",
+    "utf8_without_bom": "pass",
+    "lf_only": "pass",
+    "final_newline": "pass",
+    "exact_content_comparison": "pass"
+  },
+  "scope": "保存設計artifactの構造・参照確認。対象systemのcode・testは実行しない。",
+  "review": {
+    "self_review": "spec-v1#V1",
+    "independent_review": "not_run"
+  },
+  "application_tests": {
+    "status": "not_run",
+    "reason": "input.yamlで実装とtest実行が今回対象外。"
+  }
+}

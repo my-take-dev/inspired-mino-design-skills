@@ -1,0 +1,13 @@
+{
+  "read_skill_files": [
+    {"path": "skills/mino-domain-model-completeness/SKILL.md", "range": "全文", "reread": false, "output_omitted": false},
+    {"path": "skills/mino-core/references/shared-policies.md", "range": "全文", "reread": false, "output_omitted": false},
+    {"path": "skills/mino-core/references/domain-discovery.md", "range": "全文", "reread": false, "output_omitted": false}
+  ],
+  "reread": false,
+  "tool_output_omitted": false,
+  "difficulties": [
+    "短いメモの依頼でも12観点のscreenとcoverage集計が必須で、提供Evidenceが少ない場合は未知の表が回答の大部分を占める。",
+    "同じ範囲違反がconstraint、state、transition、behaviorに重複して現れるため、cell単位coverageは独立した欠陥数と区別する必要がある。"
+  ]
+}

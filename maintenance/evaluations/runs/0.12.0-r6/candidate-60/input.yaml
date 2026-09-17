@@ -1,0 +1,12 @@
+mode: "design"
+required_platforms: []
+raw_request: "$mino-interface-implementation-separation で文書閲覧の境界案を短くまとめてください。今回の用途と挙動は既存仕様のままです。"
+confirmed_evidence:
+  - "baseline B1 r3: 個人文書を現在同じプロジェクトに所属する利用者だけが閲覧でき、退会後は拒否する。操作はread_document。"
+  - "文書管理責任者によるreview RV1はB1 r3のこの意味と個人文書scopeをacceptedとし、採用済み。比較した解釈とB1 r3に差分なしと記録されている。"
+  - "今回も個人文書のread_document、同じ利用者種別とrevisionが対象。認可条件の変更はない。保存や外部I/Oはなく、メモリ上の文書を返す。"
+known_unknowns: []
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

@@ -1,0 +1,807 @@
+{
+  "problem_framing_package": {
+    "artifact_handle": "problem-framing-package.json",
+    "revision": "1",
+    "mode": "design",
+    "decision_frame": {
+      "question": "ピーク時の検索待ちによる接客中断について、何が確認済みで、後続設計の前に何を決める必要があるか。",
+      "owner": "依頼者。業務上の採用権限者の指名は未確認（U4）。",
+      "decide": [
+        "観測、目的候補、成功・拒否条件候補、未決事項と確認責任の整理",
+        "後続設計が参照する今回の正本packageの保存"
+      ],
+      "not_decide": [
+        "原因の断定",
+        "許容待ち時間の数値確定",
+        "技術方式・構成・運用の選択",
+        "実装・設定・運用dataの変更",
+        "業務要件の承認",
+        "release可否"
+      ],
+      "reversibility": "reversible",
+      "deadline_or_window": "期限は未指定。問題が現れる時間帯はピーク時（具体的条件はU3）。",
+      "target_platforms": []
+    },
+    "problem_frame": {
+      "actor": "受付担当",
+      "context": "ピーク時に検索する場面。平常時は支障がない（E1）。",
+      "desired_state": "ピーク時にも検索待ちによる接客中断を避けられる状態（目的候補、I1）。",
+      "observed_barrier": "ピーク時の検索待ちで接客を中断する（E1）。",
+      "impact": "接客の継続が妨げられる。中断回数・時間、売上や顧客満足への影響は確認されていない。"
+    },
+    "evidence": {
+      "confirmed": [
+        {
+          "id": "E0",
+          "statement": "問題を整理し、後続設計担当が正本として使うProblem Framing Packageを保存する依頼。利用者への説明は短くする。",
+          "source": "input.yaml / raw_request"
+        },
+        {
+          "id": "E1",
+          "statement": "受付担当はピーク時の検索待ちで接客を中断する。平常時は支障がない。",
+          "source": "input.yaml / confirmed_evidence / 先頭項目",
+          "limit": "依頼で確認済みとして与えられた観測。生の計測記録は提供されていない。"
+        },
+        {
+          "id": "E2",
+          "statement": "現在は問題整理だけが依頼範囲。",
+          "source": "input.yaml / confirmed_evidence / 2項目目"
+        },
+        {
+          "id": "E3",
+          "statement": "対象systemのcode・設定・運用dataを変更してはならない。",
+          "source": "input.yaml / prohibited_changes"
+        },
+        {
+          "id": "E4",
+          "statement": "遅延箇所と許容待ち時間は未確認。",
+          "source": "input.yaml / known_unknowns"
+        },
+        {
+          "id": "E5",
+          "statement": "対象platformの指定はない。",
+          "source": "input.yaml / required_platforms"
+        }
+      ],
+      "inferred": [
+        {
+          "id": "I1",
+          "statement": "改善目的の候補は、ピーク時の検索待ちによる接客中断を避けること。",
+          "evidence": [
+            "E1"
+          ],
+          "decision_maturity": "proposed",
+          "limit": "業務ownerによる目的・許容範囲の採用は未確認。"
+        },
+        {
+          "id": "I2",
+          "statement": "平常時の支障がない状態を損なわないことを拒否条件の候補とする。",
+          "evidence": [
+            "E1"
+          ],
+          "decision_maturity": "proposed"
+        }
+      ],
+      "assumptions": [],
+      "unknowns": [
+        {
+          "id": "U1",
+          "subject": "遅延箇所と発生条件",
+          "confirmation_method": "許可された既存記録があれば、検索開始から業務で結果を利用できるまでの時刻と工程をピーク時・平常時で比較する。記録がなければ必要な観測方法と権限を別途整理する。",
+          "impact_if_unresolved": "原因や対策の選択を正当化できない。",
+          "owner": "システム調査担当。担当者の指名は依頼者が行う（U4）。",
+          "evidence": [
+            "E1",
+            "E4"
+          ]
+        },
+        {
+          "id": "U2",
+          "subject": "許容待ち時間と許容する接客中断の程度",
+          "confirmation_method": "受付担当から支障が出る具体例と出ない具体例を集め、業務ownerが測定境界、対象条件、許容時間・中断の判定を採用する。数値は本packageで補わない。",
+          "impact_if_unresolved": "改善の合否と性能目標を確定できない。",
+          "owner": "業務owner。権限者の指名は未確認（U4）。",
+          "evidence": [
+            "E1",
+            "E4"
+          ]
+        },
+        {
+          "id": "U3",
+          "subject": "ピーク時、検索待ち、接客中断の操作上の定義",
+          "confirmation_method": "受付担当に実際の一連の作業を確認し、混雑の条件、検索開始・待ち終了の境界、中断する作業を記録する。平常時の同種作業と比較する。",
+          "impact_if_unresolved": "異なる待ち時間や業務条件を比較し、効果を誤判定するおそれがある。",
+          "owner": "受付担当と調査担当。依頼者が担当を指名する。",
+          "evidence": [
+            "E1"
+          ]
+        },
+        {
+          "id": "U4",
+          "subject": "目的・許容条件の採用権限者と調査担当者",
+          "confirmation_method": "依頼者が業務ownerとシステム調査担当を指名し、採用できる判断範囲を記録する。",
+          "impact_if_unresolved": "候補をapprovedへ移せず、追加観測の責任が未確定になる。",
+          "owner": "依頼者",
+          "evidence": [
+            "E0",
+            "E2"
+          ]
+        }
+      ],
+      "contradictions": []
+    },
+    "meanings_and_premises": [
+      {
+        "id": "MP1",
+        "statement_or_term": "検索待ち",
+        "first_interpretation": "1回の検索操作開始から結果が使えるまでの連続した待ち。解釈候補であり未確認。",
+        "alternatives": [
+          "1回の接客で複数回発生する検索待ちの累積が中断を生む可能性。解釈候補であり未確認。"
+        ],
+        "discriminating_evidence": [
+          "1回の検索待ちと1回の接客に含まれる検索回数・中断場面の対応記録"
+        ],
+        "evidence_status": "unknown",
+        "falsification": "連続した1回の検索では支障がなく、複数回の待ちの累積でのみ中断する事例があれば第一解釈だけでは不足する。",
+        "impact_if_false": "測定単位と許容値、検証対象を取り違える。"
+      },
+      {
+        "id": "MP2",
+        "statement_or_term": "ピーク時",
+        "first_interpretation": "問題が観測された混雑条件。具体的な時間帯・件数・同時利用数は未確認。",
+        "alternatives": [
+          "同じ時間帯でも業務量や検索内容により問題の有無が異なる可能性。"
+        ],
+        "discriminating_evidence": [
+          "中断あり・なしの事例ごとの時刻、業務量、操作条件の記録"
+        ],
+        "evidence_status": "unknown",
+        "falsification": "ピークとして扱う時間帯に中断しない事例があれば、時間帯だけを原因・発生条件とする説明は成立しない。",
+        "impact_if_false": "実際の問題条件を再現しない検証で改善を宣言する。"
+      }
+    ],
+    "causal_chain": {
+      "applicability": "required",
+      "reason": "既に起きている接客中断を整理する依頼のため。技術的な因果の調査は未実施。",
+      "symptom": "ピーク時の検索待ちによる接客中断（E1）。",
+      "violated_goal_or_quality": "接客を継続できることが損なわれている。正式な許容条件はU2。",
+      "violated_rule_or_invariant": "unknown。明示された業務規則や時間基準は提供されていない（U2）。",
+      "incorrect_owner_or_source": "unknown。誤った責務やデータ正本を示すEvidenceはない（U1）。",
+      "structural_cause": "unknown。遅延箇所・技術的原因は未確認（U1）。",
+      "unmet_capability": "not_applicable。今回の根拠は既存作業の中断であり、新規能力の需要は提示されていない。",
+      "demand_evidence": [],
+      "success_condition_ids": [
+        "SC1",
+        "SC2"
+      ]
+    },
+    "candidate_means": [],
+    "reasoning_traces": [
+      {
+        "id": "RT1",
+        "concrete_evidence": [
+          "E1",
+          "E4"
+        ],
+        "actor_or_owner": "受付担当。許容条件の採用は業務owner。",
+        "purpose_or_loss": "検索待ちによって接客が中断する損失を避ける（I1）。",
+        "violated_rule_or_quality": "接客の継続。数値的な違反基準は未確認。",
+        "decision_or_obligation": "SC1とRC1を目的・拒否条件候補として提示し、SG1・SG2の識別Evidenceを取得する。",
+        "falsifier_or_counterexample": "検索の応答が短くなっても接客中断が残れば、待ち時間短縮だけでは目的達成を示せない。",
+        "validation": [
+          "MP1・MP2の解釈を実例で照合する（未実施）。",
+          "採用された待ち時間・中断基準を使い、同条件のピーク時事例を評価する（未実施）。"
+        ],
+        "stop_reason": "insufficient_evidence"
+      },
+      {
+        "id": "RT2",
+        "concrete_evidence": [
+          "E1"
+        ],
+        "actor_or_owner": "受付担当と業務owner",
+        "purpose_or_loss": "平常時の支障がない状態を保つ（I2、候補）。",
+        "violated_rule_or_quality": "平常時には観測された違反なし。将来の拒否条件候補として扱う。",
+        "decision_or_obligation": "SC2・RC2をSG2の採用対象へ含める。",
+        "falsifier_or_counterexample": "ピーク時の改善と引換えに平常時へ支障が生じた場合、候補条件を満たさない。",
+        "validation": [
+          "同種の平常時業務の現状を記録し、採用後に比較できるようにする（未実施）。"
+        ],
+        "stop_reason": "authority_boundary"
+      },
+      {
+        "id": "RT3",
+        "concrete_evidence": [
+          "E0",
+          "E2",
+          "E3"
+        ],
+        "actor_or_owner": "依頼者",
+        "purpose_or_loss": "後続担当が根拠と未決事項を取り違えずに設計へ進む。",
+        "violated_rule_or_quality": "問題整理だけを行い、対象systemを変更しない。",
+        "decision_or_obligation": "SC3・RC3に従い、Problem FrameとContext Packetを同一packageで保存する。",
+        "falsifier_or_counterexample": "未確認原因や許容値を確定事項として保存すれば、正式な引継ぎとして不適切。",
+        "validation": [
+          "保存されたpackageの必須fieldと参照先ID、未決事項の確認方法を確認する。"
+        ],
+        "stop_reason": "decision_useful"
+      }
+    ],
+    "context_packet": {
+      "actors": [
+        "受付担当：検索と接客の当事者",
+        "依頼者：今回成果物の依頼者、担当者の指名窓口",
+        "後続設計担当：本packageの参照者",
+        "業務owner・システム調査担当：未指名（U4）"
+      ],
+      "problem": "ピーク時の検索待ちで受付担当が接客を中断する。平常時は支障がない。",
+      "purposes": [
+        "I1",
+        "I2"
+      ],
+      "success_conditions": [
+        "SC1",
+        "SC2",
+        "SC3"
+      ],
+      "context": {
+        "time_or_state": [
+          "ピーク時に問題が現れ、平常時は支障がない（E1）。具体的条件はU3。"
+        ],
+        "business_background": [
+          "受付担当が検索を伴う接客を行う（E1）。業種・受付対象・中断の損失額は未提示。"
+        ],
+        "technical_background": [
+          "遅延箇所は未確認（U1）。対象systemの構成や利用技術は未提示。"
+        ]
+      },
+      "terminology": [
+        {
+          "term": "検索待ち",
+          "meaning": "検索に関係する待ち。測定の始点・終点・累積の扱いは未確定（MP1）。",
+          "alternative_meanings": [
+            "単一検索の連続待ち",
+            "1回の接客に含まれる累積待ち"
+          ],
+          "evidence": [
+            "E1",
+            "U3"
+          ]
+        },
+        {
+          "term": "ピーク時",
+          "meaning": "問題が現れる条件の呼称。具体的な負荷や時間帯は未確定（MP2）。",
+          "alternative_meanings": [
+            "時間帯による分類",
+            "業務量・操作条件による分類"
+          ],
+          "evidence": [
+            "E1",
+            "U3"
+          ]
+        },
+        {
+          "term": "接客中断",
+          "meaning": "受付担当が検索待ちで接客を継続できない観測。対象作業と判断方法はU3。",
+          "alternative_meanings": [],
+          "evidence": [
+            "E1"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "id": "R1",
+          "statement": "今回の作業は問題整理とその成果物の保存に限る。",
+          "kind": "policy",
+          "owner": "依頼者",
+          "evidence_status": "confirmed"
+        },
+        {
+          "id": "R2",
+          "statement": "対象systemのcode・設定・運用dataを変更しない。",
+          "kind": "prohibition",
+          "owner": "依頼者",
+          "evidence_status": "confirmed"
+        }
+      ],
+      "quality_lens": {
+        "definitions": [],
+        "primary_ids": [],
+        "secondary_ids": [],
+        "constraint_ids": [],
+        "intentionally_not_optimized_ids": [],
+        "tradeoff_decisions": []
+      },
+      "change_boundary": {
+        "must_preserve": [
+          "E1のピーク時・平常時の違い",
+          "原因と許容時間が未確認であること",
+          "目的と条件が未承認であること"
+        ],
+        "may_change": [
+          "今回保存する問題整理成果物"
+        ],
+        "must_not_change": [
+          "対象systemのcode",
+          "対象systemの設定",
+          "対象systemの運用data"
+        ],
+        "out_of_scope": [
+          "技術対策の採用",
+          "設計・実装・移行・release",
+          "新規計測のためのsystem変更"
+        ]
+      },
+      "evidence": {
+        "confirmed": [
+          "E0",
+          "E1",
+          "E2",
+          "E3",
+          "E4",
+          "E5"
+        ],
+        "inferred": [
+          "I1",
+          "I2"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "U1",
+          "U2",
+          "U3",
+          "U4"
+        ],
+        "contradictions": []
+      }
+    },
+    "selection_gates": [
+      {
+        "id": "SG1",
+        "subject": "検索待ちと中断の測定単位・発生条件の確定",
+        "candidate_ids": [
+          "C1",
+          "C2"
+        ],
+        "candidates": [
+          {
+            "id": "C1",
+            "statement": "単一検索の連続待ちを主な測定単位とする候補。"
+          },
+          {
+            "id": "C2",
+            "statement": "1回の接客の累積待ちも測定対象に含める候補。"
+          }
+        ],
+        "decision_condition": "MP1・MP2を実例で照合し、中断を説明できる測定境界・対象条件を合意する。両方の測定が必要な場合は併用できる。技術原因はU1の調査Evidenceで別に確認する。",
+        "evidence_required": [
+          "ピーク時と平常時の検索・接客事例",
+          "検索ごとの待ちと中断箇所",
+          "U1とU3の確認結果"
+        ],
+        "evidence_acquisition": [
+          "受付担当へ事例を確認する。",
+          "取得権限のある既存記録を調査担当が照合する。必要な記録がなければ観測計画を別途作る。"
+        ],
+        "owner": "受付担当、業務owner、システム調査担当（U4で指名）",
+        "status": "pending",
+        "evidence": [
+          "E1",
+          "E4",
+          "MP1",
+          "MP2"
+        ],
+        "impact_if_pending": "待ち時間の比較と遅延箇所に依存した技術方式選択を確定できない。"
+      },
+      {
+        "id": "SG2",
+        "subject": "目的、許容待ち時間、成功・拒否条件の採用",
+        "candidate_ids": [
+          "C3",
+          "C4"
+        ],
+        "candidates": [
+          {
+            "id": "C3",
+            "statement": "確認した業務条件へ共通の許容待ち時間を設定する候補。"
+          },
+          {
+            "id": "C4",
+            "statement": "待ちの影響が異なる業務条件ごとに許容待ち時間を設定する候補。"
+          }
+        ],
+        "decision_condition": "業務ownerがI1・I2、SC1・SC2、RC1・RC2の意味を確認し、SG1の測定単位に対応する許容条件を採用する。根拠がなければ候補を維持する。",
+        "evidence_required": [
+          "支障が出る・出ない具体例",
+          "SG1の確認結果",
+          "権限を持つownerの指名と採用記録"
+        ],
+        "evidence_acquisition": [
+          "受付担当の具体例・反例を比較する。",
+          "業務ownerが対象条件、数値または観測可能な許容判定、理由を記録する。"
+        ],
+        "owner": "業務owner（U4で指名）",
+        "status": "pending",
+        "evidence": [
+          "E1",
+          "E4",
+          "I1",
+          "I2"
+        ],
+        "impact_if_pending": "性能目標・公開契約・改善の合否を確定できない。"
+      }
+    ],
+    "success_conditions": [
+      {
+        "id": "SC1",
+        "statement": "確認したピーク条件で検索待ちによる接客中断が、業務ownerの採用した許容範囲に収まる。",
+        "decision_maturity": "proposed",
+        "evidence": [
+          "E1",
+          "I1"
+        ],
+        "verification": "SG1の測定境界で待ちと中断を観測し、SG2で採用した判定に照合する。",
+        "verification_status": "planned",
+        "gate_ids": [
+          "SG1",
+          "SG2"
+        ]
+      },
+      {
+        "id": "SC2",
+        "statement": "平常時の同種業務に新たな支障が生じない。",
+        "decision_maturity": "proposed",
+        "evidence": [
+          "E1",
+          "I2"
+        ],
+        "verification": "現状と改善後の同種業務を、業務ownerが採用した支障の判定で比較する。",
+        "verification_status": "planned",
+        "gate_ids": [
+          "SG2"
+        ]
+      },
+      {
+        "id": "SC3",
+        "statement": "Problem Frame、Context Packet、根拠、未知、選択gateと判定を正本packageとして保存し、対象systemは変更しない。",
+        "decision_maturity": "approved",
+        "evidence": [
+          "E0",
+          "E2",
+          "E3"
+        ],
+        "verification": "保存ファイルのschema上の必須項目、ID、JSON構文、UTF-8・LFを確認する。",
+        "verification_status": "verified",
+        "gate_ids": []
+      }
+    ],
+    "rejection_criteria": [
+      {
+        "id": "RC1",
+        "statement": "検索応答が速くなったという値だけで、接客中断と許容条件を確認せず改善成功とする。",
+        "decision_maturity": "proposed",
+        "evidence": [
+          "E1",
+          "E4",
+          "I1"
+        ],
+        "verification": "改善の評価にSC1の観測とSG2の採用条件があるか確認する。"
+      },
+      {
+        "id": "RC2",
+        "statement": "ピーク時の改善によって平常時に支障を生む。",
+        "decision_maturity": "proposed",
+        "evidence": [
+          "E1",
+          "I2"
+        ],
+        "verification": "SC2の比較で新たな支障を確認する。"
+      },
+      {
+        "id": "RC3",
+        "statement": "未確認の原因・許容値・承認を確定扱いする、または対象systemを変更する。",
+        "decision_maturity": "approved",
+        "evidence": [
+          "E2",
+          "E3",
+          "E4"
+        ],
+        "verification": "根拠の状態と変更範囲を保存成果物・作業記録へ照合する。"
+      }
+    ],
+    "ai_restatement": {
+      "statement": "受付担当がピーク時の検索待ちで接客を中断する問題について、平常時との違い、改善目的の候補、成功・拒否条件、未確認の遅延箇所と許容待ち時間を整理し、後続設計用の正本として保存する。",
+      "comparison_basis": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ],
+      "proposed_status": "matched",
+      "differences": [
+        "接客中断を避ける目的と平常時の状態を保つ条件は、E1からの整理案（I1・I2）。採用済み業務要件とは扱わない。",
+        "測定単位、原因、許容値、権限者は未確定のまま維持した。"
+      ],
+      "reviewed_by": {
+        "kind": "unresolved",
+        "identity": "未実施。権限者はU4で確認する。",
+        "review_status": "unresolved",
+        "evidence": []
+      }
+    },
+    "problem_readiness": {
+      "subject_verdict": "conditional",
+      "reasons": [
+        "観測に基づく安全な問題記述と引継ぎは可能。",
+        "遅延箇所・測定単位・許容条件・採用権限が未確定で、技術選択と改善の合否判定はできない。"
+      ],
+      "evidence_needed": [
+        "U1",
+        "U2",
+        "U3",
+        "U4"
+      ],
+      "safe_assumptions": [
+        "成果物名とlocal IDは今回の識別用の名称。業務上の仮定は置いていない。"
+      ],
+      "selection_gate_ids": [
+        "SG1",
+        "SG2"
+      ],
+      "next_artifacts": [
+        {
+          "artifact": "contract",
+          "obligations": [
+            "条件付きの後続候補。SG1・SG2の確認・採用後、待ちと接客中断の対象条件、観測境界、許容判定、失敗時の扱いを観測可能な契約へ整理する。",
+            "今回その契約は作成していない。契約・test IDは未発行。現在の依頼範囲は拡張しない。"
+          ]
+        }
+      ]
+    },
+    "platform_context": {
+      "host_platform": "windows",
+      "process_platform": "windows",
+      "artifact_filesystem": "unknown",
+      "target_platforms": [],
+      "shell": "powershell",
+      "architecture": "unknown。文書保存のための今回の判断には依存しない。",
+      "filesystem": {
+        "case_sensitive": "unknown",
+        "path_style": "windows",
+        "executable_bit": "unknown"
+      },
+      "toolchain": {
+        "commands": [
+          "PowerShell Get-Content",
+          "PowerShell ConvertFrom-Json",
+          "System.IO.File.WriteAllText"
+        ],
+        "versions": [
+          "PowerShellのversionは未取得。今回の保存・読戻し結果のみをEvidenceとする。"
+        ]
+      },
+      "platform_requirements": [
+        "今回保存するtextをUTF-8（BOMなし）・LF・final newlineありとする。"
+      ],
+      "unknowns": [
+        {
+          "subject": "保存先filesystemの種類・case sensitivity・executable bit、およびhost architecture",
+          "confirmation_method": "対象filesystemや実行形式に依存する後続作業の前に、その環境の属性を観測する。",
+          "owner": "後続実行担当",
+          "impact_if_unresolved": "native filesystem互換性やapplication runtimeの検証済み主張はできない。",
+          "evidence": [
+            "今回の依頼は問題整理と保存のみ。E2・E5。"
+          ]
+        }
+      ]
+    },
+    "platform_validation": {
+      "required_platforms": [],
+      "executed": [
+        {
+          "platform": "windows",
+          "evidence_layer": "structural_validator",
+          "process_platform": "windows",
+          "artifact_filesystem": "unknown",
+          "requirement_ids": [],
+          "contract_ids": [],
+          "verification_ids": [
+            "V1"
+          ],
+          "oracle_refs": [],
+          "trace_not_applicable": [
+            {
+              "target_kind": "requirement/contract/oracle",
+              "target_id_or_scope": "今回の問題整理文書",
+              "reason": "対象systemの要求・契約・testは今回作成していない。文書の構造と保存形式だけを検査する。",
+              "evidence": [
+                "E0",
+                "E2",
+                "E5"
+              ]
+            }
+          ],
+          "commands": [
+            "PowerShell ConvertFrom-Json、必須fieldとlocal ID参照の照合",
+            "System.IO.File.ReadAllBytesによるUTF-8 BOM、CR、final LF確認"
+          ],
+          "result": "pass",
+          "evidence": [
+            "V1"
+          ]
+        }
+      ],
+      "unexecuted": [],
+      "parity_result": "not_applicable",
+      "platform_specific_risks": [
+        "対象platformは指定されておらず、application runtimeやnative filesystemの互換性評価は今回の範囲外（E2・E5）。",
+        "Windowsでの文書保存確認からLinux/macOS対応やsystemの動作へ成功を転用しない。"
+      ]
+    },
+    "decision": {
+      "status": "pass",
+      "artifact_readiness": "ready",
+      "engineering_status": "not_started",
+      "release_status": "not_applicable",
+      "decision_maturity": {
+        "status": "proposed",
+        "owner": "業務owner（U4で指名）",
+        "scope": [
+          "問題の意味整理",
+          "目的・成功条件・拒否条件の候補"
+        ],
+        "evidence_status": "inferred",
+        "approval_evidence": [],
+        "baseline_version": "未設定。今回のrevision 1は成果物の識別子であり承認済みbaselineではない。",
+        "change_control": "後続で採用記録とrevisionを明記し、根拠と変更理由を保持する。変更権限者はU4で確認する。"
+      },
+      "next_phase": {
+        "name": "既存記録・受付事例の確認と条件の採用",
+        "status": "allowed",
+        "reasons": [
+          "確認事項と担当役割を渡すことは可能。",
+          "新たな調査実行は今回行っていない。対象system変更と、未確定事項へ依存する設計採用・実装は今回許可されない。"
+        ],
+        "human_approvals_required": [
+          "U4で権限者を指名する。",
+          "SG2で目的・条件を採用し、ai_restatementの意味照合を受ける。",
+          "設計・実装へ進める場合は、そのscopeを別途依頼者が指定する。"
+        ]
+      },
+      "evidence": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "RT1",
+        "RT2",
+        "RT3"
+      ],
+      "assumptions": [],
+      "unknowns": [
+        {
+          "id": "U1",
+          "subject": "遅延箇所と発生条件",
+          "confirmation_method": "許可された既存記録があれば、検索開始から業務で結果を利用できるまでの時刻と工程をピーク時・平常時で比較する。記録がなければ必要な観測方法と権限を別途整理する。",
+          "impact_if_unresolved": "原因や対策の選択を正当化できない。",
+          "owner": "システム調査担当。担当者の指名は依頼者が行う（U4）。",
+          "evidence": [
+            "E1",
+            "E4"
+          ]
+        },
+        {
+          "id": "U2",
+          "subject": "許容待ち時間と許容する接客中断の程度",
+          "confirmation_method": "受付担当から支障が出る具体例と出ない具体例を集め、業務ownerが測定境界、対象条件、許容時間・中断の判定を採用する。数値は本packageで補わない。",
+          "impact_if_unresolved": "改善の合否と性能目標を確定できない。",
+          "owner": "業務owner。権限者の指名は未確認（U4）。",
+          "evidence": [
+            "E1",
+            "E4"
+          ]
+        },
+        {
+          "id": "U3",
+          "subject": "ピーク時、検索待ち、接客中断の操作上の定義",
+          "confirmation_method": "受付担当に実際の一連の作業を確認し、混雑の条件、検索開始・待ち終了の境界、中断する作業を記録する。平常時の同種作業と比較する。",
+          "impact_if_unresolved": "異なる待ち時間や業務条件を比較し、効果を誤判定するおそれがある。",
+          "owner": "受付担当と調査担当。依頼者が担当を指名する。",
+          "evidence": [
+            "E1"
+          ]
+        },
+        {
+          "id": "U4",
+          "subject": "目的・許容条件の採用権限者と調査担当者",
+          "confirmation_method": "依頼者が業務ownerとシステム調査担当を指名し、採用できる判断範囲を記録する。",
+          "impact_if_unresolved": "候補をapprovedへ移せず、追加観測の責任が未確定になる。",
+          "owner": "依頼者",
+          "evidence": [
+            "E0",
+            "E2"
+          ]
+        }
+      ],
+      "contradictions": [],
+      "failed_gates": [],
+      "unexecuted_validation": [
+        {
+          "id": "UV1",
+          "reason": "生の業務・計測記録は提供されておらず、今回の範囲は問題整理のみ。U1・U3の観測は未実施。",
+          "required_runner": "受付担当と権限のある調査担当。既存記録を読める環境。",
+          "planned_commands": [
+            "対象system・記録形式が未提示のため実行commandは未確定。まず既存記録と参照権限を特定し、その環境の読取手順を調査担当が記録する。"
+          ],
+          "owner": "依頼者が指名する調査担当（U4）",
+          "evidence": [
+            "E1",
+            "E2",
+            "E4"
+          ]
+        },
+        {
+          "id": "UV2",
+          "reason": "業務ownerの意味照合と許容条件の採用は未実施。",
+          "required_runner": "業務ownerと受付担当による実例・反例の確認",
+          "planned_commands": [
+            "対話・文書による確認でありshell commandは非該当。SG2のEvidenceと採用結果を記録する。"
+          ],
+          "owner": "業務owner（U4で指名）",
+          "evidence": [
+            "E0",
+            "E4"
+          ]
+        },
+        {
+          "id": "UV3",
+          "reason": "改善の設計・実装は今回の範囲外であり、SC1・SC2の改善効果は未検証。",
+          "required_runner": "許容条件と後続scopeの採用後に選定する、対象systemの検証環境と業務確認担当",
+          "planned_commands": [
+            "対象systemと採用条件が未確定のためcommandは未定。後続担当がSC1・SC2に対応する検証手順と実行commandを確定する。"
+          ],
+          "owner": "後続設計・検証担当（未指名）",
+          "evidence": [
+            "E2",
+            "E3",
+            "E4"
+          ]
+        }
+      ],
+      "platform_validation": {
+        "ref": "#/problem_framing_package/platform_validation"
+      },
+      "residual_risks": [
+        "未確認の遅延箇所を原因として扱うと対策を誤る。",
+        "測定境界や許容条件が未採用のままでは改善成功を判定できない。",
+        "正本としての保存は業務ownerによる意味・条件の承認を示さない。"
+      ],
+      "human_approvals_required": [
+        "現在の問題整理成果物の保存に追加承認は不要。",
+        "後続の目的・許容条件の採用はSG2の業務ownerが行う。"
+      ]
+    },
+    "validation_records": [
+      {
+        "id": "V1",
+        "scope": "今回の保存文書",
+        "checks": [
+          "JSON読戻し",
+          "packageの必須top-level field",
+          "未知recordの必須field",
+          "readinessからselection gateへの参照",
+          "gateからcandidateへの参照",
+          "UTF-8 BOMなし・LF・final newline"
+        ],
+        "result": "pass",
+        "limits": [
+          "専用の完全schema validatorではない。",
+          "意味の独立review・対象systemの実行検証は含まない。"
+        ]
+      }
+    ]
+  }
+}

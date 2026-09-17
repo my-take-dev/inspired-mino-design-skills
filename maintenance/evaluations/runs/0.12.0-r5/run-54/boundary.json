@@ -1,0 +1,365 @@
+{
+  "artifact_handle": "boundary-v1",
+  "revision": "1",
+  "boundary_package": {
+    "id": "BP1",
+    "subject": "帳票consumerとdisplay_quantityの公開境界",
+    "owner": "境界設計担当（役割名）",
+    "platform_context": {
+      "$ref": "context-v1#/platform_context"
+    },
+    "platform_validation": {
+      "$ref": "context-v1#/platform_validation"
+    },
+    "change_safety": {
+      "applicability": "not_applicable",
+      "not_applicable_reason": "既存挙動変更・既存callerの移行はない。",
+      "evidence": [
+        "context-v1#E2"
+      ]
+    },
+    "contract_source": {
+      "kind": "domain_contract",
+      "artifact_refs": [
+        "contract-v1"
+      ],
+      "domain_contract_status": "applicable",
+      "evidence": [
+        "context-v1#E1"
+      ]
+    },
+    "consumers": [
+      {
+        "id": "C1",
+        "purpose": "数量の表示形式を統一する。",
+        "must_know": [
+          "操作名display_quantity",
+          "整数を渡すこと",
+          "0〜99の成功形式はcontract-v1#CI2",
+          "範囲外整数ではcontract-v1#CI3のValueError",
+          "整数以外は今回の契約対象外"
+        ],
+        "must_not_know": [
+          "ゼロ埋め・文字列化の内部手順",
+          "formatterやlibraryの選定",
+          "algorithmの切替方法",
+          "内部helper・内部データ型"
+        ]
+      }
+    ],
+    "code_design": {
+      "capsules": [
+        {
+          "id": "CAP1",
+          "purpose": "数量表示",
+          "responsibility": "display_quantityの単一操作が範囲検査と表示契約をまとめて保証する。",
+          "status": "proposed"
+        }
+      ],
+      "branch_decisions": [
+        {
+          "id": "BR1",
+          "kind": "rule",
+          "statement": "整数の範囲内/範囲外を分ける局所guardはR1/R2の表現として実装側へ置く。consumerに桁埋めや実装variant選択の分岐を要求しない。",
+          "status": "proposed",
+          "evidence": [
+            "context-v1#E1"
+          ]
+        }
+      ],
+      "naming_decisions": [
+        {
+          "id": "N1",
+          "name": "display_quantity",
+          "rationale": "依頼に与えられた公開操作名を保持する。"
+        }
+      ],
+      "abstraction_decisions": [
+        {
+          "id": "AD1",
+          "status": "proposed",
+          "statement": "一つの直接呼出操作で足りる。interface class、factory、strategy階層、DI構成の追加根拠はない。",
+          "evidence": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      ]
+    },
+    "interface_part": {
+      "operations": [
+        {
+          "id": "OP1",
+          "name": "display_quantity",
+          "intent": "帳票へ数量の統一表示を提供する。",
+          "inputs": [
+            {
+              "name": "q",
+              "contract_ref": "contract-v1#CI1"
+            }
+          ],
+          "result": "contract-v1#CI2",
+          "failures": [
+            "contract-v1#CI3"
+          ],
+          "side_effects": [],
+          "invariants": [],
+          "contracts": [
+            "contract-v1#CI1",
+            "contract-v1#CI2",
+            "contract-v1#CI3"
+          ],
+          "end_to_end_deadline": {
+            "status": "not_applicable",
+            "not_applicable_reason": "時間依存とdeadline要求がない。",
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          "retry_semantics": {
+            "status": "not_applicable",
+            "not_applicable_reason": "一時的な外部障害や保存失敗がない。範囲外入力の再試行手順を追加しない。",
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          "idempotency": {
+            "status": "not_applicable",
+            "not_applicable_reason": "副作用・共有状態がなく、冪等性keyの要求がない。",
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          "duplicate_semantics": {
+            "status": "not_applicable",
+            "not_applicable_reason": "重複messageや副作用の重複排除を扱わない。同じ入力への値の決定性は契約を参照する。",
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          "ambiguous_outcome": {
+            "status": "not_applicable",
+            "not_applicable_reason": "外部成功/内部失敗やtimeoutによる結果不明を生む経路がない。",
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          "consistency_boundary": "1回の整数入力から文字列またはValueErrorまで。持続する整合性境界はない。",
+          "evidence": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      ]
+    },
+    "implementation_part": {
+      "items": [
+        {
+          "id": "IP1",
+          "kind": "algorithm",
+          "operation_ids": [
+            "OP1"
+          ],
+          "description": "範囲検査と十進文字列の2桁化を隠す。具体的なformat構文・helper構成は後続実装者が選ぶ。戻り値とValueErrorは公開契約へ従う。",
+          "owner": "display_quantityの実装責務",
+          "evidence": [
+            "context-v1#E1"
+          ]
+        }
+      ],
+      "transport_implementations": []
+    },
+    "ownership": {
+      "authority_refs": [
+        {
+          "id": "AR1",
+          "kind": "semantic_owner",
+          "applicability": "required",
+          "artifact_ref": "context-v1#A1",
+          "owner": "input.yamlに記載された業務owner",
+          "rationale": "R1/R2の意味は承認済み。",
+          "evidence": {
+            "status": "confirmed",
+            "sources": [
+              "context-v1#E1",
+              "context-v1#E3"
+            ]
+          }
+        },
+        {
+          "id": "AR2",
+          "kind": "contract_owner",
+          "applicability": "required",
+          "artifact_ref": "context-v1#A2",
+          "owner": "display_quantityの公開契約担当（役割名）",
+          "rationale": "公開契約の責任を参照し、境界側で再決定しない。",
+          "evidence": {
+            "status": "confirmed",
+            "sources": [
+              "contract-v1#OP1"
+            ]
+          }
+        },
+        {
+          "id": "AR3",
+          "kind": "invariant_owner",
+          "applicability": "required",
+          "artifact_ref": "context-v1#A3",
+          "owner": "display_quantityの実装責務",
+          "rationale": "CI2/CI3の保証責務を参照する。",
+          "evidence": {
+            "status": "confirmed",
+            "sources": [
+              "contract-v1#CI2",
+              "contract-v1#CI3"
+            ]
+          }
+        }
+      ],
+      "writers": [],
+      "readers": [
+        {
+          "consumer_id": "C1",
+          "operation_id": "OP1",
+          "purpose": "変換結果を受け取り帳票へ表示する。"
+        }
+      ],
+      "not_applicable": [
+        {
+          "kinds": [
+            "state_authority",
+            "source_of_truth",
+            "failure_recovery_owner",
+            "operational_owner"
+          ],
+          "reason": "保存・共有状態・外部I/O・復旧運用を扱わない。",
+          "evidence": [
+            "context-v1#E2"
+          ]
+        }
+      ]
+    },
+    "selection_boundaries": [],
+    "leakage_findings": [
+      {
+        "id": "LF1",
+        "operation_ids": [
+          "OP1"
+        ],
+        "implementation_part_ids": [
+          "IP1"
+        ],
+        "status": "absent",
+        "impact": "設計上、consumerは結果と失敗の意味だけに依存する。実codeを確認した判定ではない。",
+        "evidence": [
+          "boundary-v1#C1",
+          "boundary-v1#OP1",
+          "boundary-v1#IP1"
+        ]
+      }
+    ],
+    "dependency_direction": [
+      {
+        "from": "帳票consumer",
+        "to": "display_quantityの公開契約",
+        "reason": "統一表示を要求し、その結果を使用する。"
+      },
+      {
+        "from": "display_quantityの実装",
+        "to": [
+          "contract-v1#CI1",
+          "contract-v1#CI2",
+          "contract-v1#CI3"
+        ],
+        "reason": "実装は契約を満たす。consumerへalgorithmの知識を要求しない。"
+      }
+    ],
+    "change_scenarios": [
+      {
+        "id": "CS1",
+        "name": "同じ契約のまま内部の文字列化手順を交換する。",
+        "status": "pass",
+        "evidence": [
+          "boundary-v1#IP1",
+          "contract-v1#T1",
+          "contract-v1#T2",
+          "contract-v1#T3"
+        ],
+        "rationale": "設計上は帳票の操作名・入力・結果・失敗を維持できる。実行による検証は未実施。"
+      },
+      {
+        "id": "CS2",
+        "name": "実在variant追加/変更",
+        "status": "not_applicable",
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ],
+        "rationale": "実在variantのEvidenceがないため選択boundaryを作らない。"
+      },
+      {
+        "id": "CS3",
+        "name": "業務規則変更",
+        "status": "not_applicable",
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#E3"
+        ],
+        "rationale": "R1/R2は承認済みで変更要求がない。将来桁数・範囲・失敗型を変える場合は業務ownerと契約ownerの変更判断へ戻る。"
+      }
+    ],
+    "migration": [],
+    "boundary_traces": [
+      {
+        "id": "BT1",
+        "requirement_ids": [
+          "context-v1#R1",
+          "context-v1#R2"
+        ],
+        "consumer_ids": [
+          "C1"
+        ],
+        "operation_ids": [
+          "OP1"
+        ],
+        "contract_ids": [
+          "contract-v1#CI1",
+          "contract-v1#CI2",
+          "contract-v1#CI3"
+        ],
+        "ownership_refs": [
+          "AR1",
+          "AR2",
+          "AR3"
+        ],
+        "implementation_part_ids": [
+          "IP1"
+        ],
+        "leakage_finding_ids": [
+          "LF1"
+        ],
+        "change_scenario_ids": [
+          "CS1",
+          "CS2",
+          "CS3"
+        ],
+        "migration_ids": [],
+        "verification_ids": [
+          "contract-v1#T1",
+          "contract-v1#T2",
+          "contract-v1#T3",
+          "spec-v1#V1"
+        ],
+        "status": "covered",
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ]
+      }
+    ],
+    "subject_verdict": "separated",
+    "decision": {
+      "$ref": "context-v1#/decision"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 interface:
-  display_name: "Reproducible Development"
-  short_description: "必要な設計Functionだけを統合し、要件再現性と独立検証を成立させる"
-  default_prompt: "Use $mino-reproducible-development to choose the narrowest mode, route only required functions, and preserve read-only versus implementation boundaries."
+  display_name: "Reproducible Development Router"
+  short_description: "必要な専門成果物を統合し、実装・独立確認・要件再現性まで追跡する"
+  default_prompt: "$mino-reproducible-developmentで、依頼範囲の判断・根拠・未決事項と検証結果を返す。"
 policy:
   allow_implicit_invocation: true

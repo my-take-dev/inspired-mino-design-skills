@@ -1,0 +1,10 @@
+{
+  "artifact_pointer_refs": 2,
+  "unresolved_refs_in_checked_scope": 0,
+  "required_conditions": 4,
+  "planned_tests": 5,
+  "runtime_tests_executed": 0,
+  "document_self_static_checks": 1,
+  "probe_note": "初回probeはvalidation.executedが空であると誤って要求した。実データを読み、文書の自己静的点検1件とruntime実行0件を分離して再確認した。solver出力とoracleは変更していない。",
+  "scope": "親evaluatorによるJSON構造と実在参照の照合。条件・owner・oracleの内容は別途読んで評価。全991 fieldの意味検証ではない。"
+}

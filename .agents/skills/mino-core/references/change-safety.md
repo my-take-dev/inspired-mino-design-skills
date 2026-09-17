@@ -1,93 +1,35 @@
 # Change safety and legacy evolution
 
-既存挙動を変更する実装、legacy分割、migration、暫定経路を伴う変更で読む。設計だけのmodeではplanを作り、repositoryを変更しない。
+## Applicability and baseline
 
-## 1. Target and priority
+既存挙動、公開契約、legacy構造、移行、暫定経路を変えるときに使う。read-only design/reviewではplan/findingを作り、対象workspaceを変更しない。既存の承認済み対象選定があれば再選定せず参照する。
 
-対象が未選択なら、product value、expected change、debt impact、failure risk、remediation costで`now | next | later | do-not-fix`へ分類する。静的兆候だけで優先度を決めない。
+現行挙動をmust-preserve/intentional-change/unknownに分ける。characterization test、log、read-only queryなどで観測baselineを残し、正しい仕様と同一視しない。frozenは権限あるownerが比較baselineとして承認しversion管理したものだけである。
 
-priorityは精密な数値scoreとして扱わない。各factorを比較可能な粒度で評価し、特に`debt_impact`は、現在の構造がproduct / delivery / operationへ生む影響と、そのEvidenceを分けて残す。AIは人間ownerに代わって最終順位を確定しない。
+## Priority and strategy
 
-```yaml
-priority_assessment:
-  factors:
-    - kind: business_criticality | expected_change | debt_impact | failure_risk | remediation_cost
-      rating: high | medium | low | unknown
-      impact: ""
-      rationale: ""
-      evidence: []
-  comparison_rationale: ""
-  owner:
-    status: identified | unknown
-    value: ""
-    resolution_or_reason: ""
-    evidence: []
-```
+対象優先度を今回選ぶ場合に、business_criticality、expected_change、debt_impact、failure_risk、remediation_costを一度ずつ比較する。対象選定済みの局所修正へ投資会議相当の再承認を追加しない。
 
-5 factorを一度ずつ記録する。`impact`は少なくとも`debt_impact`で必須とし、根拠のない数値換算、空欄、静的metricだけのratingを許可しない。`owner.status: identified`では`value`を必須にする。ownerが入力から確定できない場合は補完せず、`unknown`、解決方法または未確定理由、Evidenceを残し、`priority: unknown`として人間選択待ちの候補を返す。owner不明のまま`now | next | later | do-not-fix`を確定しない。
+debt_impactの業務・開発・運用への影響を説明する。ordinalを根拠のない数値へ換算しない。新規順位決定でowner不明ならpriorityもunknownにし、確認方法を残す。
 
-## 2. Behavior baseline
-
-現行挙動を次へ分類する。
-
-- `must-preserve`: 利用者または外部契約が依存する
-- `intentional-change`: 権限を持つ人間が変更を承認した
-- `unknown`: 観測できるが意図が未確認
-
-Characterization test、log、read-only query、recording wrapperのいずれかで外部観測結果をbaselineとして記録する。権限を持つownerが比較対象として承認したbaselineだけを`frozen`とし、現行挙動を無条件に正しい仕様とはみなさない。
-
-## 3. Strategy selection
-
-| Strategy | Use when |
+| Strategy | 適用条件 |
 |---|---|
-| in-place small step | public契約が小さく、testとseamがあり、容易に戻せる |
-| purpose split / copy-delete | 一つの構造に複数目的が混在し、既存動作を保ったまま不要部分を削れる |
-| strangler | 内部依存が高riskで、use caseごとのroutingと新旧観測が可能 |
+| in-place small step | 小さい境界、test/seam、容易な復元 |
+| purpose split / copy-delete | 複数目的の混在を目的単位で分けて削れる |
+| strangler | use caseごとの新旧routingと観測が可能 |
 
-最初に一つのvertical sliceを入力から結果・運用まで通す。共通化は目的分割後に、意味・契約・変更理由が同じものだけへ行う。
+最初のvertical sliceを入力→結果→運用まで通す。意味・契約・変更理由が揃う前に共通化しない。copyしたdataやflagを無期限の正本へしない。
 
-## 4. Small reversible steps
+## Steps and temporary paths
 
-各stepを一つの目的へ限定し、次を持たせる。
+temporary_pathのidをBoundary/Architectureから参照する。導入予定を実導入日として書かず、planの場合は予定であることを明示する。削除は利用ゼロ等の観測とowner判断を満たしてから行う。
 
-```yaml
-change_step:
-  id: S1
-  single_goal: ""
-  affected_contracts: []
-  files: []
-  preconditions: []
-  validation: []
-  abort_conditions: []
-  rollback_or_recovery: []
-  completion_condition: ""
-```
+外部成功をlocal rollbackで消せない場合、write停止と照合・forward recoveryを比較する。二重処理、古いreader、移行中のconflict/reconciliation、失敗後状態、不可逆点を確認する。復旧方針unknownのまま不可逆stepを実行しない。
 
-Rename、Move、参照更新はsymbol-aware toolを優先する。AIは目的・責務仮説、test案、代替設計、差分reviewを担う。実装者のtestだけで自己正当化せず、固定契約と独立reviewで検証する。
+## Output and gates
 
-## 5. Temporary paths
+priorityを再決定しない場合は、既存priority_assessmentへの参照と再利用理由を保持する。公開契約差がない局所変更へmigrationを機械的に要求しない。必要な変更stepと回帰は省略しない。
 
-feature flag、adapter、dual read/write、copy、旧経路にはowner、導入目的、観測、期限、削除条件を付ける。rollbackで外部成功を巻き戻せない場合は、new writeを止めてforward recoveryする。
+実装者と同じcontextの自己reviewは独立reviewではない。reviewの独立性・対象revision・要求/oracle・実行Evidenceを記録する。変更範囲外のcleanupや将来拡張を追加せず、未実行・残存riskをcanonical decisionへつなぐ。
 
-## Output
-
-```yaml
-change_safety:
-  target_state: {}
-  priority: now | next | later | do-not-fix | unknown
-  priority_assessment: {}
-  behavior_baseline: []
-  intent_hypotheses: []
-  strategy: ""
-  first_vertical_slice: ""
-  steps: []
-  temporary_paths:
-    - artifact: "flag | adapter | dual-write | copy | old-path"
-      owner: ""
-      introduced_at: ""
-      purpose: ""
-      metric_or_log: ""
-      removal_condition: ""
-      removal_phase: ""
-  independent_review: []
-```
+正本packageを作る場合だけ`skills/mino-core/schemas/change-safety.md`を読み、baseline・step・暫定pathを保存する。

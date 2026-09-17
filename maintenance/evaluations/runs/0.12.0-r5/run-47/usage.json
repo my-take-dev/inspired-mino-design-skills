@@ -1,0 +1,35 @@
+{
+  "skill_files": [
+    {
+      "path": "skills/mino-domain-model-completeness/SKILL.md",
+      "read_scope": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/shared-policies.md",
+      "read_scope": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/domain-discovery.md",
+      "read_scope": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/platform-compatibility.md",
+      "read_scope": "全文",
+      "reread": false,
+      "output_omitted": false
+    }
+  ],
+  "reread_occurred": false,
+  "output_omission_occurred": false,
+  "difficulties": [
+    "意味が確定しているというEvidenceと、その意味がmodelに表現されているEvidenceの区別が必要だった。要件本文・modelが未提示のため、既存定義の未提示と実際の意味未確定を別のunknownとして記録した。",
+    "screenの確認着手とscreening解決率が混同されやすいため、全36cellの確認着手と根拠付きで解決した9cellを別記した。"
+  ],
+  "artifact": "output.md"
+}

@@ -35,7 +35,7 @@
 
 結論として、Codex runtimeでは現行の`.agents/skills/`を維持します。従来の構成図は、資料テーマを分類する**論理構成**としては有効ですが、その各groupを一つの公開Skillにすると、契約設計、境界設計、モデル監査、学習、suite保守など異なる成果物とtriggerが同居します。現行構成は、共通規則を暗黙発火しない`mino-core`へ集約し、利用者が求める主成果物ごとに公開Functionを分け、複数成果物が必要な場合だけrouterで統合するため、Codexの選択単位として扱いやすい構成です。
 
-この判断は、現行packageと[0.5.0のtargeted evaluation](../.agents/skills/mino-core/evaluations/0.5.0.md)に基づきます。単一のProblem Framing依頼で専門Functionや統合routerを過剰起動しない挙動は確認済みですが、全代表case・negative caseを最低3 fresh-context runするbehavioral releaseは未達です。したがって、現行構成を「実運用で完全に実証済み」とは扱わず、利用実績と回帰結果に応じて再評価します。
+この判断は当時のpackageと0.5.0のtargeted evaluationに基づく履歴です。その結果は現行suiteへ継承しません。現在の構成と実測範囲は[Evaluation 0.12.0](../maintenance/evaluations/0.12.0.md)を正本とし、全代表case・negative caseを最低3 fresh-context runするbehavioral releaseは未達です。利用実績と回帰結果に応じて再評価します。
 
 ## 直近6か月で重要度が高いキーワード
 
@@ -166,6 +166,15 @@ approvedまたはfrozenな問題・契約・品質・境界内でAIに実装さ�
 | 25 | [直近6か月のキーワード重要度監査](25-recent-keyword-importance-audit.md) | 最近の公開資料を中心性・反復性・因果性・Skill化可能性で評価する |
 | 26 | [技術の引力と具体・抽象の往復](26-technical-gravity-and-abstraction-navigation.md) | 技術への早期固定を検出し、`つまり`と`たとえば`で目的と実装を往復する |
 | 27 | [アーキテクチャ品質戦略](27-architecture-quality-strategy.md) | プロダクト価値、品質portfolio、全体trade-off、targetとtransitionを統合する |
+
+### 8. 公開資料の更新と実行規則の再監査
+
+| No. | 文書 | 内容 |
+|---:|---|---|
+| 28 | [公開資料の更新監査](28-web-update-audit-20260908.md) | 公開資料の確認範囲と既存判断規則への影響 |
+| 29 | [実行方針の専門化](29-execution-specialization.md) | 実行環境とSkill責務を分けた操作的解釈 |
+| 30 | [7 Skillの再構成](30-seven-skill-refresh-20260908.md) | 入口、共通規則、専門workflowの整理 |
+| 31 | [実用性の再点検](31-practicality-refresh-20260910.md) | 公式guideとの照合、修正と検証Evidenceの対応 |
 
 ## 読む順序
 
@@ -447,3 +456,5 @@ AIの一般知識を、そのシステムの業務要件として扱いません
 6. `18`の人間学習と`24`・`25`の再監査を継続し、AI出力を評価する人間の能力とsource coverageを更新する。
 
 構造validatorのpassや一部targeted caseの成功をbehavioral releaseと混同せず、Release gate未達の間は`not ready`を維持します。
+
+runtime分離は[0.12.0-r5の記録](../maintenance/evaluations/0.12.0-r5.md)、現行の判断規則補強と比較検証は[0.12.0-r6の記録](../maintenance/evaluations/0.12.0-r6.md)を参照する。

@@ -1,116 +1,51 @@
 # Requirements and traceability
 
-機械的変更を除く設計、実装、reviewで、自然言語の要求を後続Functionが判定できる共通入力へ正規化する。
+## Catalog and ownership
 
-## Contents
+非機械的な設計・実装・reviewで、自然言語の要求を独立に合否判定できる単位へ分ける。
 
-- Requirement Catalog
-- Ownership vocabulary
-- Traceability
-- Test-first rejection criteria
-- Gate
+曖昧な形容詞を観測可能な成功/拒否条件へ変換する。quality_constraint_idsはCoreの実在quality IDを参照し、分類語と目標数値を混ぜない。現行挙動はmust-preserve/intentional-change/unknownへ分け、既存codeを無条件に仕様としない。
 
-## Requirement Catalog
-
-各要求へ安定したIDを付ける。
-
-```yaml
-requirement:
-  id: R1
-  actor: ""
-  context: ""
-  trigger: ""
-  expected_result: ""
-  prohibited_results: []
-  quality_constraint_ids: []
-  evidence:
-    status: confirmed | inferred | assumption | unknown | contradiction
-    sources: []
-  acceptance: []
-```
-
-### Normalization rules
-
-- `適切に`、`安全に`、`保守しやすく`を観測可能な結果または品質scenarioへ変換する。
-- `quality_constraint_ids`は`skills/mino-core/references/core.md`のQuality vocabularyで定義したstable IDだけを参照する。characteristic、subcharacteristic、thresholdを一つのfree-text fieldへ混在させない。
-- 一つのrequirementへ複数の独立した結果を詰めず、個別に合否判定できる粒度へ分ける。
-- 現行挙動は`must-preserve | intentional-change | unknown`に分類し、無条件に仕様へ昇格しない。
-- `unknown`または`contradiction`が公開契約、data meaning、金銭、認可、安全、不可逆変更を分岐させる場合、design / reviewでは選択肢、選択gate、Evidence取得方法へ隔離する。未決事項に依存する選択・実装・不可逆操作はblockedにし、現在artifactまでblockedにするのは安全な条件分岐も作れない場合だけとする。
-
-## Ownership vocabulary
-
-同じ`owner`語で異なる権限を混ぜない。
-
-| Authority | Meaning |
+| Authority | 意味 |
 |---|---|
-| semantic owner | 用語と意味を定義するcontext / module |
-| invariant owner | 制約を常時守るmodel |
-| contract owner | 公開操作と互換性を決めるboundary |
-| state authority | 状態遷移を許可するboundary |
-| source of truth | authoritativeなstate |
-| writer / reader | stateを変更 / 解釈する経路 |
-| transition owner | migration中のauthorityを管理する責任者 |
-| failure / recovery owner | ambiguous outcome、補償、復旧方針を決める責任者 |
-| operational owner | 障害検知とrecoveryを担う責任者 |
+| semantic_owner | contextで用語・意味を定義する責任 |
+| invariant_owner | modelの制約を守る責任 |
+| contract_owner | 公開操作と互換性の責任 |
+| state_authority | 状態遷移を許可する責任 |
+| source_of_truth | authoritativeな状態の正本 |
+| transition_owner | 移行中のauthority管理 |
+| failure_recovery_owner | 曖昧結果・補償・復旧方針 |
+| operational_owner | 検知・照合・復旧運用 |
 
-targetではsemantic owner、contract owner、state authority、source of truthを一意にする。transition中の複数writerは、期間、競合規則、reconciliation、削除条件がある場合だけ許す。
+writer/readerはアクセス経路でありauthority種別と同一ではない。同じsubjectとauthority種別の正本を一意にする。authority種別が違えば同じoperation内でも別ownerになり得る。
 
-## Traceability
+## Identity and downstream obligations
 
-```yaml
-trace:
-  purpose_id: P1
-  goal_id: G1
-  requirement_id: R1
-  model_elements: []
-  contract_ids: []
-  boundary_operations: []
-  implementation_changes: []
-  verification_ids: []
-  evidence: []
-  connections:
-    - from_kind: purpose | goal | requirement | model | contract | boundary | change
-      from_id: ""
-      to_kind: goal | requirement | model | contract | boundary | change | verification
-      to_id: ""
-      rationale: ""
-      validation_ids: []
-      evidence: []
-  not_applicable:
-    - target_kind: model | contract | boundary | change | verification
-      target_id_or_scope: ""
-      reason: ""
-      evidence: []
-  status: covered | partial | missing | contradictory
-```
+local IDは各artifact内で一意にする。別artifact間は`artifact_handle#local_id`で参照する。contractのT1とarchitectureのT1を文字列一致だけで同一視しない。handleには対象revisionを結び付け、同名artifactの古い結果を参照しない。
 
-各requirementを最低でも目的、model、contract、公開操作、testまたはmeasurementへ接続する。`not_applicable`は理由を必須にする。
+上流Functionが作れるのは自身のmodel IDやobligation IDである。将来作るcontract/testのIDを先取りしない。ContractがCI/T IDを発行した後にrouterがobligationとの接続を確定する。
 
-### Trace quality rules
+| Scope | IDを発行する責任 |
+|---|---|
+| 問題・要件・未決 | Core/Framingの依頼成果物 |
+| model・access path・gap・obligation | Completeness |
+| condition・contract test | Contract |
+| consumer操作・漏出・変更scenario | Boundary |
+| option・target・transition・品質検証 | Architecture |
+| package handle・統合edge・最終検証 | Router |
 
-- `covered`はIDが並んでいるだけでは成立しない。各接続を`connections`へ一件ずつ置き、前段が後段を必要とする`rationale`と、反証可能な`validation_ids`を示す。並列ID listはinventoryであり、edgeのEvidenceを代替しない。
-- 専門Functionは、共通traceを自身の判断単位へ拡張する。Architectureはoption / target / transition、Completenessはmodel dimension / access path、Contractはcondition / test、Boundaryはconsumer operation / leakage / change scenarioを保持する。
-- 未作成の後続artifact IDを捏造しない。standaloneの上流Functionは`contract_obligation`、`boundary_obligation`、`test_obligation`までを返し、routerが実在artifactと統合する。
-- coverageの分母はscope内でapplicableな項目、分子はEvidenceと検証先へ接続済みの項目とする。除外は`not_applicable` recordに対象、理由、Evidenceがある項目だけに限定する。
+参照が未解決ならpartial/missingとし、名前の意味が似ているだけでcoveredにしない。
 
-## Test-first rejection criteria
+## Trace and coverage
 
-実装前に、生成物を拒否する条件をEvidence付きで記録する。AIが作成した直後は`decision_maturity.status: proposed`とし、権限を持つownerがversioned baselineとして承認した場合だけ`approved | frozen`とする。
+各edgeに前段が後段を必要とする根拠と反証方法を残す。単にIDを並べたinventoryをtraceと呼ばない。専門Functionは固有成果物までを所有し、不要な後続成果物を充足のために作らない。
 
-```yaml
-rejection_criterion:
-  id: RC1
-  requirement_ids: []
-  condition: ""
-  evidence_required: []
-  gate: core | architecture | completeness | contract | boundary | verification
-```
+coverageは対象集合、除外と理由、分母、分子、未coverage IDを示す。未知を除外して100%を作らない。0件はN/Aの根拠を示し、0/0を100%と表現しない。screening、設計上のcoverage、実行成功のcoverageは別値である。
 
-最低限、問題の取り違え、requirement / test欠落、不正状態、未定義failure、技術漏出、品質constraint違反、無承認の契約変更、scope外変更を含める。
+## Rejection criteria and gate
 
-## Gate
+実装前に問題の取り違え、不正状態、契約/失敗/品質の欠落、技術漏出、scope外変更を拒否条件へ落とす。AIが作成した条件はproposedであり、承認Evidenceなしにfrozenにしない。
 
-- requirement coverageとverification coverageを計算する。
-- `partial`、`missing`、`contradictory`を隠して実装へ進まない。
-- testがまだ実装されていないdesign modeでは、test ID、oracle、実行条件までを成果とし、実行済みと表現しない。
-- schemaの空欄、汎用語、pattern名をcoverageとして数えない。
+designではtest ID、oracle、実行条件、ownerのあるplanを成果物にできるが、実行済みとはしない。未知に依存する実装は止め、条件付きdesign/reviewの完成と分離する。schema欄を埋めただけでcoveredやverifiedにしない。
+
+正本packageを作る場合だけ`skills/mino-core/schemas/requirements.md`を読み、要件・trace・拒否条件を保存する。

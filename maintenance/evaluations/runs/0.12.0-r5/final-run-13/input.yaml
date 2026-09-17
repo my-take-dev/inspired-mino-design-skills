@@ -1,0 +1,11 @@
+mode: "review"
+required_platforms: []
+raw_request: "$mino-interface-implementation-separation で5行のprivate入力guardをレビューしてください。"
+confirmed_evidence:
+  - "範囲外をerrorにするだけで副作用はない。"
+  - "variant追加予定も外部障害境界もなく、契約とtestは一致する。"
+known_unknowns: []
+allowed_assumptions:
+  - "説明用の名前と現在成果物のローカルIDだけ。業務条件は補完しない。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"
