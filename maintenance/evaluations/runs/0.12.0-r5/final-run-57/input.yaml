@@ -1,0 +1,12 @@
+mode: "design"
+required_platforms: []
+raw_request: "名前の検証操作について、後続の実装者が正本として使うContract Packageを保存してください。説明は短くしてください。"
+confirmed_evidence:
+  - "owner承認済みR1: check_nameは空文字を拒否し、それ以外の文字列を受理する。正規化しない。"
+  - "R2: 空文字にはNameErrorを返し、副作用を起こさない。"
+  - "操作はpureで外部I/O・時間依存なし。既存の実装とtestは未提供。"
+known_unknowns: []
+allowed_assumptions:
+  - "説明用の名前と現在成果物のlocal IDのみ。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

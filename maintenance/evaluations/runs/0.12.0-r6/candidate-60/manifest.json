@@ -1,0 +1,32 @@
+{
+  "run_id": "candidate-60",
+  "case_id": "C60",
+  "variant": "candidate",
+  "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-60",
+  "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+  "solver_input_sha256": "271e017df1e8e204fe0f0f92be3f3448b9b5e76a72c84ed291cfa687f21abd7e",
+  "agent": "solver_b",
+  "fork_turns": "none",
+  "model_requested": "inherit",
+  "effective_model": null,
+  "effective_settings": null,
+  "counted": false,
+  "evaluation_status": "selected_semantic_gates_observed",
+  "artifacts": [
+    {
+      "path": "input.yaml",
+      "bytes": 958,
+      "sha256": "271e017df1e8e204fe0f0f92be3f3448b9b5e76a72c84ed291cfa687f21abd7e"
+    },
+    {
+      "path": "output.md",
+      "bytes": 2542,
+      "sha256": "6fc5a50b37c58319f71e8bea8d16c98e0d85ae923fe0d1945162096eba799432"
+    }
+  ],
+  "solver_output_sha256": "6fc5a50b37c58319f71e8bea8d16c98e0d85ae923fe0d1945162096eba799432",
+  "output_digest_scope": "solverが保存した回答artifactのraw bytes。tool transcript全体ではない",
+  "evaluation_scope": "r6 oracleの該当caseにある意味gateを親evaluatorが出力読了後に照合。全schema fieldの意味同等性やrelease passではない。",
+  "semantic_observation": "B1 r3とRV1のscope適合を示し、再承認・Framing routing・正式packageを要求せず境界案を返した。",
+  "known_differences": []
+}

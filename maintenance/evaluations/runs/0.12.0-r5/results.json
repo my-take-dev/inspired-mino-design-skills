@@ -1,0 +1,341 @@
+[
+  {
+    "run_id": "run-47",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C47",
+    "runtime_sha256": "6d870a2b2e36fbad6a61ddb2b0e11d234c893b46e05fe0c4b35484673393d79d",
+    "input_sha256": "b5fcd900fe729ae3ea2b311a489ad8a6b66cbad072c829511dc7ae34d5f7390f",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 4,
+    "read_bytes": 12449,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "input.yaml",
+        "bytes": 594,
+        "sha256": "b5fcd900fe729ae3ea2b311a489ad8a6b66cbad072c829511dc7ae34d5f7390f"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "0bb185f1c603ebc119c3d1695828d4d5e5570c54902154bf7a6421b8825a11ff"
+      },
+      {
+        "path": "output.md",
+        "bytes": 9657,
+        "sha256": "ad3ab09d524841bd32bb38d49bea29b459595fb8321a2417b59eb05d8b0c9546"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 1225,
+        "sha256": "e01beea3936cbc6d536521869384a351b9f3f83817df422dac8f581f2a8bad19"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; screening denominator interpretation refined afterwards",
+    "read_files_match_final": false
+  },
+  {
+    "run_id": "run-50",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C50",
+    "runtime_sha256": "6d870a2b2e36fbad6a61ddb2b0e11d234c893b46e05fe0c4b35484673393d79d",
+    "input_sha256": "70058531c00aa75d4510d33df21df24556c5478f219044442977cd49584b36b1",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 7,
+    "read_bytes": 20034,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "input.yaml",
+        "bytes": 631,
+        "sha256": "70058531c00aa75d4510d33df21df24556c5478f219044442977cd49584b36b1"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "916bb800bda85b003b3321ae38ca642a55f429bc85ab2855a322db3e03025547"
+      },
+      {
+        "path": "output.md",
+        "bytes": 602,
+        "sha256": "ebf9252769c5d8449f6df1b471d2aa0adfa4a848722b14a904a213dfe6ef71aa"
+      },
+      {
+        "path": "problem-framing-package.json",
+        "bytes": 33287,
+        "sha256": "03ec2eb9ca6285ce77b8057291f54ddc0657fc48ffed7b6335602d4b5f214ab2"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 2455,
+        "sha256": "90ac8358ff82a05c817b7510a0eb7e8f208c2b77dc9fc41373bdd22e885ef715"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; inspection notes in evaluation report",
+    "read_files_match_final": false
+  },
+  {
+    "run_id": "run-53",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C53",
+    "runtime_sha256": "6d870a2b2e36fbad6a61ddb2b0e11d234c893b46e05fe0c4b35484673393d79d",
+    "input_sha256": "9e7099ed24542513dc0096d0569e7d907abbf73798affa5da09f172e329a3288",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 4,
+    "read_bytes": 11993,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "input.yaml",
+        "bytes": 713,
+        "sha256": "9e7099ed24542513dc0096d0569e7d907abbf73798affa5da09f172e329a3288"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "09924164e80fa5d06a6a4f3a50e85bffc1f4e087b2af4c4ce9f1e7f0d1da4aff"
+      },
+      {
+        "path": "output.md",
+        "bytes": 1942,
+        "sha256": "fa1dfa8ea23ab8775dd1702f67190cacc4e5ff4862c05c485214e186344169cd"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 993,
+        "sha256": "8a352f83e2b0ff6c9c10b28549bdca78f040edf8ca615fb3743f3400c9aa444c"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; inspection notes in evaluation report",
+    "read_files_match_final": false
+  },
+  {
+    "run_id": "run-54",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C54",
+    "runtime_sha256": "6d870a2b2e36fbad6a61ddb2b0e11d234c893b46e05fe0c4b35484673393d79d",
+    "input_sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 13,
+    "read_bytes": 44732,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "boundary.json",
+        "bytes": 10777,
+        "sha256": "fde967934e051b99960dcb88fec69fb6034a60e224ae49253a4b0d50a7a23928"
+      },
+      {
+        "path": "context.json",
+        "bytes": 15200,
+        "sha256": "b85e2212a9a73f2507275ddf1c5773d8b6b6ba8e5f1c4a7d84099de772fb4cec"
+      },
+      {
+        "path": "contract.json",
+        "bytes": 20526,
+        "sha256": "5fc02d8627b05e506a0b4a4111776e0cbde89887d45d5fe0f04787c47654d534"
+      },
+      {
+        "path": "implementation-spec.json",
+        "bytes": 17378,
+        "sha256": "2cbf6bd1dcfddb41f19e7f21b2624c88bcdba32de1549ad7d5b96ac33eb9f9b2"
+      },
+      {
+        "path": "input.yaml",
+        "bytes": 842,
+        "sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "31d97442e495b6c99b0c1a1c6b7e255ff5b4d97eea9f1e5df947e38e314bf441"
+      },
+      {
+        "path": "output.md",
+        "bytes": 438,
+        "sha256": "30ba3fba18bc18b4f8c404414429f0a74cc4cabea0b07f84579d15127bd7f25c"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 3127,
+        "sha256": "8cf32aca53b55919b4b27e458d5eeb4bfe9dcfecbdc9db915bc3151a584a2345"
+      },
+      {
+        "path": "validation.json",
+        "bytes": 1015,
+        "sha256": "d1604b45120ff33d4f1eecd0ef1b8d0eb9ede3293245b9f1db651196bd39db28"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; inspection notes in evaluation report",
+    "read_files_match_final": false
+  },
+  {
+    "run_id": "final-run-13",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C13",
+    "runtime_sha256": "380561c3a44c6468820a7e3dc5a0016705736f1e25e98f4478c390577c742852",
+    "input_sha256": "1b18078f2c81eb00ff05527d00104f5544ff990224ada48c0ab41d32820d8379",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 2,
+    "read_bytes": 9124,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "input.yaml",
+        "bytes": 552,
+        "sha256": "1b18078f2c81eb00ff05527d00104f5544ff990224ada48c0ab41d32820d8379"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "e24a16cf884df1631a9d63854936a9cf46edfadfd932adc8e41430e140ca3a68"
+      },
+      {
+        "path": "output.md",
+        "bytes": 1520,
+        "sha256": "638cd232e8dbcbcecc9172e0be9e273f4358ebf6f7e7d9312fe16cb11bcd97e9"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 683,
+        "sha256": "fa523bcde0809020d347f81dd4f4cebea3af2db24ff7aacea61823954b947179"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; inspection notes in evaluation report",
+    "read_files_match_final": true
+  },
+  {
+    "run_id": "final-run-56",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C56",
+    "runtime_sha256": "380561c3a44c6468820a7e3dc5a0016705736f1e25e98f4478c390577c742852",
+    "input_sha256": "9bdd37cfc4ca953a9ea3b482004a9f45d2181cf6bad430ff3fd8fe907efd1c16",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 3,
+    "read_bytes": 10650,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "input.yaml",
+        "bytes": 646,
+        "sha256": "9bdd37cfc4ca953a9ea3b482004a9f45d2181cf6bad430ff3fd8fe907efd1c16"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "eb09ce1cf11a1e664fbafb6de4de929de0d09bd115cd1885a95987ce9f0ef75a"
+      },
+      {
+        "path": "output.md",
+        "bytes": 3497,
+        "sha256": "75e79160bea7e55f051e16fc037a2fbe2c7f76fc95cca64bb1a208838287b502"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 801,
+        "sha256": "cff5e4f5c29e4abedf519ea059b6ffa727e70a6ec9604e54c23a00f4b44891dc"
+      }
+    ],
+    "assessment": "known gap and unknown separated; one requirement-only constraint was incorrectly counted present; refined-run-56 corrected it",
+    "read_files_match_final": false
+  },
+  {
+    "run_id": "refined-run-56",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C56",
+    "runtime_sha256": "6c2062d1170a7e012b8685d8f92ddf0bc89e3c51492591c444b78244b54b58c1",
+    "input_sha256": "9bdd37cfc4ca953a9ea3b482004a9f45d2181cf6bad430ff3fd8fe907efd1c16",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 3,
+    "read_bytes": 10869,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "input.yaml",
+        "bytes": 646,
+        "sha256": "9bdd37cfc4ca953a9ea3b482004a9f45d2181cf6bad430ff3fd8fe907efd1c16"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "049568375dca25cb0ba029c8212c96bf5d846af27fbd3463daa4b992e8ec7b8e"
+      },
+      {
+        "path": "output.md",
+        "bytes": 3764,
+        "sha256": "7ba63e7cf96269dec4f8e5539df5f7f6afa527a117e37ea225d26b8900295ea7"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 828,
+        "sha256": "ecdfdae6d234df55f125fa2b792ca3afb19f00d98cbbb9d7fb8c2295c42375f7"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; inspection notes in evaluation report",
+    "read_files_match_final": true
+  },
+  {
+    "run_id": "final-run-57",
+    "evaluation_revision": "0.12.0-r5",
+    "case_id": "C57",
+    "runtime_sha256": "380561c3a44c6468820a7e3dc5a0016705736f1e25e98f4478c390577c742852",
+    "input_sha256": "386a1d7a3e13644028736eb153c22a8dc4a9f9f150dfcd32378c846bbee2d697",
+    "setting": "inherited; exact model/effort not observed",
+    "fresh_context": true,
+    "oracle_visibility": "not supplied; scoped instructions only, no OS access barrier",
+    "counted_run": false,
+    "read_files": 6,
+    "read_bytes": 18713,
+    "reread_or_truncation_reported": false,
+    "artifact_records": [
+      {
+        "path": "contract-package.json",
+        "bytes": 26089,
+        "sha256": "e4dfc2898cf97beb5dcd79b2384081741b24aaa33fb6552df212474a93281a9c"
+      },
+      {
+        "path": "input.yaml",
+        "bytes": 712,
+        "sha256": "386a1d7a3e13644028736eb153c22a8dc4a9f9f150dfcd32378c846bbee2d697"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 6370,
+        "sha256": "32c6bca8b2f2e19b8aecc619e5d1933dee68b3b507a91ba45f4159d9621d361a"
+      },
+      {
+        "path": "output.md",
+        "bytes": 531,
+        "sha256": "e9cb02a438881780d6fef03df24c66cfe3dd38759d0225bb342a37f891011058"
+      },
+      {
+        "path": "usage.json",
+        "bytes": 1806,
+        "sha256": "42a2ecef13cdc2f872fb709dcff2b9a1c431a743c06bfa441e22d69fc6b1c295"
+      }
+    ],
+    "assessment": "required/forbidden satisfied; inspection notes in evaluation report",
+    "read_files_match_final": true
+  }
+]

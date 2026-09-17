@@ -1,0 +1,12 @@
+mode: "design"
+required_platforms: []
+raw_request: "$mino-design-by-contract で返金上限の契約案を作り、実装へ渡せるか判定してください。"
+confirmed_evidence:
+  - "仕様S1 r1は「返金額は支払額まで」。返金ownerは会計担当。分割返金も同じ操作で行う。"
+  - "前工程のAIは「各回の返金額が支払額以下ならよい」と復唱し、S1とmatched、不明点なしと記録した。"
+  - "この復唱の比較根拠はS1 r1。review欄はunresolved。会計担当はこの解釈をまだ確認していない。"
+known_unknowns: []
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

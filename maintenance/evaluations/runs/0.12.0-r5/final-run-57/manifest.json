@@ -1,0 +1,176 @@
+{
+  "input_sha256": "386a1d7a3e13644028736eb153c22a8dc4a9f9f150dfcd32378c846bbee2d697",
+  "runtime_files": [
+    {
+      "path": "skills/mino-architecture-quality-strategy/agents/openai.yaml",
+      "bytes": 355,
+      "sha256": "126b423b01fbb984574c118d82cbc3b79b54a514f4dd1b603f10db0b92addbd3"
+    },
+    {
+      "path": "skills/mino-architecture-quality-strategy/schemas/package.md",
+      "bytes": 6338,
+      "sha256": "ecde99ddd545f522a5f81decff21d3bab9e33f06608763bc684374b1bf9091be"
+    },
+    {
+      "path": "skills/mino-architecture-quality-strategy/SKILL.md",
+      "bytes": 4663,
+      "sha256": "f1e27fb0e11ce9ef448b0a61fe450b3796f0b06afff01d04f556935a935a64fd"
+    },
+    {
+      "path": "skills/mino-core/agents/openai.yaml",
+      "bytes": 301,
+      "sha256": "583ddc1d54d10d3d2f3b2b4fb7e0aca8cdf0dc33a39adb1972a27dcf1c75e7c6"
+    },
+    {
+      "path": "skills/mino-core/references/change-safety.md",
+      "bytes": 2811,
+      "sha256": "4d7090af7786597b4e9ae0c6eb2f3ebf71cd56b0d24adfd831203226301bd1ba"
+    },
+    {
+      "path": "skills/mino-core/references/code-design.md",
+      "bytes": 2483,
+      "sha256": "f305680053458c655d054265cf350cb9f1629776d1a5e0aae7e2dbde7874ba2d"
+    },
+    {
+      "path": "skills/mino-core/references/domain-discovery.md",
+      "bytes": 1867,
+      "sha256": "b5dba1c023393b12efe51bda21329817f656382533dc8b7938a7f1e8f940cfc3"
+    },
+    {
+      "path": "skills/mino-core/references/platform-compatibility.md",
+      "bytes": 2008,
+      "sha256": "4b02e014010fd1d4719fa3b94ffd9b2e2195ac1ae242754ff6cf1dddc531403d"
+    },
+    {
+      "path": "skills/mino-core/references/quality.md",
+      "bytes": 1020,
+      "sha256": "d6f3fe35327d2e7ec0470c5d9f05df91d354d346cb7fc7a3fe73c8ad84d86220"
+    },
+    {
+      "path": "skills/mino-core/references/requirements-and-traceability.md",
+      "bytes": 3451,
+      "sha256": "70081448e2fe764cad829b1051e65a67069bdfb8c7d766252cdd9cdb3a9cffdf"
+    },
+    {
+      "path": "skills/mino-core/references/shared-policies.md",
+      "bytes": 4377,
+      "sha256": "aef3f12b5dd46796c903fd8f12ba6dfd0f25ead043245479180459b493952bca"
+    },
+    {
+      "path": "skills/mino-core/schemas/change-safety.md",
+      "bytes": 1578,
+      "sha256": "e788b77ff0bedd038e00e68ffee1f98c4e73198f96b253da0d3f8d071fd5a984"
+    },
+    {
+      "path": "skills/mino-core/schemas/core.md",
+      "bytes": 3882,
+      "sha256": "bbbe03d8d647b3c01e0fd0f0f8879dffb92f14948c52cd7f18c28e70ea9b27b5"
+    },
+    {
+      "path": "skills/mino-core/schemas/decision.md",
+      "bytes": 1698,
+      "sha256": "4a6157ba220751f9c3735a95bc1f830c15320c5a7bf52a4236e346204675a0c1"
+    },
+    {
+      "path": "skills/mino-core/schemas/discovery.md",
+      "bytes": 2571,
+      "sha256": "dfb458e9b3276edd292319e79ec40b058f6a99082b5873e5d3cf98816518ce05"
+    },
+    {
+      "path": "skills/mino-core/schemas/platform.md",
+      "bytes": 2354,
+      "sha256": "6306ec4afc0fba50f60690158b39c5bf66817311e85844bdaea4eedfa744001b"
+    },
+    {
+      "path": "skills/mino-core/schemas/requirements.md",
+      "bytes": 1653,
+      "sha256": "8ca8919edf1c44be942e399bcb4936d41fd4efb5837890dde75ef0ca286474f1"
+    },
+    {
+      "path": "skills/mino-core/SKILL.md",
+      "bytes": 2168,
+      "sha256": "99a2152d15576128534d6ee608752f4268ea04a777cbc00cc33fbcce6972b7e4"
+    },
+    {
+      "path": "skills/mino-design-by-contract/agents/openai.yaml",
+      "bytes": 339,
+      "sha256": "8474aca4d99a4d4bd09ba71c7ba011b454789ed49e014772642fc635e9dd49d2"
+    },
+    {
+      "path": "skills/mino-design-by-contract/schemas/package.md",
+      "bytes": 3885,
+      "sha256": "6c08b3dee6cde37e56838d3d8753694e437054c274f3e842d7c6aa4fd6c83e07"
+    },
+    {
+      "path": "skills/mino-design-by-contract/SKILL.md",
+      "bytes": 4391,
+      "sha256": "7d0375433a45b7a5dea6e2b372a16813728b848821bc353b5822e6448f28042a"
+    },
+    {
+      "path": "skills/mino-domain-model-completeness/agents/openai.yaml",
+      "bytes": 338,
+      "sha256": "e0b0c84d7893c133562abb4e70a72926f993d743201d3eb594604dcd3f24d501"
+    },
+    {
+      "path": "skills/mino-domain-model-completeness/schemas/package.md",
+      "bytes": 6109,
+      "sha256": "4a185a1c2b98a74c5b936104938f4c003286361d4904f7178671dd4714f7cd93"
+    },
+    {
+      "path": "skills/mino-domain-model-completeness/SKILL.md",
+      "bytes": 4406,
+      "sha256": "50b979e39765230a983e140c4f9dac168074f5ba21208aed0ec29b9cd4e55b47"
+    },
+    {
+      "path": "skills/mino-interface-implementation-separation/agents/openai.yaml",
+      "bytes": 359,
+      "sha256": "6a4806c31732f96d6a51996638409c1aa5f5e31c766b6632bd0bf5567f4ec26c"
+    },
+    {
+      "path": "skills/mino-interface-implementation-separation/schemas/package.md",
+      "bytes": 3816,
+      "sha256": "bfa2f2d38ddb3681650b903c5177746f5530a0dd6ecd584d89f4c48f95901ba9"
+    },
+    {
+      "path": "skills/mino-interface-implementation-separation/SKILL.md",
+      "bytes": 4747,
+      "sha256": "72ef8c15d20d9c82bc094da97c771b38b2479116960cdb5a1a9894df4cd1a5a1"
+    },
+    {
+      "path": "skills/mino-problem-framing/agents/openai.yaml",
+      "bytes": 333,
+      "sha256": "da663f9e0aa4939ef5c79d063bc36d38882264bdedcf8801f9ecf52a406e386c"
+    },
+    {
+      "path": "skills/mino-problem-framing/schemas/package.md",
+      "bytes": 2091,
+      "sha256": "1815a3f53202a17dda530594d56c2e7288952bb7c83a9371bfe4414e5829ca34"
+    },
+    {
+      "path": "skills/mino-problem-framing/SKILL.md",
+      "bytes": 3699,
+      "sha256": "c031dcae915f47c923dd1d5fddf8ff3cfa33f6c005cd8b7a54602cb5862670a3"
+    },
+    {
+      "path": "skills/mino-reproducible-development/agents/openai.yaml",
+      "bytes": 352,
+      "sha256": "d6c48b43e875d7cdb4ff38ae621f8bbc4d467d7efc86254e2d577d0c900933ee"
+    },
+    {
+      "path": "skills/mino-reproducible-development/references/reproduction.md",
+      "bytes": 1784,
+      "sha256": "3018bd373615f19d261e07894bf0d837abf8c3d5f310a94de0640c7c08ed9c94"
+    },
+    {
+      "path": "skills/mino-reproducible-development/schemas/package.md",
+      "bytes": 3845,
+      "sha256": "fcda7113fde332334bd080b74bf40be5010ef5e5fb9cb954e40966801c1f6dc2"
+    },
+    {
+      "path": "skills/mino-reproducible-development/SKILL.md",
+      "bytes": 4850,
+      "sha256": "ceb48115266355d371b3d8bb9f1db6dabcdfa32268cc58a330e9b3b9cd2e6ec7"
+    }
+  ],
+  "isolation": "copy and scoped instruction; not OS sandbox"
+}

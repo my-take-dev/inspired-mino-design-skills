@@ -1,0 +1,804 @@
+{
+  "artifact_handle": "contract-v1",
+  "revision": "1",
+  "contract_package": {
+    "subject": "display_quantityの数量表示契約",
+    "platform_context": {
+      "$ref": "context-v1#/platform_context"
+    },
+    "platform_validation": {
+      "$ref": "context-v1#/platform_validation"
+    },
+    "change_safety": {
+      "applicability": "not_applicable",
+      "not_applicable_reason": "既存挙動変更・既存callerの移行はない。",
+      "evidence": [
+        "context-v1#E2"
+      ]
+    },
+    "requirements": [
+      {
+        "$ref": "context-v1#R1"
+      },
+      {
+        "$ref": "context-v1#R2"
+      }
+    ],
+    "operations": [
+      {
+        "id": "OP1",
+        "name": "display_quantity",
+        "caller": "帳票",
+        "boundary": "値を受け取り表示文字列またはValueErrorを返す公開操作",
+        "contract_owner": "context-v1#A2",
+        "initial_state": "永続状態・外部状態を持たない。",
+        "inputs": [
+          {
+            "name": "q",
+            "domain": "整数。整数以外は今回対象外。"
+          }
+        ],
+        "expected_result": "CI2に従う2桁文字列",
+        "side_effects": [],
+        "failures": [
+          "CI3のValueError"
+        ],
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      }
+    ],
+    "contract_items": [
+      {
+        "id": "CI1",
+        "kind": "precondition",
+        "statement": "今回の契約でcallerが渡す入力は整数である。範囲外整数も操作の公開入力に含み、CI3で応答する。整数以外の扱いは定義しない。",
+        "contract_level": "api",
+        "authority_type": "contract_owner",
+        "authoritative_owner": "帳票consumerの呼出責務",
+        "requirement_ids": [
+          "context-v1#R1",
+          "context-v1#R2"
+        ],
+        "operation_id": "OP1",
+        "domain_obligation_ids": [],
+        "applicability": {
+          "status": "required",
+          "rationale": "整数以外は承認済み対象外。callerの型前提はproviderの範囲外保証を取り除かない。"
+        },
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "追加UI入力検証や別writerは今回対象外。providerの範囲検査はCI3を成立させる本来の保証責務。"
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      },
+      {
+        "id": "CI2",
+        "kind": "postcondition",
+        "statement": "0≤q≤99の整数入力では、十進の入力数量を表す2桁文字列を返す。0〜9は先頭を0にする。厳密な期待値はtestsの正常値oracleへ接続する。",
+        "contract_level": "api",
+        "authority_type": "invariant_owner",
+        "authoritative_owner": "display_quantityの実装責務",
+        "requirement_ids": [
+          "context-v1#R1"
+        ],
+        "operation_id": "OP1",
+        "domain_obligation_ids": [],
+        "applicability": {
+          "status": "required",
+          "rationale": "成功時の表示契約はproviderが保証する。帳票での事後加工へ委譲しない。"
+        },
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "追加UI入力検証や別writerは今回対象外。providerの範囲検査はCI3を成立させる本来の保証責務。"
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      },
+      {
+        "id": "CI3",
+        "kind": "failure_guarantee",
+        "statement": "q<0またはq>99の整数入力ではValueErrorを送出し、正常な返却値を返さない。",
+        "contract_level": "api",
+        "authority_type": "invariant_owner",
+        "authoritative_owner": "display_quantityの実装責務",
+        "requirement_ids": [
+          "context-v1#R2"
+        ],
+        "operation_id": "OP1",
+        "domain_obligation_ids": [],
+        "applicability": {
+          "status": "required",
+          "rationale": "無効な整数入力への応答を明示する公開失敗契約である。callerによる事前range validationだけに依存しない。"
+        },
+        "defensive_validations": {
+          "status": "not_applicable",
+          "rationale": "追加UI入力検証や別writerは今回対象外。providerの範囲検査はCI3を成立させる本来の保証責務。"
+        },
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "context-v1#E1",
+            "context-v1#E2"
+          ]
+        }
+      }
+    ],
+    "condition_screening": [
+      {
+        "kind": "invariant",
+        "applicability": "not_applicable",
+        "rationale": "独立した有効modelや保持状態がない。成功値の制約はCI2で保証する。",
+        "evidence": [
+          "context-v1#E2"
+        ]
+      },
+      {
+        "kind": "environment_condition",
+        "applicability": "not_applicable",
+        "rationale": "外部I/O・時間依存・対象OS要件はない。",
+        "evidence": [
+          "context-v1#E2",
+          "input.yaml#/required_platforms"
+        ]
+      },
+      {
+        "kind": "failure_post_state",
+        "applicability": "not_applicable",
+        "rationale": "更新対象のdomain/persisted stateおよび外部副作用がないため、復旧状態や補償を定義しない。呼出側の元データを変更する権限も操作に含めない。",
+        "evidence": [
+          "context-v1#E2"
+        ]
+      },
+      {
+        "kind": "technical_failure_cancel_timeout_concurrency",
+        "applicability": "not_applicable",
+        "rationale": "外部依存、共有更新、時間制約がなく、runtime自体の障害応答は承認済みR1/R2の対象外。",
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ]
+      }
+    ],
+    "idempotency_assessments": [
+      {
+        "operation_id": "OP1",
+        "applicability": "not_applicable",
+        "rationale": "保存・外部I/O・時間依存がなく副作用の重複を防ぐ要件がない。同じ整数への同じ結果はCI2/CI3の決定性であり、副作用の冪等性やkeyを要求しない。",
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "context-v1#E2"
+          ]
+        },
+        "contract_item_ids": []
+      }
+    ],
+    "public_contract_changes": [],
+    "tests": [
+      {
+        "id": "T1",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "context-v1#R1",
+          "context-v1#R2"
+        ],
+        "verifies": [
+          "CI1",
+          "CI2",
+          "CI3"
+        ],
+        "given": "整数fixture。境界直前・値・直後を選ぶ。",
+        "when": "各入力でdisplay_quantityを一度呼ぶ。",
+        "then": [
+          "戻り値または例外型が次の表と一致する。"
+        ],
+        "oracle": {
+          "kind": "explicit_cases",
+          "cases": [
+            {
+              "input": -1,
+              "raises": "ValueError"
+            },
+            {
+              "input": 0,
+              "returns": "00"
+            },
+            {
+              "input": 1,
+              "returns": "01"
+            },
+            {
+              "input": 98,
+              "returns": "98"
+            },
+            {
+              "input": 99,
+              "returns": "99"
+            },
+            {
+              "input": 100,
+              "raises": "ValueError"
+            }
+          ]
+        },
+        "environment_conditions": [],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          "context-v1#E1"
+        ]
+      },
+      {
+        "id": "T2",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "context-v1#R1"
+        ],
+        "verifies": [
+          "CI1",
+          "CI2"
+        ],
+        "given": "0〜99の各整数と本artifactに固定した期待値表。",
+        "when": "各入力でdisplay_quantityを呼ぶ。",
+        "then": [
+          "結果が文字列であり、その値が期待値と完全一致する。"
+        ],
+        "oracle": {
+          "kind": "literal_expected_table",
+          "cases": [
+            {
+              "input": 0,
+              "expected": "00"
+            },
+            {
+              "input": 1,
+              "expected": "01"
+            },
+            {
+              "input": 2,
+              "expected": "02"
+            },
+            {
+              "input": 3,
+              "expected": "03"
+            },
+            {
+              "input": 4,
+              "expected": "04"
+            },
+            {
+              "input": 5,
+              "expected": "05"
+            },
+            {
+              "input": 6,
+              "expected": "06"
+            },
+            {
+              "input": 7,
+              "expected": "07"
+            },
+            {
+              "input": 8,
+              "expected": "08"
+            },
+            {
+              "input": 9,
+              "expected": "09"
+            },
+            {
+              "input": 10,
+              "expected": "10"
+            },
+            {
+              "input": 11,
+              "expected": "11"
+            },
+            {
+              "input": 12,
+              "expected": "12"
+            },
+            {
+              "input": 13,
+              "expected": "13"
+            },
+            {
+              "input": 14,
+              "expected": "14"
+            },
+            {
+              "input": 15,
+              "expected": "15"
+            },
+            {
+              "input": 16,
+              "expected": "16"
+            },
+            {
+              "input": 17,
+              "expected": "17"
+            },
+            {
+              "input": 18,
+              "expected": "18"
+            },
+            {
+              "input": 19,
+              "expected": "19"
+            },
+            {
+              "input": 20,
+              "expected": "20"
+            },
+            {
+              "input": 21,
+              "expected": "21"
+            },
+            {
+              "input": 22,
+              "expected": "22"
+            },
+            {
+              "input": 23,
+              "expected": "23"
+            },
+            {
+              "input": 24,
+              "expected": "24"
+            },
+            {
+              "input": 25,
+              "expected": "25"
+            },
+            {
+              "input": 26,
+              "expected": "26"
+            },
+            {
+              "input": 27,
+              "expected": "27"
+            },
+            {
+              "input": 28,
+              "expected": "28"
+            },
+            {
+              "input": 29,
+              "expected": "29"
+            },
+            {
+              "input": 30,
+              "expected": "30"
+            },
+            {
+              "input": 31,
+              "expected": "31"
+            },
+            {
+              "input": 32,
+              "expected": "32"
+            },
+            {
+              "input": 33,
+              "expected": "33"
+            },
+            {
+              "input": 34,
+              "expected": "34"
+            },
+            {
+              "input": 35,
+              "expected": "35"
+            },
+            {
+              "input": 36,
+              "expected": "36"
+            },
+            {
+              "input": 37,
+              "expected": "37"
+            },
+            {
+              "input": 38,
+              "expected": "38"
+            },
+            {
+              "input": 39,
+              "expected": "39"
+            },
+            {
+              "input": 40,
+              "expected": "40"
+            },
+            {
+              "input": 41,
+              "expected": "41"
+            },
+            {
+              "input": 42,
+              "expected": "42"
+            },
+            {
+              "input": 43,
+              "expected": "43"
+            },
+            {
+              "input": 44,
+              "expected": "44"
+            },
+            {
+              "input": 45,
+              "expected": "45"
+            },
+            {
+              "input": 46,
+              "expected": "46"
+            },
+            {
+              "input": 47,
+              "expected": "47"
+            },
+            {
+              "input": 48,
+              "expected": "48"
+            },
+            {
+              "input": 49,
+              "expected": "49"
+            },
+            {
+              "input": 50,
+              "expected": "50"
+            },
+            {
+              "input": 51,
+              "expected": "51"
+            },
+            {
+              "input": 52,
+              "expected": "52"
+            },
+            {
+              "input": 53,
+              "expected": "53"
+            },
+            {
+              "input": 54,
+              "expected": "54"
+            },
+            {
+              "input": 55,
+              "expected": "55"
+            },
+            {
+              "input": 56,
+              "expected": "56"
+            },
+            {
+              "input": 57,
+              "expected": "57"
+            },
+            {
+              "input": 58,
+              "expected": "58"
+            },
+            {
+              "input": 59,
+              "expected": "59"
+            },
+            {
+              "input": 60,
+              "expected": "60"
+            },
+            {
+              "input": 61,
+              "expected": "61"
+            },
+            {
+              "input": 62,
+              "expected": "62"
+            },
+            {
+              "input": 63,
+              "expected": "63"
+            },
+            {
+              "input": 64,
+              "expected": "64"
+            },
+            {
+              "input": 65,
+              "expected": "65"
+            },
+            {
+              "input": 66,
+              "expected": "66"
+            },
+            {
+              "input": 67,
+              "expected": "67"
+            },
+            {
+              "input": 68,
+              "expected": "68"
+            },
+            {
+              "input": 69,
+              "expected": "69"
+            },
+            {
+              "input": 70,
+              "expected": "70"
+            },
+            {
+              "input": 71,
+              "expected": "71"
+            },
+            {
+              "input": 72,
+              "expected": "72"
+            },
+            {
+              "input": 73,
+              "expected": "73"
+            },
+            {
+              "input": 74,
+              "expected": "74"
+            },
+            {
+              "input": 75,
+              "expected": "75"
+            },
+            {
+              "input": 76,
+              "expected": "76"
+            },
+            {
+              "input": 77,
+              "expected": "77"
+            },
+            {
+              "input": 78,
+              "expected": "78"
+            },
+            {
+              "input": 79,
+              "expected": "79"
+            },
+            {
+              "input": 80,
+              "expected": "80"
+            },
+            {
+              "input": 81,
+              "expected": "81"
+            },
+            {
+              "input": 82,
+              "expected": "82"
+            },
+            {
+              "input": 83,
+              "expected": "83"
+            },
+            {
+              "input": 84,
+              "expected": "84"
+            },
+            {
+              "input": 85,
+              "expected": "85"
+            },
+            {
+              "input": 86,
+              "expected": "86"
+            },
+            {
+              "input": 87,
+              "expected": "87"
+            },
+            {
+              "input": 88,
+              "expected": "88"
+            },
+            {
+              "input": 89,
+              "expected": "89"
+            },
+            {
+              "input": 90,
+              "expected": "90"
+            },
+            {
+              "input": 91,
+              "expected": "91"
+            },
+            {
+              "input": 92,
+              "expected": "92"
+            },
+            {
+              "input": 93,
+              "expected": "93"
+            },
+            {
+              "input": 94,
+              "expected": "94"
+            },
+            {
+              "input": 95,
+              "expected": "95"
+            },
+            {
+              "input": 96,
+              "expected": "96"
+            },
+            {
+              "input": 97,
+              "expected": "97"
+            },
+            {
+              "input": 98,
+              "expected": "98"
+            },
+            {
+              "input": 99,
+              "expected": "99"
+            }
+          ],
+          "usage": "保存された期待値を使う。test実行時に対象実装のformatterや同一helperで期待値を再生成しない。"
+        },
+        "environment_conditions": [],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#I1"
+        ]
+      },
+      {
+        "id": "T3",
+        "operation_id": "OP1",
+        "requirement_ids": [
+          "context-v1#R2"
+        ],
+        "verifies": [
+          "CI1",
+          "CI3"
+        ],
+        "given": "整数fixture -1000、-2、101、1000。",
+        "when": "各入力でdisplay_quantityを呼ぶ。",
+        "then": [
+          "すべてValueErrorを送出する。正常返却・clamp・切り捨て・剰余変換を成功扱いしない。"
+        ],
+        "oracle": {
+          "kind": "exception_type",
+          "inputs": [
+            -1000,
+            -2,
+            101,
+            1000
+          ],
+          "raises": "ValueError"
+        },
+        "environment_conditions": [],
+        "implementation_status": "planned",
+        "execution_status": "not_run",
+        "evidence": [
+          "context-v1#E1"
+        ]
+      }
+    ],
+    "traceability": [
+      {
+        "requirement_id": "context-v1#R1",
+        "domain_obligation_ids": [],
+        "operation_ids": [
+          "OP1"
+        ],
+        "contract_item_ids": [
+          "CI1",
+          "CI2"
+        ],
+        "test_ids": [
+          "T1",
+          "T2"
+        ],
+        "status": "covered"
+      },
+      {
+        "requirement_id": "context-v1#R2",
+        "domain_obligation_ids": [],
+        "operation_ids": [
+          "OP1"
+        ],
+        "contract_item_ids": [
+          "CI1",
+          "CI3"
+        ],
+        "test_ids": [
+          "T1",
+          "T3"
+        ],
+        "status": "covered"
+      }
+    ],
+    "coverage": {
+      "requirement": {
+        "target_ids": [
+          "context-v1#R1",
+          "context-v1#R2"
+        ],
+        "denominator": 2,
+        "numerator": 2,
+        "uncovered_ids": []
+      },
+      "contract": {
+        "target_ids": [
+          "CI1",
+          "CI2",
+          "CI3"
+        ],
+        "denominator": 3,
+        "numerator": 3,
+        "incomplete_item_ids": []
+      },
+      "test": {
+        "target_ids": [
+          "CI1",
+          "CI2",
+          "CI3"
+        ],
+        "denominator": 3,
+        "numerator": 3,
+        "uncovered_item_ids": [],
+        "note": "CI1はtest fixtureの整数前提として満たす。非整数へのprovider validationをtestしたことにはしない。"
+      },
+      "execution": {
+        "target_ids": [
+          "CI1",
+          "CI2",
+          "CI3"
+        ],
+        "denominator": 3,
+        "numerator": 0,
+        "unverified_item_ids": [
+          "CI1",
+          "CI2",
+          "CI3"
+        ]
+      },
+      "unknown_item_ids": [],
+      "exclusions": [
+        {
+          "target": "非整数入力",
+          "reason": "承認済み対象外",
+          "evidence": [
+            "context-v1#E1"
+          ]
+        }
+      ]
+    },
+    "subject_verdict": "sufficient",
+    "decision": {
+      "$ref": "context-v1#/decision"
+    }
+  }
+}

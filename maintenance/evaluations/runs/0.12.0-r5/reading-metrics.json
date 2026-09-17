@@ -1,0 +1,44 @@
+[
+  {
+    "skill": "mino-architecture-quality-strategy",
+    "old_entry_common_workflow_bytes": 50199,
+    "new_entry_common_bytes": 9040,
+    "reduction_percent": 82.0
+  },
+  {
+    "skill": "mino-core",
+    "old_entry_common_workflow_bytes": 47985,
+    "new_entry_common_bytes": 6545,
+    "reduction_percent": 86.4
+  },
+  {
+    "skill": "mino-design-by-contract",
+    "old_entry_common_workflow_bytes": 48246,
+    "new_entry_common_bytes": 8768,
+    "reduction_percent": 81.8
+  },
+  {
+    "skill": "mino-domain-model-completeness",
+    "old_entry_common_workflow_bytes": 49315,
+    "new_entry_common_bytes": 9002,
+    "reduction_percent": 81.7
+  },
+  {
+    "skill": "mino-interface-implementation-separation",
+    "old_entry_common_workflow_bytes": 47601,
+    "new_entry_common_bytes": 9124,
+    "reduction_percent": 80.8
+  },
+  {
+    "skill": "mino-problem-framing",
+    "old_entry_common_workflow_bytes": 44988,
+    "new_entry_common_bytes": 8076,
+    "reduction_percent": 82.0
+  },
+  {
+    "skill": "mino-reproducible-development",
+    "old_entry_common_workflow_bytes": 50732,
+    "new_entry_common_bytes": 9227,
+    "reduction_percent": 81.8
+  }
+]

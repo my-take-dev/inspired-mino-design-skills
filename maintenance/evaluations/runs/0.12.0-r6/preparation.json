@@ -1,0 +1,79 @@
+{
+  "evaluation_revision": "0.12.0-r6",
+  "baseline_commit": "180ca1f31c34dbe4c16e7246413fae0f1194d912",
+  "stage": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv",
+  "runs": [
+    {
+      "run_id": "candidate-58",
+      "case_id": "C58",
+      "variant": "candidate",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-58",
+      "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+      "solver_input_sha256": "8e5762d46a0a39c803f8d9e7564595df26d8531c8bafb553fa1b718863304d0f"
+    },
+    {
+      "run_id": "candidate-60",
+      "case_id": "C60",
+      "variant": "candidate",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-60",
+      "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+      "solver_input_sha256": "271e017df1e8e204fe0f0f92be3f3448b9b5e76a72c84ed291cfa687f21abd7e"
+    },
+    {
+      "run_id": "candidate-62",
+      "case_id": "C62",
+      "variant": "candidate",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-62",
+      "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+      "solver_input_sha256": "3038e638fa01a573c158d7ca7066820ccb7b8870a9821fe0d0ade032c65cd847"
+    },
+    {
+      "run_id": "candidate-11",
+      "case_id": "C11",
+      "variant": "candidate",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-11",
+      "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+      "solver_input_sha256": "ca76920a90d2a6a09941e90d4a647e86aec63c15c3bd7a0c3f7973b5845644e5"
+    },
+    {
+      "run_id": "candidate-54",
+      "case_id": "C54",
+      "variant": "candidate",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\candidate-54",
+      "suite_artifact_sha256": "3728904afbae004424cbdcfe1ed836189e392dfdaafa1aa39c1917a52f27ea29",
+      "solver_input_sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5"
+    },
+    {
+      "run_id": "develop-58",
+      "case_id": "C58",
+      "variant": "develop",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\develop-58",
+      "suite_artifact_sha256": "bfade6fb5fd0b06459da4d29fb6c5a3d644ac24184f1f792da954e4d53140070",
+      "solver_input_sha256": "8e5762d46a0a39c803f8d9e7564595df26d8531c8bafb553fa1b718863304d0f"
+    },
+    {
+      "run_id": "develop-62",
+      "case_id": "C62",
+      "variant": "develop",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\develop-62",
+      "suite_artifact_sha256": "bfade6fb5fd0b06459da4d29fb6c5a3d644ac24184f1f792da954e4d53140070",
+      "solver_input_sha256": "3038e638fa01a573c158d7ca7066820ccb7b8870a9821fe0d0ade032c65cd847"
+    },
+    {
+      "run_id": "develop-11",
+      "case_id": "C11",
+      "variant": "develop",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\develop-11",
+      "suite_artifact_sha256": "bfade6fb5fd0b06459da4d29fb6c5a3d644ac24184f1f792da954e4d53140070",
+      "solver_input_sha256": "ca76920a90d2a6a09941e90d4a647e86aec63c15c3bd7a0c3f7973b5845644e5"
+    },
+    {
+      "run_id": "develop-54",
+      "case_id": "C54",
+      "variant": "develop",
+      "workspace": "C:\\Users\\MYTAKE~2\\AppData\\Local\\Temp\\mino-r6-comparison-wtc98axv\\develop-54",
+      "suite_artifact_sha256": "bfade6fb5fd0b06459da4d29fb6c5a3d644ac24184f1f792da954e4d53140070",
+      "solver_input_sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5"
+    }
+  ]
+}

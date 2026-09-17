@@ -1,0 +1,9 @@
+{
+  "qualified_refs": 25,
+  "registry_revisions": 5,
+  "unresolved_refs": 0,
+  "required_conditions": 4,
+  "planned_tests": 4,
+  "runtime_tests_executed": 0,
+  "scope": "親evaluatorによるJSON構造と実在参照の照合。条件・owner・oracleの内容は別途読んで評価。全991 fieldの意味検証ではない。"
+}

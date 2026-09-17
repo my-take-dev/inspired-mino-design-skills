@@ -1,0 +1,13 @@
+{
+  "skill_files_read": [
+    {"path": "skills/mino-domain-model-completeness/SKILL.md", "range": "full", "reread": false, "output_omitted": false},
+    {"path": "skills/mino-core/references/shared-policies.md", "range": "full", "reread": false, "output_omitted": false},
+    {"path": "skills/mino-core/references/domain-discovery.md", "range": "full", "reread": false, "output_omitted": false}
+  ],
+  "reread": false,
+  "output_omitted": false,
+  "usability_notes": [
+    "短い監査メモでも12観点とcoverageの記録を要求するため、既知欠陥1件と表示意味の未知という小さな依頼に対して表が長くなる。",
+    "回答保存ではpackage schemaを読まない条件と、既知gapと未知が併存する場合のincomplete判定は明確だった。"
+  ]
+}

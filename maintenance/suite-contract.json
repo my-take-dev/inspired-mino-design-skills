@@ -1,0 +1,182 @@
+{
+  "suite_version": "0.12.0",
+  "evaluation_revision": "0.12.0-r6",
+  "evidence_status": [
+    "confirmed",
+    "inferred",
+    "assumption",
+    "unknown",
+    "contradiction"
+  ],
+  "decision_status": [
+    "pass",
+    "revise",
+    "blocked",
+    "awaiting_approval"
+  ],
+  "artifact_readiness": [
+    "ready",
+    "incomplete",
+    "blocked"
+  ],
+  "engineering_status": [
+    "not_started",
+    "planned",
+    "changed",
+    "verified",
+    "failed"
+  ],
+  "release_status": [
+    "not_applicable",
+    "not_ready",
+    "awaiting_approval",
+    "approved"
+  ],
+  "decision_maturity": [
+    "proposed",
+    "approved",
+    "frozen",
+    "unknown",
+    "contradiction"
+  ],
+  "owner_by_concern": {
+    "evidence_authority_decision": "mino-core",
+    "problem_framing": "mino-problem-framing",
+    "use_case_model_audit": "mino-domain-model-completeness",
+    "condition_authority_oracle": "mino-design-by-contract",
+    "consumer_boundary": "mino-interface-implementation-separation",
+    "system_quality_data_authority_transition": "mino-architecture-quality-strategy",
+    "integration_verification": "mino-reproducible-development"
+  },
+  "mode_artifacts": {
+    "design": "Implementation Spec",
+    "implementation": "Verified Change",
+    "review": "Review Result",
+    "reproduction-test": "Reproduction Report"
+  },
+  "model_dimensions": [
+    "term_context",
+    "concept",
+    "constraint",
+    "state",
+    "transition",
+    "behavior",
+    "relationship",
+    "failure",
+    "time",
+    "writer",
+    "reader",
+    "authority"
+  ],
+  "skills": {
+    "mino-core": {
+      "artifact": "Core Result",
+      "root": "core_result",
+      "modes": [
+        "internal"
+      ],
+      "subject_verdict": [],
+      "allow_implicit_invocation": false
+    },
+    "mino-problem-framing": {
+      "artifact": "Problem Framing Package",
+      "root": "problem_framing_package",
+      "modes": [
+        "design",
+        "review"
+      ],
+      "subject_verdict": [
+        "ready",
+        "conditional",
+        "blocked"
+      ],
+      "allow_implicit_invocation": true
+    },
+    "mino-domain-model-completeness": {
+      "artifact": "Completeness Package",
+      "root": "completeness_package",
+      "modes": [
+        "design",
+        "review"
+      ],
+      "subject_verdict": [
+        "complete",
+        "incomplete",
+        "indeterminate"
+      ],
+      "allow_implicit_invocation": true
+    },
+    "mino-design-by-contract": {
+      "artifact": "Contract Package",
+      "root": "contract_package",
+      "modes": [
+        "design",
+        "review",
+        "implementation"
+      ],
+      "subject_verdict": [
+        "sufficient",
+        "insufficient",
+        "indeterminate"
+      ],
+      "allow_implicit_invocation": true
+    },
+    "mino-interface-implementation-separation": {
+      "artifact": "Boundary Package",
+      "root": "boundary_package",
+      "modes": [
+        "design",
+        "review",
+        "implementation"
+      ],
+      "subject_verdict": [
+        "separated",
+        "leaky",
+        "overabstracted",
+        "not_applicable",
+        "indeterminate"
+      ],
+      "allow_implicit_invocation": true
+    },
+    "mino-architecture-quality-strategy": {
+      "artifact": "Architecture Strategy Package",
+      "root": "architecture_strategy_package",
+      "modes": [
+        "design",
+        "review"
+      ],
+      "subject_verdict": [
+        "coherent",
+        "conditional",
+        "incomplete",
+        "indeterminate"
+      ],
+      "allow_implicit_invocation": true
+    },
+    "mino-reproducible-development": {
+      "artifact": "Mode-specific integrated artifact",
+      "root": "reproducible_development_result",
+      "modes": [
+        "design",
+        "implementation",
+        "review",
+        "reproduction-test"
+      ],
+      "subject_verdict": [],
+      "allow_implicit_invocation": true
+    }
+  },
+  "invariants": [
+    "artifact_subject_separation",
+    "no_fabricated_ids",
+    "no_self_approval",
+    "operation_specific_semantics",
+    "mode_scoped_mutation",
+    "no_leaf_rerouting",
+    "independent_evidence",
+    "risk_scoped_verification",
+    "required_platform_separation",
+    "runtime_authoring_separation",
+    "conditional_schema_loading"
+  ]
+}

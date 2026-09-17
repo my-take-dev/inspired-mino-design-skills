@@ -1,0 +1,12 @@
+mode: "design"
+required_platforms: []
+raw_request: "検索サービスと画面をまたぐ品質の優先案を、打合せ用の短い文章でまとめてください。今は品質の比較だけが対象です。"
+confirmed_evidence:
+  - "受付担当の業務中断を減らすことが目的。ピーク時の検索待ちが長いという観測がある。"
+  - "検索結果の内容と閲覧権限は維持する。技術方式と改善案の採用は未決。"
+known_unknowns:
+  - "許容待ち時間、遅延箇所、運用費の許容増分。"
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

@@ -1,0 +1,106 @@
+{
+  "read_skill_files": [
+    {
+      "path": "skills/mino-reproducible-development/SKILL.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/shared-policies.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/requirements-and-traceability.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/references/platform-compatibility.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-reproducible-development/schemas/package.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-design-by-contract/SKILL.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-interface-implementation-separation/SKILL.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/schemas/decision.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/schemas/requirements.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/schemas/platform.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-core/schemas/core.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-design-by-contract/schemas/package.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    },
+    {
+      "path": "skills/mino-interface-implementation-separation/schemas/package.md",
+      "read_range": "全文",
+      "reread": false,
+      "output_omitted": false
+    }
+  ],
+  "non_skill_inputs_read": [
+    "input.yaml",
+    "catalog.txt"
+  ],
+  "rereads": false,
+  "output_omissions": false,
+  "difficulties": [
+    "正本保存ではrouter、共通規則、共通schema、2つの専門Skillと各schemaへ展開され、単純な数量変換でも読むfileが13件になった。",
+    "test未実装かつ対象言語未指定のdesignでは実行commandを確定できない。unexecuted recordに理由・runner条件・後続のcommand確定責任を分けて残した。",
+    "同じfieldを統合artifactと専門packageへ重複保存しないよう、artifact_handleとrevisionと参照規約を明示して扱った。"
+  ],
+  "artifacts": [
+    "implementation-spec.json",
+    "context.json",
+    "contract.json",
+    "boundary.json",
+    "validation.json",
+    "output.md",
+    "usage.json"
+  ],
+  "limitations": [
+    "対象systemの実装・test実行・独立reviewは未実施。",
+    "参照できる範囲を指定directory内に限定した。"
+  ]
+}

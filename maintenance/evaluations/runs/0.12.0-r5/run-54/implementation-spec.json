@@ -1,0 +1,543 @@
+{
+  "artifact_handle": "spec-v1",
+  "revision": "1",
+  "reference_convention": "artifact_handleはfunction_artifact_refsでpathとrevisionへ解決する。#local_idは当該JSON内のid、#/pathはJSON Pointer。別artifactの同名IDを統合しない。spec-v1はこのfile自身。input.yamlは依頼Evidence。",
+  "reproducible_development_result": {
+    "mode": "design",
+    "function_plan": [
+      {
+        "function": "discovery",
+        "run_if": "問題・意味・範囲が未確定の場合",
+        "required_artifact": "Problem Frame / Context Packet",
+        "status": "not_applicable",
+        "not_applicable_reason": "業務意味と範囲は承認済み。入力をcontext-v1へ最小限正規化し、専門の再framingは行わない。"
+      },
+      {
+        "function": "architecture",
+        "run_if": "system-wide品質trade-off・正本・移行を設計する場合",
+        "required_artifact": "Architecture Strategy",
+        "status": "not_applicable",
+        "not_applicable_reason": "単一の数量変換で、保存・外部I/O・移行はない。"
+      },
+      {
+        "function": "completeness",
+        "run_if": "modelの概念・状態・遷移の欠落を監査する場合",
+        "required_artifact": "Completeness Package",
+        "status": "not_applicable",
+        "not_applicable_reason": "今回の仕事は固定済み整数範囲の契約とconsumer境界。独立した状態model監査は要求されていない。"
+      },
+      {
+        "function": "contract",
+        "run_if": "R1/R2を条件・責任・失敗・test oracleへ変換する。",
+        "required_artifact": "contract-v1",
+        "status": "completed",
+        "inputs": [
+          "context-v1"
+        ],
+        "dependencies": [],
+        "owner": "契約設計担当（役割名）"
+      },
+      {
+        "function": "boundary",
+        "run_if": "帳票consumerが知る契約と内部手順を分ける。",
+        "required_artifact": "boundary-v1",
+        "status": "completed",
+        "inputs": [
+          "context-v1",
+          "contract-v1"
+        ],
+        "dependencies": [
+          "contract"
+        ],
+        "owner": "境界設計担当（役割名）"
+      },
+      {
+        "function": "change_safety",
+        "run_if": "既存挙動変更・移行を行う場合",
+        "required_artifact": "Change Safety Package",
+        "status": "not_applicable",
+        "not_applicable_reason": "既存callerの移行はなく、対象systemを変更しない。"
+      }
+    ],
+    "mode_artifact": {
+      "kind": "implementation_spec",
+      "artifact": {
+        "decision_frame": {
+          "mode": "design",
+          "requested_outcome": "数量変換の契約とconsumer境界を統合した後続実装者向け正本",
+          "decision_owner": "input.yamlに記載された業務owner",
+          "routing_origin": "integrated",
+          "mutation_authorized": false,
+          "in_scope": [
+            "設計とartifact保存"
+          ],
+          "out_of_scope": [
+            "対象systemのcode・設定・運用data変更",
+            "実装",
+            "test実行",
+            "整数以外の応答"
+          ],
+          "reversibility": "reversible",
+          "public_contract_change_allowed": false,
+          "destructive_change_allowed": false,
+          "deadline_or_window": "指定なし",
+          "host_platform": "windows",
+          "target_platforms": [],
+          "decision_maturity": {
+            "$ref": "context-v1#/core_result/decision_maturity"
+          }
+        },
+        "function_plan": {
+          "$ref": "spec-v1#/reproducible_development_result/function_plan"
+        },
+        "platform_context": {
+          "$ref": "context-v1#/platform_context"
+        },
+        "platform_validation": {
+          "$ref": "context-v1#/platform_validation"
+        },
+        "problem_frame": {
+          "$ref": "context-v1#/core_result/problem_frame"
+        },
+        "problem_readiness": "ready",
+        "selection_gates": [],
+        "premises": {
+          "$ref": "context-v1#/core_result/premises"
+        },
+        "causal_chain": {
+          "$ref": "context-v1#/core_result/causal_chain"
+        },
+        "context_packet": {
+          "$ref": "context-v1#/core_result/context_packet"
+        },
+        "reasoning_traces": {
+          "$ref": "context-v1#/core_result/reasoning_traces"
+        },
+        "requirements": {
+          "$ref": "context-v1#/requirement_catalog"
+        },
+        "rejection_criteria": {
+          "$ref": "spec-v1#/reproducible_development_result/rejection_criteria"
+        },
+        "contract_package": {
+          "$ref": "contract-v1#/contract_package"
+        },
+        "boundary_package": {
+          "$ref": "boundary-v1#/boundary_package"
+        },
+        "allowed_dependencies": [
+          "帳票→display_quantityの公開契約",
+          "内部algorithm→公開契約の条件。外部I/Oや保存への依存は含めない。"
+        ],
+        "prohibited_structures": [
+          "帳票側へのゼロ埋め手順の分散",
+          "根拠のない実装variant選択のfactoryや階層",
+          "整数以外の応答の独断追加"
+        ],
+        "change_boundary": {
+          "$ref": "context-v1#/core_result/context_packet/change_boundary"
+        },
+        "verification_plan": {
+          "$ref": "spec-v1#/verification_plan"
+        },
+        "traceability": {
+          "$ref": "spec-v1#/reproducible_development_result/traceability"
+        },
+        "human_approvals_required": [],
+        "function_artifact_refs": {
+          "$ref": "spec-v1#/reproducible_development_result/function_artifact_refs"
+        }
+      }
+    },
+    "platform_context": {
+      "$ref": "context-v1#/platform_context"
+    },
+    "core_result": {
+      "$ref": "context-v1#/core_result"
+    },
+    "requirement_catalog": {
+      "$ref": "context-v1#/requirement_catalog"
+    },
+    "rejection_criteria": [
+      {
+        "id": "RC1",
+        "requirement_ids": [
+          "context-v1#R1"
+        ],
+        "condition": "正常値が2桁文字列でない、または入力数量と異なる。",
+        "evidence_required": [
+          "contract-v1#T1",
+          "contract-v1#T2"
+        ],
+        "gate": "contract"
+      },
+      {
+        "id": "RC2",
+        "requirement_ids": [
+          "context-v1#R2"
+        ],
+        "condition": "範囲外整数でValueErrorを返さず、正常化や別の成功値へ置換する。",
+        "evidence_required": [
+          "contract-v1#T1",
+          "contract-v1#T3"
+        ],
+        "gate": "contract"
+      },
+      {
+        "id": "RC3",
+        "requirement_ids": [
+          "context-v1#R1",
+          "context-v1#R2"
+        ],
+        "condition": "帳票が内部formatterや桁埋め手順を選択・再実装しなければ契約を使えない。",
+        "evidence_required": [
+          "spec-v1#V1"
+        ],
+        "gate": "boundary"
+      },
+      {
+        "id": "RC4",
+        "requirement_ids": [],
+        "condition": "今回の成果物作成で対象systemのcode・設定・運用dataを変更する。",
+        "evidence_required": [
+          "context-v1#E3",
+          "context-v1#E4"
+        ],
+        "gate": "core"
+      }
+    ],
+    "contract_package": {
+      "$ref": "contract-v1#/contract_package"
+    },
+    "boundary_package": {
+      "$ref": "boundary-v1#/boundary_package"
+    },
+    "implementation_summary": [],
+    "validation": {
+      "executed": [
+        "spec-v1#V1",
+        "spec-v1#V2"
+      ],
+      "passed": [
+        "spec-v1#V1",
+        "spec-v1#V2"
+      ],
+      "failed": [],
+      "unexecuted": [
+        "spec-v1#V3"
+      ],
+      "platform_validation": {
+        "$ref": "context-v1#/platform_validation"
+      }
+    },
+    "traceability": [
+      {
+        "purpose_id": "context-v1#P1",
+        "goal_id": "context-v1#G1",
+        "requirement_id": "context-v1#R1",
+        "model_elements": [],
+        "contract_ids": [
+          "contract-v1#CI1",
+          "contract-v1#CI2"
+        ],
+        "boundary_operations": [
+          "boundary-v1#OP1"
+        ],
+        "implementation_changes": [],
+        "verification_ids": [
+          "contract-v1#T1",
+          "contract-v1#T2",
+          "spec-v1#V1"
+        ],
+        "evidence": [
+          "context-v1#E1",
+          "context-v1#E2"
+        ],
+        "connections": [
+          {
+            "from_kind": "purpose",
+            "from_id": "context-v1#P1",
+            "to_kind": "goal",
+            "to_id": "context-v1#G1",
+            "rationale": "帳票表示の統一を、数量の成功形式と失敗応答の一致で確認する。",
+            "validation_ids": [
+              "contract-v1#T1",
+              "contract-v1#T2"
+            ],
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          {
+            "from_kind": "goal",
+            "from_id": "context-v1#G1",
+            "to_kind": "requirement",
+            "to_id": "context-v1#R1",
+            "rationale": "正常範囲の数量を常に同じ2桁形式へ変換する必要がある。",
+            "validation_ids": [
+              "contract-v1#T2"
+            ],
+            "evidence": [
+              "context-v1#E1"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "context-v1#R1",
+            "to_kind": "contract",
+            "to_id": "contract-v1#CI2",
+            "rationale": "観測可能な戻り値として固定する。9→9または9→10なら反証される。",
+            "validation_ids": [
+              "contract-v1#T2"
+            ],
+            "evidence": [
+              "context-v1#E1"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "contract-v1#CI2",
+            "to_kind": "boundary",
+            "to_id": "boundary-v1#OP1",
+            "rationale": "帳票は公開結果に依存し、内部手順に依存しない。",
+            "validation_ids": [
+              "spec-v1#V1"
+            ],
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "contract-v1#CI2",
+            "to_kind": "verification",
+            "to_id": "contract-v1#T2",
+            "rationale": "正常範囲100個すべてを固定期待値と比較する。",
+            "validation_ids": [
+              "contract-v1#T2"
+            ],
+            "evidence": [
+              "context-v1#E1"
+            ]
+          }
+        ],
+        "not_applicable": [
+          {
+            "target_kind": "model",
+            "target_id_or_scope": "独立したmodel監査",
+            "reason": "今回の整数値範囲は確定済み。状態modelを追加しない。",
+            "evidence": [
+              "context-v1#E1"
+            ]
+          },
+          {
+            "target_kind": "change",
+            "target_id_or_scope": "対象system実装",
+            "reason": "designのみ。",
+            "evidence": [
+              "context-v1#E3"
+            ]
+          }
+        ],
+        "status": "covered"
+      },
+      {
+        "purpose_id": "context-v1#P1",
+        "goal_id": "context-v1#G1",
+        "requirement_id": "context-v1#R2",
+        "model_elements": [],
+        "contract_ids": [
+          "contract-v1#CI1",
+          "contract-v1#CI3"
+        ],
+        "boundary_operations": [
+          "boundary-v1#OP1"
+        ],
+        "implementation_changes": [],
+        "verification_ids": [
+          "contract-v1#T1",
+          "contract-v1#T3",
+          "spec-v1#V1"
+        ],
+        "evidence": [
+          "context-v1#E1"
+        ],
+        "connections": [
+          {
+            "from_kind": "goal",
+            "from_id": "context-v1#G1",
+            "to_kind": "requirement",
+            "to_id": "context-v1#R2",
+            "rationale": "対象外の整数を誤った表示として受理しない。",
+            "validation_ids": [
+              "contract-v1#T1",
+              "contract-v1#T3"
+            ],
+            "evidence": [
+              "context-v1#E1"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "context-v1#R2",
+            "to_kind": "contract",
+            "to_id": "contract-v1#CI3",
+            "rationale": "範囲外整数への公開応答をValueErrorに固定する。100→00なら反証される。",
+            "validation_ids": [
+              "contract-v1#T1",
+              "contract-v1#T3"
+            ],
+            "evidence": [
+              "context-v1#E1"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "contract-v1#CI3",
+            "to_kind": "boundary",
+            "to_id": "boundary-v1#OP1",
+            "rationale": "帳票へ失敗の意味を公開し、内部validation手順を漏らさない。",
+            "validation_ids": [
+              "spec-v1#V1"
+            ],
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "contract-v1#CI3",
+            "to_kind": "verification",
+            "to_id": "contract-v1#T3",
+            "rationale": "境界だけを特別処理する誤実装を、境界から離れた値で区別する。",
+            "validation_ids": [
+              "contract-v1#T3"
+            ],
+            "evidence": [
+              "context-v1#E1"
+            ]
+          }
+        ],
+        "not_applicable": [
+          {
+            "target_kind": "model",
+            "target_id_or_scope": "状態遷移model",
+            "reason": "共有更新・永続状態がない。",
+            "evidence": [
+              "context-v1#E2"
+            ]
+          },
+          {
+            "target_kind": "change",
+            "target_id_or_scope": "対象system実装",
+            "reason": "designのみ。",
+            "evidence": [
+              "context-v1#E3"
+            ]
+          }
+        ],
+        "status": "covered"
+      }
+    ],
+    "findings": [],
+    "function_artifact_refs": [
+      {
+        "artifact_handle": "context-v1",
+        "revision": "1",
+        "path": "context.json",
+        "owner": "統合設計担当（役割名）",
+        "scope": "承認済み要件・Evidence・共通判定"
+      },
+      {
+        "artifact_handle": "contract-v1",
+        "revision": "1",
+        "path": "contract.json",
+        "owner": "契約設計担当（役割名）",
+        "scope": "条件・条件保証責任・契約test plan"
+      },
+      {
+        "artifact_handle": "boundary-v1",
+        "revision": "1",
+        "path": "boundary.json",
+        "owner": "境界設計担当（役割名）",
+        "scope": "consumer公開操作・内部実装境界"
+      }
+    ],
+    "decision": {
+      "$ref": "context-v1#/decision"
+    },
+    "next_action": "後続実装者はR1/R2、CI1〜CI3、帳票境界を保持して実装する。T1〜T3とrunner/commandを具体化した後に実行Evidenceを追記する。今回の対象system変更は行わない。"
+  },
+  "verification_plan": [
+    {
+      "id": "V1",
+      "kind": "design_review",
+      "owner": "統合設計担当（自己review）",
+      "target_ids": [
+        "boundary-v1#C1",
+        "boundary-v1#OP1",
+        "boundary-v1#IP1",
+        "boundary-v1#CS1"
+      ],
+      "oracle": "帳票の入力・戻り値・失敗型を変えずに内部formatterを交換でき、consumerへformatter選択やゼロ埋め手順を要求しない。",
+      "status": "passed",
+      "evidence": [
+        "boundary-v1#C1",
+        "boundary-v1#OP1",
+        "boundary-v1#IP1"
+      ],
+      "limitation": "保存した設計の自己照合。独立reviewや実codeの適合確認ではない。"
+    },
+    {
+      "id": "V2",
+      "kind": "structural_check",
+      "owner": "統合設計担当",
+      "target_ids": [
+        "context-v1",
+        "contract-v1",
+        "boundary-v1",
+        "spec-v1"
+      ],
+      "oracle": "JSON parse、artifact handle/revision、local ID一意性、実在参照、UTF-8 BOMなし/LF/final newlineを確認する。",
+      "status": "passed",
+      "evidence": [
+        "validation.json"
+      ]
+    },
+    {
+      "id": "V3",
+      "kind": "contract_execution",
+      "owner": "後続実装者",
+      "target_ids": [
+        "contract-v1#T1",
+        "contract-v1#T2",
+        "contract-v1#T3"
+      ],
+      "oracle": "各test planの期待値と例外型に一致する。",
+      "status": "not_run",
+      "reason": "実装・test実行は今回対象外。",
+      "unexecuted_record": "context-v1#UV1"
+    }
+  ],
+  "coverage_summary": {
+    "design_requirements": {
+      "denominator": 2,
+      "numerator": 2
+    },
+    "contract_definitions": {
+      "denominator": 3,
+      "numerator": 3
+    },
+    "planned_test_condition_coverage": {
+      "denominator": 3,
+      "numerator": 3
+    },
+    "executed_test_condition_coverage": {
+      "denominator": 3,
+      "numerator": 0
+    },
+    "unknown_requirement_ids": [],
+    "uncovered_design_requirement_ids": []
+  },
+  "execution_mode": "同一agentによる逐次統合。独立reviewは未実施。"
+}

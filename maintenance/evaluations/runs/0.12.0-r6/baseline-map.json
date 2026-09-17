@@ -1,0 +1,132 @@
+{
+  "baseline_commit": "180ca1f31c34dbe4c16e7246413fae0f1194d912",
+  "baseline_suite_version": "0.8.0",
+  "pr_base_at_review": {
+    "checked_on": "2026-09-17",
+    "branch": "develop",
+    "commit": "9a2af5e9106d785673d00cd49ea1a546e6451372",
+    "suite_version": "0.9.0",
+    "comparison_status": "not_executed"
+  },
+  "historical_run_label": "既存runのdevelop-*とvariant=developは旧0.8.0を指す。run記録のSHA・digestは変更しない。",
+  "baseline_case_path": ".agents/skills/mino-core/evaluations/cases/0.8.0.md",
+  "evaluation_revision": "0.12.0-r6",
+  "mappings": [
+    {
+      "baseline_case_id": "C13",
+      "baseline_section": "High-impact restatement without independent review",
+      "baseline_input_sha256": "0aa3dfea9e9489995b4e540ed81394bc109bc143eaf1c07187b960229349aea9",
+      "current_cases": [
+        "C02",
+        "C58",
+        "C59",
+        "C60",
+        "C61"
+      ],
+      "preserved_gate": "高impact意味照合を専門入口とbaseline再利用へ拡張",
+      "relationship": "semantic_partial_not_byte_identical",
+      "limitation": "旧C13はFramingへの明示呼出しと採点hintを含む。直接入口と差分再利用は追加観点。"
+    },
+    {
+      "baseline_case_id": "C2",
+      "baseline_section": "Supporting audit-log migration",
+      "baseline_input_sha256": "d9fd8b6d4f97acaa9d9f3e946ab378d76dd280ca896b9037acee94c26b43fcf2",
+      "current_cases": [
+        "C18",
+        "C19",
+        "C62"
+      ],
+      "preserved_gate": "分類の適用範囲、supportingの価値維持、移行・復旧",
+      "relationship": "semantic_partial_not_byte_identical",
+      "limitation": "旧監査ログの業務と全platform scenarioを置換したとは扱わない。"
+    },
+    {
+      "baseline_case_id": "C5",
+      "baseline_section": "Cross-context debt and delivery failure semantics",
+      "baseline_input_sha256": "775a45da6b15415a6e1ad948fdbbfcd8f80aacaa39ecae3be7a74f6c1b844540",
+      "current_cases": [
+        "C15",
+        "C62"
+      ],
+      "preserved_gate": "負債の5要因、未決owner/cost、公開retry意味",
+      "relationship": "semantic_partial_not_byte_identical",
+      "limitation": "context間の商品語義とdead-letter統合全体はこの対応だけでは未充足。"
+    },
+    {
+      "baseline_case_id": "C1",
+      "baseline_section": "Reservation confirmation and partial failure",
+      "baseline_input_sha256": "47ab6a9b276740769c6743cd927a35303744215bf060265158ce90c97acbf6fc",
+      "current_cases": [
+        "C11",
+        "C21",
+        "C54",
+        "C57"
+      ],
+      "preserved_gate": "外部成功/内部失敗、recovery gate、condition authority、package引継ぎ",
+      "relationship": "semantic_partial_not_byte_identical",
+      "limitation": "旧予約統合全体のmodel coverageと複数writer監査は部分対応。"
+    },
+    {
+      "baseline_case_id": "C11",
+      "baseline_section": "Technical capability without domain classification",
+      "baseline_input_sha256": "d24cd9eeda39ad797de486afaa5b77648adb22a62c81bd24c77a8f56ebc9bc44",
+      "current_cases": [
+        "C18"
+      ],
+      "preserved_gate": "technical capabilityへcore分類をしない",
+      "relationship": "semantic_partial_not_byte_identical",
+      "limitation": "platform運用を含む旧入力全体は未比較。"
+    },
+    {
+      "baseline_case_id": "C12",
+      "baseline_section": "Hierarchical quality vocabulary",
+      "baseline_input_sha256": "3f33bead973525fdac989261b22ad043ad63b7a12931744b9726cd8a5997380e",
+      "current_cases": [
+        "C42",
+        "C53"
+      ],
+      "preserved_gate": "品質語彙とscope内の比較",
+      "relationship": "semantic_partial_not_byte_identical",
+      "limitation": "品質比較へ投資評価を強制しないnegative観点を別に保持。"
+    }
+  ],
+  "paired_smoke_cases": [
+    {
+      "case_id": "C58",
+      "input_sha256": "8e5762d46a0a39c803f8d9e7564595df26d8531c8bafb553fa1b718863304d0f",
+      "common_oracle": "maintenance/evaluations/oracles/0.12.0-r6.json#C58"
+    },
+    {
+      "case_id": "C62",
+      "input_sha256": "3038e638fa01a573c158d7ca7066820ccb7b8870a9821fe0d0ade032c65cd847",
+      "common_oracle": "maintenance/evaluations/oracles/0.12.0-r6.json#C62"
+    },
+    {
+      "case_id": "C11",
+      "input_sha256": "ca76920a90d2a6a09941e90d4a647e86aec63c15c3bd7a0c3f7973b5845644e5",
+      "common_oracle": "maintenance/evaluations/oracles/0.12.0-r6.json#C11"
+    },
+    {
+      "case_id": "C54",
+      "input_sha256": "8941a0e62c75de1b532dda69a03af1162e52b230389d417da136f9a4848e44f5",
+      "common_oracle": "maintenance/evaluations/oracles/0.12.0-r6.json#C54"
+    }
+  ],
+  "negative_smoke_cases": [
+    "C60"
+  ],
+  "unexecuted_required_cases": [
+    "C59",
+    "C61",
+    "C19",
+    "C53",
+    "C50",
+    "C57"
+  ],
+  "limitations": [
+    "対応表とpaired smokeは旧0.8.0との限定比較であり、PR baseの0.9.0との比較Evidenceではない。",
+    "旧15入力の全対応・再実行ではない。",
+    "共通入力はr6のraw fence bodyを両runtimeへ渡す。旧入力と同一とは主張しない。",
+    "実効model / setting未観測、case / oracle未frozen、各1回のため非劣化・releaseを証明しない。"
+  ]
+}

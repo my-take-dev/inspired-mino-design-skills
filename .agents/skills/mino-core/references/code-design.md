@@ -1,62 +1,31 @@
 # Purpose-driven code design
 
-domain model、contract、boundaryを実コードの責務、公開操作、分岐、名前、抽象へ落とすときに読む。pattern数やclass数を成果にしない。
+## Purpose and contracts
 
-## Decision sequence
+state、判断、計算、更新を同じ目的と不変条件の責務へ集める。意図を表す操作を公開し、無制限setter、mutable collectionの直接公開、半初期化状態を必要な範囲で防ぐ。技術関心・別目的・別lifecycleを同じmodelに押し込まない。
 
-### 1. Purpose-centered capsule
+Goのstruct、Javaのclass、関数型の値など表現方式だけで良否を決めない。全public writerから不正状態を防げるか、ruleの正本、失敗後状態、consumerの変更局所性で判定する。DTOや永続化表現がdata-onlyであること自体を欠陥とせず、domain保証がそこだけに依存していないかを見る。
 
-- state、判断、計算、更新を、同じ目的とinvariantを所有するboundaryへ集める。
-- `setStatus`やmutable collectionではなく、意図と契約を表すcommand / queryを公開する。
-- 技術関心、別目的、別lifecycleを同じmodelへ押し込まない。
+## Branch and naming decisions
 
-### 2. Branch classification
-
-| Branch meaning | Default decision |
+| 分岐の意味 | 判断 |
 |---|---|
-| short input guard | 明快ならifを維持 |
-| lifecycle state | state transition ownerへ置く |
-| business decision table | rule / policy候補 |
-| implementation variant | 現実の変更根拠があればpurpose-oriented boundary候補 |
-| feature / migration flag | owner、期限、削除条件を付ける |
+| 明快な短い入力guard | ifを維持する |
+| lifecycle state | 状態遷移のownerへ置く |
+| 業務判断表 | rule/policyとして条件と結果を明示する |
+| 実装variant | 実在する変更根拠がある場合にboundaryを検討する |
+| 一時flag・移行分岐 | owner、期限、観測、削除条件を付ける |
 
-分岐を消すこと自体を目標にしない。選択分岐が必要ならcomposition boundaryへ一箇所に置く。
+名前はactor、context、目的、責務、対象外が分かるものにする。既存名を伏せて候補を作り、含まれるmemberがfits/does_not_fitかを調べる。単なる用語置換はsymbol-awareなrenameを優先する。
 
-### 3. Purpose-driven naming
+## Abstraction and change scenario
 
-名前はactor、context、purpose、owned responsibility、out-of-scopeを示す。既存名を伏せて候補を作り、新しい名前に合わないmemberを`fits | does_not_fit`へ分類する。安全なrenameはIDE / language serverへ委ねる。
+consumer目的、契約、不変条件、変更理由が同じかを先に確認する。表面的に似たcodeを理由なく共通化しない。抽象化なしの案と比較して理解・変更・検証が改善するEvidenceを求める。
 
-### 4. Abstraction gate
+一実装でvariant根拠がなければ具体実装を保つ。外部障害境界、安定契約、技術隔離の品質根拠があれば小さなportは許すが、将来用factoryや階層を追加しない。replace implementation/add proven variant/change proven variant/change business ruleのうち該当するscenarioだけで検証する。
 
-抽象化前に次を比較する。
-
-- consumerとpurposeが同じか
-- contractとinvariantが同じか
-- 同じ理由で変わるか
-- 実装固有型、flag、unused operationが漏れないか
-- 抽象化しない案より理解・変更・検証が改善するか
-
-具体例が一つでvariant根拠がない場合は、原則として具体実装を保つ。外部障害境界、安定した契約、技術隔離など別の品質根拠がある場合だけ小さなportを認め、factoryや将来用階層を作らない。
-
-### 5. Change scenario
-
-- replace implementation
-- add a proven variant
-- change one proven variant
-- change one business rule
-
-適用根拠のないscenarioは`not_applicable`とし、架空の拡張性を作らない。
+semantic retry、duplicate、曖昧結果はconsumerの正しい判断に必要なら契約へ残す。backoffやper-attempt timeoutはその契約内の実装である。
 
 ## Output
 
-```yaml
-code_design:
-  capsules: []
-  public_operations: []
-  branch_decisions: []
-  naming_decisions: []
-  abstraction_decisions: []
-  dependency_direction: []
-  change_scenarios: []
-  rejected_overdesign: []
-```
+各判断には対象、変更理由、比較した最小案、Evidence、必要な検証を残す。pattern数・class数・if数を完了条件にしない。実装の全文を追認するtestではなく、公開契約を違反する実装を識別するoracleを使う。

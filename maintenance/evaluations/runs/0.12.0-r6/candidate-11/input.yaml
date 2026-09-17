@@ -1,0 +1,13 @@
+mode: "design"
+required_platforms: []
+raw_request: "$mino-design-by-contract で決済承認後の保存失敗を契約化してください。"
+confirmed_evidence:
+  - "provider authorization成功後にDB saveが失敗する。"
+  - "同一key・異なるpayloadはconflictという既存契約がある。"
+known_unknowns:
+  - "void/refund/reconciliationのどれを採るか未承認。"
+  - "recovery ownerと期限が未確定。"
+allowed_assumptions:
+  - "説明用の名前と現在成果物のローカルIDだけ。業務条件は補完しない。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"

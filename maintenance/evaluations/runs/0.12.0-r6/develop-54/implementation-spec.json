@@ -1,0 +1,3863 @@
+{
+  "reproducible_development_result": {
+    "mode": "design",
+    "method_provenance": {
+      "source_derived_principles": [
+        "目的から契約と検証へ接続する",
+        "consumerが知る意味と内部手順を分ける"
+      ],
+      "suite_operationalization": [
+        "stable ID、condition authority、coverage、canonical decision、Function Package"
+      ],
+      "repository_policy": [
+        "保存成果物のUTF-8 BOMなし・LF。suiteのrelease評価は今回対象外。"
+      ]
+    },
+    "function_plan": [
+      {
+        "id": "FP-ARCH",
+        "function": "architecture",
+        "run_if": "system-wideな品質trade-offやdata authorityの設計が必要",
+        "required_artifact": "Architecture Strategy Package",
+        "status": "not_applicable",
+        "not_applicable_reason": "単一の無状態変換で保存・移行なし。E1・E2。"
+      },
+      {
+        "id": "FP-DISC",
+        "function": "discovery",
+        "run_if": "用語・意味・contextが未確定",
+        "required_artifact": "Domain Discovery Package",
+        "status": "not_applicable",
+        "not_applicable_reason": "整数範囲・返却・失敗・consumerがE1・E2で確定。"
+      },
+      {
+        "id": "FP-COMP",
+        "function": "completeness",
+        "run_if": "concept・状態・遷移の欠落監査が必要",
+        "required_artifact": "Completeness Package",
+        "status": "not_applicable",
+        "not_applicable_reason": "今回の意味は承認済みの無状態変換。追加のモデル監査は依頼範囲外。E1〜E3。"
+      },
+      {
+        "id": "FP-CONTRACT",
+        "function": "contract",
+        "run_if": "数量変換の成功・失敗保証を成果物にする",
+        "required_artifact": "Contract Package",
+        "status": "completed",
+        "artifact_ref": "CP1",
+        "routing_context": {
+          "origin": "integrated",
+          "mode": "design",
+          "orchestrator": "mino-reproducible-development",
+          "requested_by": "router",
+          "requested_artifact": "Contract Package",
+          "return_to": "router",
+          "mutation_authorized": false
+        }
+      },
+      {
+        "id": "FP-BOUNDARY",
+        "function": "boundary",
+        "run_if": "帳票consumerが知る契約と内部変換手順を分離する",
+        "required_artifact": "Boundary Package",
+        "status": "completed",
+        "artifact_ref": "BP1",
+        "routing_context": {
+          "origin": "integrated",
+          "mode": "design",
+          "orchestrator": "mino-reproducible-development",
+          "requested_by": "router",
+          "requested_artifact": "Boundary Package",
+          "return_to": "router",
+          "mutation_authorized": false
+        }
+      },
+      {
+        "id": "FP-SAFETY",
+        "function": "change_safety",
+        "run_if": "既存挙動または公開契約の変更・移行がある",
+        "required_artifact": "Change Safety Package",
+        "status": "not_applicable",
+        "not_applicable_reason": "既存caller移行なし。R1・R2を変更せずdesign保存のみ。E1〜E3。"
+      }
+    ],
+    "mode_artifact": {
+      "kind": "implementation_spec",
+      "artifact": {
+        "id": "SPEC1",
+        "artifact_version": "1",
+        "authority_note": "後続実装で参照する設計正本。R1・R2とscopeは承認済み。AIが作った責務配置・検証計画はproposedで、文書保存を承認やfrozenへ読み替えない。",
+        "evidence_catalog": [
+          {
+            "id": "E1",
+            "status": "confirmed",
+            "source": "input.yaml confirmed_evidence[0]",
+            "statement": "owner承認済みR1: display_quantityは整数0〜99を2桁文字列に変換する。R2: 範囲外整数はValueError。整数以外は今回対象外。"
+          },
+          {
+            "id": "E2",
+            "status": "confirmed",
+            "source": "input.yaml confirmed_evidence[1]",
+            "statement": "consumerは帳票。目的は表示形式を統一すること。保存、外部I/O、時間依存、既存callerの移行はない。"
+          },
+          {
+            "id": "E3",
+            "status": "confirmed",
+            "source": "input.yaml confirmed_evidence[2] / raw_request / prohibited_changes",
+            "statement": "業務意味と範囲は承認済み。契約とconsumer境界の正本保存を依頼。対象systemのcode・設定・運用data変更、実装とtest実行は含まない。"
+          },
+          {
+            "id": "V-SPEC",
+            "status": "confirmed",
+            "source": "このartifactのID参照・coverage・矛盾の自己点検",
+            "statement": "designの静的点検のみ。独立reviewまたはruntime成功のEvidenceではない。"
+          }
+        ],
+        "method_provenance": {
+          "source_derived_principles": [
+            "目的から契約と検証へ接続する",
+            "consumerが知る意味と内部手順を分ける"
+          ],
+          "suite_operationalization": [
+            "stable ID、condition authority、coverage、canonical decision、Function Package"
+          ],
+          "repository_policy": [
+            "保存成果物のUTF-8 BOMなし・LF。suiteのrelease評価は今回対象外。"
+          ]
+        },
+        "decision_frame": {
+          "mode": "design",
+          "requested_outcome": "契約とconsumer境界を統合したImplementation Specの保存",
+          "decision_owner": "依頼者",
+          "routing_origin": "integrated",
+          "mutation_authorized": false,
+          "artifact_save_authorized": true,
+          "in_scope": [
+            "R1",
+            "R2",
+            "Contract Package",
+            "Boundary Package",
+            "契約test仕様",
+            "成果物保存"
+          ],
+          "out_of_scope": [
+            "実装",
+            "test実行",
+            "整数以外の挙動",
+            "保存",
+            "外部I/O",
+            "時間依存",
+            "既存caller移行"
+          ],
+          "reversibility": "reversible",
+          "public_contract_change_allowed": false,
+          "destructive_change_allowed": false,
+          "deadline_or_window": "not_applicable",
+          "host_platform": "windows",
+          "target_platforms": [],
+          "decision_maturity": {
+            "status": "proposed",
+            "owner": "依頼者",
+            "scope": [
+              "今回のImplementation Specと実装上の責務配置"
+            ],
+            "evidence_status": "confirmed",
+            "approval_evidence": [],
+            "baseline_version": "not_applicable",
+            "change_control": "R1・R2またはscopeを変える場合はownerの再承認が必要。"
+          }
+        },
+        "function_plan": [
+          {
+            "id": "FP-ARCH",
+            "function": "architecture",
+            "run_if": "system-wideな品質trade-offやdata authorityの設計が必要",
+            "required_artifact": "Architecture Strategy Package",
+            "status": "not_applicable",
+            "not_applicable_reason": "単一の無状態変換で保存・移行なし。E1・E2。"
+          },
+          {
+            "id": "FP-DISC",
+            "function": "discovery",
+            "run_if": "用語・意味・contextが未確定",
+            "required_artifact": "Domain Discovery Package",
+            "status": "not_applicable",
+            "not_applicable_reason": "整数範囲・返却・失敗・consumerがE1・E2で確定。"
+          },
+          {
+            "id": "FP-COMP",
+            "function": "completeness",
+            "run_if": "concept・状態・遷移の欠落監査が必要",
+            "required_artifact": "Completeness Package",
+            "status": "not_applicable",
+            "not_applicable_reason": "今回の意味は承認済みの無状態変換。追加のモデル監査は依頼範囲外。E1〜E3。"
+          },
+          {
+            "id": "FP-CONTRACT",
+            "function": "contract",
+            "run_if": "数量変換の成功・失敗保証を成果物にする",
+            "required_artifact": "Contract Package",
+            "status": "completed",
+            "artifact_ref": "CP1",
+            "routing_context": {
+              "origin": "integrated",
+              "mode": "design",
+              "orchestrator": "mino-reproducible-development",
+              "requested_by": "router",
+              "requested_artifact": "Contract Package",
+              "return_to": "router",
+              "mutation_authorized": false
+            }
+          },
+          {
+            "id": "FP-BOUNDARY",
+            "function": "boundary",
+            "run_if": "帳票consumerが知る契約と内部変換手順を分離する",
+            "required_artifact": "Boundary Package",
+            "status": "completed",
+            "artifact_ref": "BP1",
+            "routing_context": {
+              "origin": "integrated",
+              "mode": "design",
+              "orchestrator": "mino-reproducible-development",
+              "requested_by": "router",
+              "requested_artifact": "Boundary Package",
+              "return_to": "router",
+              "mutation_authorized": false
+            }
+          },
+          {
+            "id": "FP-SAFETY",
+            "function": "change_safety",
+            "run_if": "既存挙動または公開契約の変更・移行がある",
+            "required_artifact": "Change Safety Package",
+            "status": "not_applicable",
+            "not_applicable_reason": "既存caller移行なし。R1・R2を変更せずdesign保存のみ。E1〜E3。"
+          }
+        ],
+        "platform_context": {
+          "host_platform": "windows",
+          "process_platform": "windows",
+          "artifact_filesystem": "unknown",
+          "target_platforms": [],
+          "shell": "powershell",
+          "architecture": "X64",
+          "filesystem": {
+            "case_sensitive": "unknown",
+            "path_style": "windows",
+            "executable_bit": "unknown"
+          },
+          "toolchain": {
+            "commands": [
+              "PowerShell"
+            ],
+            "versions": [
+              "7.6.6"
+            ]
+          },
+          "platform_requirements": [],
+          "unknowns": [],
+          "scope_note": "保存hostはWindows 10.0.26200。filesystem性質は未検証で今回の業務判断を分岐させない。対象関数のOS要件と実行検証はscope外。保存形式はUTF-8 BOMなし・LF。"
+        },
+        "platform_validation": {
+          "required_platforms": [],
+          "executed": [],
+          "unexecuted": [],
+          "parity_result": "not_applicable",
+          "platform_specific_risks": []
+        },
+        "problem_frame": {
+          "actor": "帳票consumerと後続実装者",
+          "context": "数量を帳票向けに表示する単一操作",
+          "desired_state": "承認済みの数量表示契約と境界を参照可能な正本にする",
+          "observed_barrier": "契約とconsumer境界を統合した成果物の作成依頼。現行障害の報告はない。",
+          "impact": "実装者がR1・R2を同じ意味で実現できる"
+        },
+        "problem_readiness": {
+          "status": "ready",
+          "evidence": [
+            "E1",
+            "E2",
+            "E3"
+          ]
+        },
+        "selection_gates": [],
+        "premises": [
+          {
+            "statement": "業務意味とscopeはowner承認済み",
+            "evidence": [
+              "E1",
+              "E3"
+            ],
+            "falsification": "ownerがR1・R2の変更または承認取消を提示する",
+            "impact_if_false": "該当契約を改訂するまで後続実装を停止する",
+            "evidence_status": "confirmed",
+            "assessment": "supported"
+          },
+          {
+            "statement": "保存・外部I/O・時間依存・既存caller移行はない",
+            "evidence": [
+              "E2"
+            ],
+            "falsification": "状態更新・外部通信・移行対象callerが新たにscopeへ加わる",
+            "impact_if_false": "failure、retry、migrationを再評価する",
+            "evidence_status": "confirmed",
+            "assessment": "supported"
+          }
+        ],
+        "causal_chain": {
+          "applicability": "not_applicable",
+          "reason": "既存障害・負債・回帰の原因分析を求めていない。新規設計成果物が対象。",
+          "unmet_capability": "実装者が利用できる数量変換の契約・境界の正本",
+          "demand_evidence": [
+            "E3"
+          ],
+          "success_condition_ids": [
+            "G1",
+            "G2"
+          ]
+        },
+        "context_packet": {
+          "id": "CTX1",
+          "actors": [
+            "帳票consumer"
+          ],
+          "problem": "帳票から利用する数量変換の契約とconsumer境界を実装者が再利用できる正本として固定する必要がある。",
+          "purposes": [
+            {
+              "id": "P1",
+              "statement": "帳票の数量表示形式を統一する",
+              "evidence": [
+                "E2"
+              ]
+            }
+          ],
+          "success_conditions": [
+            {
+              "id": "G1",
+              "statement": "範囲内整数を同じ2桁文字列へ変換する",
+              "evidence": [
+                "R1"
+              ]
+            },
+            {
+              "id": "G2",
+              "statement": "範囲外整数はValueErrorとして区別する",
+              "evidence": [
+                "R2"
+              ]
+            }
+          ],
+          "context": {
+            "time_or_state": [
+              "時間・永続状態なし"
+            ],
+            "business_background": [
+              "帳票表示"
+            ],
+            "technical_background": [
+              "display_quantityという単一の公開操作。実装言語は指定しない。"
+            ]
+          },
+          "terminology": [
+            {
+              "term": "数量",
+              "meaning": "今回の入力は整数。表示可能範囲は0〜99。",
+              "alternative_meanings": [
+                "小数や文字列の数量は今回対象外"
+              ],
+              "evidence": [
+                "E1"
+              ]
+            },
+            {
+              "term": "2桁文字列",
+              "meaning": "0→\"00\"、9→\"09\"、10→\"10\"、99→\"99\"の数量表示",
+              "alternative_meanings": [
+                "範囲外を切詰める、またはmoduloで丸める意味ではない"
+              ],
+              "evidence": [
+                "E1"
+              ]
+            }
+          ],
+          "rules": [
+            {
+              "id": "R1",
+              "statement": "整数0〜99を2桁文字列に変換する",
+              "kind": "postcondition",
+              "owner": "要件owner",
+              "evidence_status": "confirmed"
+            },
+            {
+              "id": "R2",
+              "statement": "範囲外整数はValueError",
+              "kind": "policy",
+              "owner": "要件owner",
+              "evidence_status": "confirmed"
+            }
+          ],
+          "quality_lens": {
+            "definitions": [
+              {
+                "id": "QL1",
+                "quality": {
+                  "reference_model": "project-defined",
+                  "level": "project_defined",
+                  "characteristic": "not_applicable",
+                  "subcharacteristic": "not_applicable",
+                  "standard_term": "not_applicable",
+                  "display_name_ja": "数量の表示形式の統一",
+                  "source_terms_ja": []
+                },
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            ],
+            "primary_ids": [
+              "QL1"
+            ],
+            "secondary_ids": [],
+            "constraint_ids": [],
+            "intentionally_not_optimized_ids": [],
+            "tradeoff_decisions": []
+          },
+          "change_boundary": {
+            "id": "CB1",
+            "must_preserve": [
+              "R1",
+              "R2",
+              "整数以外の挙動を規定しない",
+              "帳票の表示形式統一という目的"
+            ],
+            "may_change": [
+              "今回workspace内への設計成果物の保存"
+            ],
+            "must_not_change": [
+              "対象systemのcode",
+              "対象systemの設定",
+              "運用data",
+              "承認済み要件"
+            ],
+            "out_of_scope": [
+              "実装",
+              "test実行",
+              "整数以外の挙動",
+              "保存",
+              "外部I/O",
+              "時間依存",
+              "既存caller移行"
+            ]
+          },
+          "evidence": {
+            "confirmed": [
+              "E1",
+              "E2",
+              "E3"
+            ],
+            "inferred": [],
+            "assumptions": [],
+            "unknowns": [],
+            "contradictions": []
+          }
+        },
+        "ai_restatement": {
+          "id": "AI1",
+          "statement": "帳票は整数数量をdisplay_quantityへ渡す。0〜99は2桁文字列、範囲外整数はValueError。表示変換の手順はcallerへ公開しない。今回は契約・境界・未実行test仕様を保存する。",
+          "comparison_basis": [
+            "E1",
+            "E2",
+            "E3",
+            "R1",
+            "R2",
+            "CB1"
+          ],
+          "proposed_status": "matched",
+          "differences": [],
+          "reviewed_by": {
+            "kind": "unresolved",
+            "identity": "独立reviewは未実行",
+            "review_status": "unresolved",
+            "evidence": []
+          },
+          "review_scope_note": "業務意味とscopeは入力で承認済み。復唱自体が人間に受理されたとは主張しない。新しい業務選択は行わない。"
+        },
+        "reasoning_traces": [
+          {
+            "id": "RT1",
+            "concrete_evidence": [
+              "E1",
+              "E2"
+            ],
+            "actor_or_owner": "帳票consumer",
+            "purpose_or_loss": "数量表示の統一",
+            "violated_rule_or_quality": "現行違反の主張なし。満たす規則はR1・R2。",
+            "decision_or_obligation": "表示変換をOP1へ集約しC2・C3を実装する",
+            "falsifier_or_counterexample": "0が\"0\"、100が\"00\"となる実装",
+            "validation": [
+              "T1",
+              "T2",
+              "T3",
+              "BV1"
+            ]
+          }
+        ],
+        "requirements": [
+          {
+            "id": "R1",
+            "actor": "帳票consumer",
+            "context": "数量の表示形式の統一",
+            "trigger": "整数nが0〜99でdisplay_quantityを呼ぶ",
+            "expected_result": "数量nを表す2桁文字列",
+            "prohibited_results": [
+              "1桁文字列",
+              "数値型の返却",
+              "値を変える表示",
+              "範囲内でのValueError"
+            ],
+            "quality_constraint_ids": [
+              "QL1"
+            ],
+            "evidence": {
+              "status": "confirmed",
+              "sources": [
+                "E1",
+                "E2"
+              ]
+            },
+            "acceptance": [
+              "T1",
+              "T2"
+            ],
+            "existing_behavior": "must-preserve",
+            "decision_maturity": {
+              "status": "approved",
+              "owner": "要件owner（入力により承認済み）",
+              "scope": [
+                "R1",
+                "R2",
+                "整数以外は対象外",
+                "帳票consumer",
+                "副作用なし",
+                "今回designのみ"
+              ],
+              "evidence_status": "confirmed",
+              "approval_evidence": [
+                "E1",
+                "E2",
+                "E3"
+              ],
+              "baseline_version": "not_applicable",
+              "change_control": "入力にversioned baselineはない。frozenとは扱わない。"
+            }
+          },
+          {
+            "id": "R2",
+            "actor": "帳票consumer",
+            "context": "表示可能範囲を外れる整数入力",
+            "trigger": "整数nが0未満または99超でdisplay_quantityを呼ぶ",
+            "expected_result": "ValueErrorを送出する",
+            "prohibited_results": [
+              "値の切詰め",
+              "modulo変換",
+              "成功文字列の返却",
+              "別種の例外"
+            ],
+            "quality_constraint_ids": [
+              "QL1"
+            ],
+            "evidence": {
+              "status": "confirmed",
+              "sources": [
+                "E1"
+              ]
+            },
+            "acceptance": [
+              "T3"
+            ],
+            "existing_behavior": "must-preserve",
+            "decision_maturity": {
+              "status": "approved",
+              "owner": "要件owner（入力により承認済み）",
+              "scope": [
+                "R1",
+                "R2",
+                "整数以外は対象外",
+                "帳票consumer",
+                "副作用なし",
+                "今回designのみ"
+              ],
+              "evidence_status": "confirmed",
+              "approval_evidence": [
+                "E1",
+                "E2",
+                "E3"
+              ],
+              "baseline_version": "not_applicable",
+              "change_control": "入力にversioned baselineはない。frozenとは扱わない。"
+            }
+          }
+        ],
+        "rejection_criteria": [
+          {
+            "id": "RC1",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ],
+            "condition": "帳票の数量表示以外を目的にする、またはscope外へ条件を追加する",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "core",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          },
+          {
+            "id": "RC2",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ],
+            "condition": "要件・condition・oracleへのtraceが欠ける",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "verification",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          },
+          {
+            "id": "RC3",
+            "requirement_ids": [
+              "R1"
+            ],
+            "condition": "0〜99を2桁として返さない",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "contract",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          },
+          {
+            "id": "RC4",
+            "requirement_ids": [
+              "R2"
+            ],
+            "condition": "範囲外整数でValueError以外の挙動を返す",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "contract",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          },
+          {
+            "id": "RC5",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ],
+            "condition": "consumerが書式指定子・内部手順・variant選択を知る必要がある",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "boundary",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          },
+          {
+            "id": "RC6",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ],
+            "condition": "無承認の契約変更、system code・設定・運用data変更、実装・test実行を行う",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "verification",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          },
+          {
+            "id": "RC7",
+            "requirement_ids": [
+              "R1",
+              "R2"
+            ],
+            "condition": "未実行test、独立review、platform適合を検証済みと主張する",
+            "evidence_required": [
+              "E1",
+              "E2",
+              "E3",
+              "対応する契約test仕様と静的trace"
+            ],
+            "gate": "verification",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者"
+            }
+          }
+        ],
+        "architecture_strategy_package": {
+          "applicability": "not_applicable",
+          "not_applicable_reason": "局所の無状態変換でsystem-wide判断なし。",
+          "evidence": [
+            "E1",
+            "E2"
+          ]
+        },
+        "domain_discovery_package": {
+          "applicability": "not_applicable",
+          "not_applicable_reason": "重要語の意味と範囲は承認済み。",
+          "evidence": [
+            "E1",
+            "E3"
+          ]
+        },
+        "completeness_package": {
+          "applicability": "not_applicable",
+          "not_applicable_reason": "状態・遷移を持たず、追加model監査は今回scope外。",
+          "evidence": [
+            "E1",
+            "E2"
+          ]
+        },
+        "contract_package": {
+          "id": "CP1",
+          "subject": "display_quantityの数量表示契約",
+          "platform_context": {
+            "host_platform": "windows",
+            "process_platform": "windows",
+            "artifact_filesystem": "unknown",
+            "target_platforms": [],
+            "shell": "powershell",
+            "architecture": "X64",
+            "filesystem": {
+              "case_sensitive": "unknown",
+              "path_style": "windows",
+              "executable_bit": "unknown"
+            },
+            "toolchain": {
+              "commands": [
+                "PowerShell"
+              ],
+              "versions": [
+                "7.6.6"
+              ]
+            },
+            "platform_requirements": [],
+            "unknowns": [],
+            "scope_note": "保存hostはWindows 10.0.26200。filesystem性質は未検証で今回の業務判断を分岐させない。対象関数のOS要件と実行検証はscope外。保存形式はUTF-8 BOMなし・LF。"
+          },
+          "platform_validation": {
+            "required_platforms": [],
+            "executed": [],
+            "unexecuted": [],
+            "parity_result": "not_applicable",
+            "platform_specific_risks": []
+          },
+          "change_safety": {
+            "applicability": "not_applicable",
+            "not_applicable_reason": "承認済み要件を変更せず、既存caller移行もない。",
+            "evidence": [
+              "E1",
+              "E2",
+              "E3"
+            ]
+          },
+          "requirements": [
+            {
+              "id": "R1",
+              "evidence": [
+                "E1",
+                "E2"
+              ]
+            },
+            {
+              "id": "R2",
+              "evidence": [
+                "E1"
+              ]
+            }
+          ],
+          "operations": [
+            {
+              "id": "OP1",
+              "name": "display_quantity",
+              "caller": "帳票consumer",
+              "boundary": "整数数量から帳票向け表示文字列への公開操作",
+              "contract_owner": "数量表示契約の要件owner",
+              "initial_state": "無状態。保存状態を持たない。",
+              "inputs": [
+                "整数n（範囲外整数もfailureの対象）"
+              ],
+              "expected_result": "0〜99は2桁文字列。範囲外整数はValueError。",
+              "side_effects": [],
+              "failures": [
+                "ValueError：整数n<0またはn>99"
+              ],
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            }
+          ],
+          "contract_items": [
+            {
+              "id": "C1",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "precondition",
+              "statement": "この契約の対象入力は整数。整数以外の戻り値・例外・型変換は規定しない。",
+              "applicability": {
+                "status": "required",
+                "rationale": "callerの入力領域と今回の対象範囲を限定する。範囲外整数もC3の対象として受け取る。"
+              },
+              "contract_level": "api",
+              "authority_type": "contract_owner",
+              "authoritative_owner": "帳票callerの入力提供責務",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "別入口・UI・DTOで重複validationを置く根拠がない。範囲guardはC3のauthoritative enforcementである。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1"
+                ]
+              },
+              "authority_allocation": {
+                "status": "proposed",
+                "rationale": "このconditionを保証する局所責務を指定。operation boundaryの承認ownerとは区別する。"
+              }
+            },
+            {
+              "id": "C2",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "postcondition",
+              "statement": "整数nが0〜99なら、その数量を表す2桁文字列を返す。0〜9は先頭0、10〜99はその2桁。",
+              "applicability": {
+                "status": "required",
+                "rationale": "成功時の観測可能な表示保証。"
+              },
+              "contract_level": "api",
+              "authority_type": "contract_owner",
+              "authoritative_owner": "display_quantityの表示変換処理",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "別入口・UI・DTOで重複validationを置く根拠がない。範囲guardはC3のauthoritative enforcementである。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              "authority_allocation": {
+                "status": "proposed",
+                "rationale": "このconditionを保証する局所責務を指定。operation boundaryの承認ownerとは区別する。"
+              }
+            },
+            {
+              "id": "C3",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "failure_guarantee",
+              "statement": "整数nが0未満または99超ならValueErrorを送出する。",
+              "applicability": {
+                "status": "required",
+                "rationale": "callerの自主validation任せにせず公開操作がfailureを保証する。"
+              },
+              "contract_level": "api",
+              "authority_type": "failure_recovery_owner",
+              "authoritative_owner": "display_quantity入口の範囲guard",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "別入口・UI・DTOで重複validationを置く根拠がない。範囲guardはC3のauthoritative enforcementである。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1"
+                ]
+              },
+              "authority_allocation": {
+                "status": "proposed",
+                "rationale": "このconditionを保証する局所責務を指定。operation boundaryの承認ownerとは区別する。"
+              }
+            },
+            {
+              "id": "C4",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "failure_guarantee",
+              "statement": "成功・失敗で永続化・外部I/O・共有状態の更新を行わない。失敗後に復旧すべき保存状態や外部副作用はない。",
+              "applicability": {
+                "status": "required",
+                "rationale": "scopeが無状態変換であるため範囲failureを状態変更から分離する。"
+              },
+              "contract_level": "use_case",
+              "authority_type": "contract_owner",
+              "authoritative_owner": "display_quantity全体の副作用非導入責務",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "別入口・UI・DTOで重複validationを置く根拠がない。範囲guardはC3のauthoritative enforcementである。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E2"
+                ]
+              },
+              "authority_allocation": {
+                "status": "proposed",
+                "rationale": "このconditionを保証する局所責務を指定。operation boundaryの承認ownerとは区別する。"
+              }
+            },
+            {
+              "id": "C5",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "invariant",
+              "statement": "存続するentity・aggregate状態の不変条件はない。",
+              "applicability": {
+                "status": "not_applicable",
+                "rationale": "存続するentity・aggregate状態の不変条件はない。"
+              },
+              "contract_level": "not_applicable",
+              "authority_type": "not_applicable",
+              "authoritative_owner": "not_applicable",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "当該保証対象がない。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            },
+            {
+              "id": "C6",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "prohibited_transition",
+              "statement": "永続状態やlifecycleがなく禁止状態遷移は非該当。",
+              "applicability": {
+                "status": "not_applicable",
+                "rationale": "永続状態やlifecycleがなく禁止状態遷移は非該当。"
+              },
+              "contract_level": "not_applicable",
+              "authority_type": "not_applicable",
+              "authoritative_owner": "not_applicable",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "当該保証対象がない。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            },
+            {
+              "id": "C7",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "environment_condition",
+              "statement": "clock・外部I/O・OS条件で結果を分岐させる要件がない。",
+              "applicability": {
+                "status": "not_applicable",
+                "rationale": "clock・外部I/O・OS条件で結果を分岐させる要件がない。"
+              },
+              "contract_level": "not_applicable",
+              "authority_type": "not_applicable",
+              "authoritative_owner": "not_applicable",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "当該保証対象がない。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            },
+            {
+              "id": "C8",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "retry",
+              "statement": "通信失敗や一時的外部失敗がなく、mutation retry方針は不要。範囲外整数は再試行で有効にならない。",
+              "applicability": {
+                "status": "not_applicable",
+                "rationale": "通信失敗や一時的外部失敗がなく、mutation retry方針は不要。範囲外整数は再試行で有効にならない。"
+              },
+              "contract_level": "not_applicable",
+              "authority_type": "not_applicable",
+              "authoritative_owner": "not_applicable",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "当該保証対象がない。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            },
+            {
+              "id": "C9",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "duplicate",
+              "statement": "deliveryやcommand重複による副作用がない。呼出しをまとめたり記録したりする契約は不要。",
+              "applicability": {
+                "status": "not_applicable",
+                "rationale": "deliveryやcommand重複による副作用がない。呼出しをまとめたり記録したりする契約は不要。"
+              },
+              "contract_level": "not_applicable",
+              "authority_type": "not_applicable",
+              "authoritative_owner": "not_applicable",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "当該保証対象がない。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            },
+            {
+              "id": "C10",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "domain_obligation_ids": [],
+              "kind": "idempotency",
+              "statement": "無状態の表示変換。mutation idempotencyのkey・保存・deduplicationは非該当。",
+              "applicability": {
+                "status": "not_applicable",
+                "rationale": "無状態の表示変換。mutation idempotencyのkey・保存・deduplicationは非該当。"
+              },
+              "contract_level": "not_applicable",
+              "authority_type": "not_applicable",
+              "authoritative_owner": "not_applicable",
+              "defensive_validations": {
+                "status": "not_applicable",
+                "rationale": "当該保証対象がない。",
+                "entries": []
+              },
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            }
+          ],
+          "idempotency_assessments": [
+            {
+              "operation_id": "OP1",
+              "applicability": "not_applicable",
+              "rationale": "純粋な表示変換にmutation idempotencyは不要。同一入力で同じ表示となることと重複処理機構は別。",
+              "evidence": {
+                "status": "confirmed",
+                "sources": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              "contract_item_ids": [
+                "C10"
+              ]
+            }
+          ],
+          "public_contract_changes": [],
+          "public_contract_changes_applicability": {
+            "applicability": "not_applicable",
+            "not_applicable_reason": "既存契約差分なし。承認済みR1・R2を明文化する。",
+            "evidence": [
+              "E1",
+              "E3"
+            ]
+          },
+          "tests": [
+            {
+              "id": "T0",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "verifies": [
+                "C1"
+              ],
+              "given": "このSpecから実装する契約testの全入力",
+              "when": "test定義と呼出側の入力領域を静的照合する",
+              "then": [
+                "整数のみをR1・R2の保証対象にしている",
+                "非整数の挙動をassertしない"
+              ],
+              "oracle": "全契約test入力が整数で、非整数へ保証を拡張していない。",
+              "environment_conditions": [],
+              "implementation_status": "planned",
+              "execution_status": "not_run",
+              "evidence": [
+                "E1"
+              ]
+            },
+            {
+              "id": "T1",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1"
+              ],
+              "verifies": [
+                "C2"
+              ],
+              "given": "n = 0, 1, 9, 10, 98, 99",
+              "when": "display_quantity(n)を各値で呼ぶ",
+              "then": [
+                "結果は順に\"00\", \"01\", \"09\", \"10\", \"98\", \"99\""
+              ],
+              "oracle": "結果型が文字列で上記固定対応と完全一致する。",
+              "environment_conditions": [],
+              "implementation_status": "planned",
+              "execution_status": "not_run",
+              "evidence": [
+                "E1"
+              ]
+            },
+            {
+              "id": "T2",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1"
+              ],
+              "verifies": [
+                "C2"
+              ],
+              "given": "0〜99の全整数100件",
+              "when": "各整数nでdisplay_quantity(n)を呼ぶ",
+              "then": [
+                "長さ2の数字文字列となる",
+                "表示の十の位・一の位を読んだ値がnと一致する"
+              ],
+              "oracle": "全100件で長さ2、両桁が数字、10×十の位+一の位=n。T1の固定例とも一致する。内部formatterをoracleに流用しない。",
+              "environment_conditions": [],
+              "implementation_status": "planned",
+              "execution_status": "not_run",
+              "evidence": [
+                "E1"
+              ]
+            },
+            {
+              "id": "T3",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R2"
+              ],
+              "verifies": [
+                "C3"
+              ],
+              "given": "n = -100, -1, 100, 101, 1000。加えて任意の整数n<0またはn>99。",
+              "when": "display_quantity(n)を呼ぶ",
+              "then": [
+                "ValueErrorを送出し、成功文字列を返さない"
+              ],
+              "oracle": "例外の型がValueError。例外messageは契約として固定しない。代表値に加え範囲条件の静的確認またはproperty testを後続で行う。",
+              "environment_conditions": [],
+              "implementation_status": "planned",
+              "execution_status": "not_run",
+              "evidence": [
+                "E1"
+              ]
+            },
+            {
+              "id": "T4",
+              "operation_id": "OP1",
+              "requirement_ids": [
+                "R1",
+                "R2"
+              ],
+              "verifies": [
+                "C4"
+              ],
+              "given": "display_quantityの全公開経路と、正常値0・99、失敗値-1・100",
+              "when": "実装を静的reviewし、各呼出経路を観測する",
+              "then": [
+                "保存・外部I/O・共有状態への書込み経路がない",
+                "失敗後に復旧処理が必要な副作用がない"
+              ],
+              "oracle": "code上で外部effectへの依存がなく、呼出し前後で外部・共有状態の変更がない。観測だけでなく静的依存も確認する。",
+              "environment_conditions": [],
+              "implementation_status": "planned",
+              "execution_status": "not_run",
+              "evidence": [
+                "E2"
+              ]
+            }
+          ],
+          "traceability": [
+            {
+              "requirement_id": "R1",
+              "domain_obligation_ids": [],
+              "operation_ids": [
+                "OP1"
+              ],
+              "contract_item_ids": [
+                "C1",
+                "C2",
+                "C4"
+              ],
+              "test_ids": [
+                "T0",
+                "T1",
+                "T2",
+                "T4"
+              ],
+              "status": "covered"
+            },
+            {
+              "requirement_id": "R2",
+              "domain_obligation_ids": [],
+              "operation_ids": [
+                "OP1"
+              ],
+              "contract_item_ids": [
+                "C1",
+                "C3",
+                "C4"
+              ],
+              "test_ids": [
+                "T0",
+                "T3",
+                "T4"
+              ],
+              "status": "covered"
+            }
+          ],
+          "coverage": {
+            "requirement": {
+              "denominator": 2,
+              "numerator": 2,
+              "uncovered_ids": []
+            },
+            "contract": {
+              "denominator": 4,
+              "numerator": 4,
+              "incomplete_item_ids": []
+            },
+            "test": {
+              "denominator": 4,
+              "numerator": 4,
+              "uncovered_item_ids": []
+            },
+            "unknown_item_ids": [],
+            "excluded_item_ids": [
+              "C5",
+              "C6",
+              "C7",
+              "C8",
+              "C9",
+              "C10"
+            ],
+            "coverage_scope": "設計仕様とoracleへの接続。test実行成功率ではない。"
+          },
+          "subject_verdict": "sufficient",
+          "decision": {
+            "status": "pass",
+            "artifact_readiness": "ready",
+            "engineering_status": "planned",
+            "release_status": "not_applicable",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者",
+              "scope": [
+                "今回のImplementation Specと実装上の責務配置"
+              ],
+              "evidence_status": "confirmed",
+              "approval_evidence": [],
+              "baseline_version": "not_applicable",
+              "change_control": "R1・R2またはscopeを変える場合はownerの再承認が必要。"
+            },
+            "next_phase": {
+              "name": "implementation",
+              "status": "awaiting_approval",
+              "reasons": [
+                "今回の依頼はdesignと成果物保存に限定。実装着手には別途依頼が必要。R1・R2の意味の再承認は不要。"
+              ],
+              "human_approvals_required": [
+                "後続の実装・test実行の作業権限"
+              ]
+            },
+            "evidence": [
+              "E1",
+              "E2",
+              "CP1",
+              "T0",
+              "T1",
+              "T2",
+              "T3",
+              "T4"
+            ],
+            "assumptions": [],
+            "unknowns": [],
+            "contradictions": [],
+            "failed_gates": [],
+            "unexecuted_validation": [
+              {
+                "id": "UV1",
+                "reason": "design依頼で実装とtest実行は対象外。",
+                "required_runner": "後続実装が動く言語runtimeと契約test runner",
+                "planned_commands": [
+                  "後続実装後、T0〜T4のGiven/When/Thenとoracleをtestへ移し、選定runnerの全件実行commandを記録する。言語・project未指定のため実在しないcommandを固定しない。"
+                ],
+                "owner": "後続実装者",
+                "evidence": [
+                  "E3",
+                  "T0",
+                  "T1",
+                  "T2",
+                  "T3",
+                  "T4"
+                ]
+              },
+              {
+                "id": "UV2",
+                "reason": "独立評価者によるSpec照合は今回実行していない。",
+                "required_runner": "要件ownerまたは独立reviewer",
+                "planned_commands": [
+                  "E1〜E3とRC1〜RC7を基準にSpecの契約・coverage・boundaryを静的reviewする。"
+                ],
+                "owner": "後続reviewer",
+                "evidence": [
+                  "AI1",
+                  "R1",
+                  "R2"
+                ]
+              }
+            ],
+            "platform_validation": {
+              "required_platforms": [],
+              "executed": [],
+              "unexecuted": [],
+              "parity_result": "not_applicable",
+              "platform_specific_risks": []
+            },
+            "residual_risks": [
+              "実装・test実行・独立reviewの結果は未取得。設計のreadyは対象systemのruntime適合を意味しない。"
+            ],
+            "human_approvals_required": []
+          }
+        },
+        "boundary_package": {
+          "id": "BP1",
+          "subject": "帳票consumerとdisplay_quantityの責務境界",
+          "owner": "数量表示契約の要件owner",
+          "platform_context": {
+            "host_platform": "windows",
+            "process_platform": "windows",
+            "artifact_filesystem": "unknown",
+            "target_platforms": [],
+            "shell": "powershell",
+            "architecture": "X64",
+            "filesystem": {
+              "case_sensitive": "unknown",
+              "path_style": "windows",
+              "executable_bit": "unknown"
+            },
+            "toolchain": {
+              "commands": [
+                "PowerShell"
+              ],
+              "versions": [
+                "7.6.6"
+              ]
+            },
+            "platform_requirements": [],
+            "unknowns": [],
+            "scope_note": "保存hostはWindows 10.0.26200。filesystem性質は未検証で今回の業務判断を分岐させない。対象関数のOS要件と実行検証はscope外。保存形式はUTF-8 BOMなし・LF。"
+          },
+          "platform_validation": {
+            "required_platforms": [],
+            "executed": [],
+            "unexecuted": [],
+            "parity_result": "not_applicable",
+            "platform_specific_risks": []
+          },
+          "change_safety": {
+            "applicability": "not_applicable",
+            "not_applicable_reason": "既存callerの移行や契約変更はない。",
+            "evidence": [
+              "E1",
+              "E2",
+              "E3"
+            ]
+          },
+          "contract_source": {
+            "kind": "domain_contract",
+            "artifact_refs": [
+              "CP1"
+            ],
+            "domain_contract_status": "applicable",
+            "evidence": [
+              {
+                "status": "confirmed",
+                "source": "E1",
+                "supports": "承認済み数量範囲・表示・failureをCP1へ具体化した。"
+              }
+            ]
+          },
+          "consumers": [
+            {
+              "id": "CONSUMER1",
+              "purpose": "帳票の数量表示形式を統一する",
+              "must_know": [
+                "display_quantityへ整数数量を渡す",
+                "0〜99は2桁文字列、範囲外整数はValueError",
+                "副作用なし",
+                "整数以外の挙動は今回の保証外"
+              ],
+              "must_not_know": [
+                "書式指定子",
+                "先頭0の生成手順",
+                "範囲guardと変換の内部実装",
+                "内部helper・library選択"
+              ]
+            }
+          ],
+          "code_design": {
+            "capsules": [
+              {
+                "id": "CAP1",
+                "operation_ids": [
+                  "OP1"
+                ],
+                "responsibility": "数量表示に必要な範囲guardと変換を単一関数へ集約する",
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            ],
+            "branch_decisions": [
+              {
+                "id": "BR1",
+                "classification": "guard",
+                "decision": "範囲外ならValueErrorを送出する短い条件分岐を許す。分岐排除を目的にしない。",
+                "contract_ids": [
+                  "C3"
+                ],
+                "evidence": [
+                  "E1"
+                ]
+              }
+            ],
+            "naming_decisions": [
+              {
+                "id": "NM1",
+                "decision": "承認済みのdisplay_quantityを公開名として使う。保存や出力処理をこの関数へ含めない。",
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            ],
+            "abstraction_decisions": [
+              {
+                "id": "AB1",
+                "decision": "具体的な単一関数を採用する設計案。interface型、factory、Strategy、OS adapter、deduplication storeは追加しない。",
+                "rationale": "variant・外部障害・状態・platform差の根拠がない。",
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              }
+            ]
+          },
+          "interface_part": {
+            "operations": [
+              {
+                "id": "OP1",
+                "name": "display_quantity",
+                "intent": "整数数量を帳票の統一表示へ変換する",
+                "inputs": [
+                  "整数n"
+                ],
+                "result": "0〜99は数量を表す2桁文字列",
+                "failures": [
+                  "範囲外整数はValueError。例外messageや非整数応答は規定しない。"
+                ],
+                "side_effects": [],
+                "invariants": [],
+                "contracts": [
+                  "C1",
+                  "C2",
+                  "C3",
+                  "C4"
+                ],
+                "end_to_end_deadline": {
+                  "status": "not_applicable",
+                  "not_applicable_reason": "時間依存・deadline要件がない。",
+                  "evidence": [
+                    "E1",
+                    "E2"
+                  ]
+                },
+                "retry_semantics": {
+                  "status": "not_applicable",
+                  "not_applicable_reason": "外部通信・一時的失敗・mutationがない。失敗値を同じまま繰り返してもR2のまま。",
+                  "evidence": [
+                    "E1",
+                    "E2"
+                  ]
+                },
+                "idempotency": {
+                  "status": "not_applicable",
+                  "not_applicable_reason": "無状態の純粋変換でmutation idempotencyは非該当。keyを要求しない。",
+                  "evidence": [
+                    "E1",
+                    "E2"
+                  ]
+                },
+                "duplicate_semantics": {
+                  "status": "not_applicable",
+                  "not_applicable_reason": "deliveryや副作用の重複がない。各呼出しは同じR1・R2に従う。",
+                  "evidence": [
+                    "E1",
+                    "E2"
+                  ]
+                },
+                "ambiguous_outcome": {
+                  "status": "not_applicable",
+                  "not_applicable_reason": "外部effectがなく、成功文字列またはValueErrorで完結する。reconciliationを必要とする結果不明状態がない。",
+                  "evidence": [
+                    "E1",
+                    "E2"
+                  ]
+                },
+                "consistency_boundary": "単一の関数呼出し。共有・永続stateなし。",
+                "evidence": [
+                  "E1",
+                  "E2",
+                  "CP1"
+                ]
+              }
+            ]
+          },
+          "implementation_part": {
+            "items": [
+              {
+                "id": "IP1",
+                "kind": "algorithm",
+                "operation_ids": [
+                  "OP1"
+                ],
+                "description": "範囲guardと2桁表示の具体手順を内部に置く。帳票callerへ書式指定子や変換順序を要求しない。",
+                "owner": "display_quantity実装責務（設計案）",
+                "evidence": [
+                  "E1",
+                  "E2",
+                  "C2",
+                  "C3"
+                ]
+              }
+            ],
+            "transport_implementations": []
+          },
+          "ownership": {
+            "authority_refs": [
+              {
+                "id": "AR1",
+                "kind": "semantic_owner",
+                "applicability": "required",
+                "artifact_ref": "CP1/R1,R2",
+                "owner": "数量表示契約の要件owner",
+                "rationale": "意味の承認はE1・E3。Boundaryが再定義しない。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E1",
+                    "E3"
+                  ]
+                }
+              },
+              {
+                "id": "AR2",
+                "kind": "contract_owner",
+                "applicability": "required",
+                "artifact_ref": "CP1/OP1",
+                "owner": "数量表示契約の要件owner",
+                "rationale": "公開操作の意味・互換性を所有。conditionのenforcementはCP1を参照する。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E1"
+                  ]
+                }
+              },
+              {
+                "id": "AR3",
+                "kind": "failure_recovery_owner",
+                "applicability": "required",
+                "artifact_ref": "CP1/C3",
+                "owner": "display_quantity入口の範囲guard",
+                "rationale": "範囲外の公開failureを確定させる責務。復旧すべき状態はない。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E1",
+                    "E2"
+                  ]
+                }
+              },
+              {
+                "id": "AR4",
+                "kind": "invariant_owner",
+                "applicability": "not_applicable",
+                "owner": "not_applicable",
+                "rationale": "保存状態・lifecycle・外部通信・運用recoveryを持たない局所変換。永続状態のownerを発明しない。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E2"
+                  ]
+                }
+              },
+              {
+                "id": "AR5",
+                "kind": "state_authority",
+                "applicability": "not_applicable",
+                "owner": "not_applicable",
+                "rationale": "保存状態・lifecycle・外部通信・運用recoveryを持たない局所変換。永続状態のownerを発明しない。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E2"
+                  ]
+                }
+              },
+              {
+                "id": "AR6",
+                "kind": "source_of_truth",
+                "applicability": "not_applicable",
+                "owner": "not_applicable",
+                "rationale": "保存状態・lifecycle・外部通信・運用recoveryを持たない局所変換。永続状態のownerを発明しない。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E2"
+                  ]
+                }
+              },
+              {
+                "id": "AR7",
+                "kind": "operational_owner",
+                "applicability": "not_applicable",
+                "owner": "not_applicable",
+                "rationale": "保存状態・lifecycle・外部通信・運用recoveryを持たない局所変換。永続状態のownerを発明しない。",
+                "evidence": {
+                  "status": "confirmed",
+                  "sources": [
+                    "E2"
+                  ]
+                }
+              }
+            ],
+            "writers": [],
+            "readers": [],
+            "state_access_applicability": {
+              "applicability": "not_applicable",
+              "not_applicable_reason": "表示入力は引数で受け取り結果を返す。永続stateのwriter/readerは存在しない。",
+              "evidence": [
+                "E2"
+              ]
+            }
+          },
+          "selection_boundaries": [],
+          "selection_boundary_applicability": {
+            "applicability": "not_applicable",
+            "not_applicable_reason": "実在variant・roadmap・変更historyの根拠がない。",
+            "evidence": [
+              "E2"
+            ]
+          },
+          "leakage_findings": [
+            {
+              "id": "LF1",
+              "operation_ids": [
+                "OP1"
+              ],
+              "implementation_part_ids": [
+                "IP1"
+              ],
+              "status": "absent",
+              "impact": "提案interfaceには整数入力・表示結果・ValueErrorだけが現れ、内部書式手順は露出しない。実コードの検査結果ではない。",
+              "evidence": [
+                "BP1/interface_part",
+                "BP1/implementation_part",
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "dependency_direction": [
+            {
+              "id": "DEP1",
+              "from": "帳票consumer",
+              "to": "OP1",
+              "rationale": "帳票は目的と契約に依存する。",
+              "evidence": [
+                "E2"
+              ]
+            },
+            {
+              "id": "DEP2",
+              "from": "IP1",
+              "to": "CP1",
+              "rationale": "内部実装が承認済み表示契約を満たす。帳票が実装詳細へ依存しない。",
+              "evidence": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "change_scenarios": [
+            {
+              "id": "CS1",
+              "name": "Replace implementation",
+              "status": "pass",
+              "evidence": [
+                "C2",
+                "C3",
+                "IP1",
+                "T1",
+                "T2",
+                "T3"
+              ],
+              "rationale": "契約適合の別の表示algorithmへ置き換える思考実験ではOP1とoracleは不変。runtime実証ではない。"
+            },
+            {
+              "id": "CS2",
+              "name": "Add proven variant",
+              "status": "not_applicable",
+              "evidence": [
+                "E1",
+                "E2"
+              ],
+              "rationale": "追加variantのEvidenceがない。selection boundaryを先回りして作らない。"
+            },
+            {
+              "id": "CS3",
+              "name": "Change one proven variant",
+              "status": "not_applicable",
+              "evidence": [
+                "E1",
+                "E2"
+              ],
+              "rationale": "複数variantが存在するEvidenceがない。"
+            },
+            {
+              "id": "CS4",
+              "name": "Change one business rule",
+              "status": "not_applicable",
+              "evidence": [
+                "E1",
+                "E3"
+              ],
+              "rationale": "業務規則変更は依頼されておらず承認済みR1・R2を保持する。変更時はowner判断の後にCP1とoracleを改訂し、consumer影響を再評価する。"
+            }
+          ],
+          "migration": [],
+          "migration_applicability": {
+            "applicability": "not_applicable",
+            "not_applicable_reason": "既存caller移行なし。compatibility windowやtemporary pathを作らない。",
+            "evidence": [
+              "E2"
+            ]
+          },
+          "boundary_traces": [
+            {
+              "id": "BT1",
+              "requirement_ids": [
+                "R1"
+              ],
+              "consumer_ids": [
+                "CONSUMER1"
+              ],
+              "operation_ids": [
+                "OP1"
+              ],
+              "contract_ids": [
+                "C1",
+                "C2",
+                "C4"
+              ],
+              "ownership_refs": [
+                "AR1",
+                "AR2"
+              ],
+              "implementation_part_ids": [
+                "IP1"
+              ],
+              "leakage_finding_ids": [
+                "LF1"
+              ],
+              "change_scenario_ids": [
+                "CS1",
+                "CS2",
+                "CS3",
+                "CS4"
+              ],
+              "migration_ids": [],
+              "verification_ids": [
+                "T0",
+                "T1",
+                "T2",
+                "T4",
+                "BV1"
+              ],
+              "status": "covered",
+              "evidence": [
+                "E1",
+                "E2",
+                "CP1"
+              ]
+            },
+            {
+              "id": "BT2",
+              "requirement_ids": [
+                "R2"
+              ],
+              "consumer_ids": [
+                "CONSUMER1"
+              ],
+              "operation_ids": [
+                "OP1"
+              ],
+              "contract_ids": [
+                "C1",
+                "C3",
+                "C4"
+              ],
+              "ownership_refs": [
+                "AR1",
+                "AR2",
+                "AR3"
+              ],
+              "implementation_part_ids": [
+                "IP1"
+              ],
+              "leakage_finding_ids": [
+                "LF1"
+              ],
+              "change_scenario_ids": [
+                "CS1",
+                "CS2",
+                "CS3",
+                "CS4"
+              ],
+              "migration_ids": [],
+              "verification_ids": [
+                "T0",
+                "T3",
+                "T4",
+                "BV1"
+              ],
+              "status": "covered",
+              "evidence": [
+                "E1",
+                "E2",
+                "CP1"
+              ]
+            }
+          ],
+          "subject_verdict": "separated",
+          "decision": {
+            "status": "pass",
+            "artifact_readiness": "ready",
+            "engineering_status": "planned",
+            "release_status": "not_applicable",
+            "decision_maturity": {
+              "status": "proposed",
+              "owner": "依頼者",
+              "scope": [
+                "今回のImplementation Specと実装上の責務配置"
+              ],
+              "evidence_status": "confirmed",
+              "approval_evidence": [],
+              "baseline_version": "not_applicable",
+              "change_control": "R1・R2またはscopeを変える場合はownerの再承認が必要。"
+            },
+            "next_phase": {
+              "name": "implementation",
+              "status": "awaiting_approval",
+              "reasons": [
+                "今回の依頼はdesignと成果物保存に限定。実装着手には別途依頼が必要。R1・R2の意味の再承認は不要。"
+              ],
+              "human_approvals_required": [
+                "後続の実装・test実行の作業権限"
+              ]
+            },
+            "evidence": [
+              "E1",
+              "E2",
+              "CP1",
+              "BT1",
+              "BT2",
+              "BV1"
+            ],
+            "assumptions": [],
+            "unknowns": [],
+            "contradictions": [],
+            "failed_gates": [],
+            "unexecuted_validation": [
+              {
+                "id": "UV1",
+                "reason": "design依頼で実装とtest実行は対象外。",
+                "required_runner": "後続実装が動く言語runtimeと契約test runner",
+                "planned_commands": [
+                  "後続実装後、T0〜T4のGiven/When/Thenとoracleをtestへ移し、選定runnerの全件実行commandを記録する。言語・project未指定のため実在しないcommandを固定しない。"
+                ],
+                "owner": "後続実装者",
+                "evidence": [
+                  "E3",
+                  "T0",
+                  "T1",
+                  "T2",
+                  "T3",
+                  "T4"
+                ]
+              },
+              {
+                "id": "UV2",
+                "reason": "独立評価者によるSpec照合は今回実行していない。",
+                "required_runner": "要件ownerまたは独立reviewer",
+                "planned_commands": [
+                  "E1〜E3とRC1〜RC7を基準にSpecの契約・coverage・boundaryを静的reviewする。"
+                ],
+                "owner": "後続reviewer",
+                "evidence": [
+                  "AI1",
+                  "R1",
+                  "R2"
+                ]
+              }
+            ],
+            "platform_validation": {
+              "required_platforms": [],
+              "executed": [],
+              "unexecuted": [],
+              "parity_result": "not_applicable",
+              "platform_specific_risks": []
+            },
+            "residual_risks": [
+              "実装・test実行・独立reviewの結果は未取得。設計のreadyは対象systemのruntime適合を意味しない。"
+            ],
+            "human_approvals_required": []
+          }
+        },
+        "change_safety_package": {
+          "applicability": "not_applicable",
+          "not_applicable_reason": "公開契約変更・既存caller移行・system変更なし。",
+          "evidence": [
+            "E1",
+            "E2",
+            "E3"
+          ]
+        },
+        "allowed_dependencies": [
+          {
+            "from": "帳票consumer",
+            "to": "OP1",
+            "evidence": [
+              "E2"
+            ]
+          },
+          {
+            "from": "IP1",
+            "to": "CP1",
+            "evidence": [
+              "E1"
+            ]
+          }
+        ],
+        "prohibited_structures": [
+          {
+            "description": "表示書式をcallerへ要求するAPI、将来用factory/Strategy、deduplication storage、OS固有公開型、永続化依存",
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          }
+        ],
+        "change_boundary": {
+          "must_preserve": [
+            "R1",
+            "R2",
+            "整数以外の挙動を規定しない",
+            "帳票の表示形式統一という目的"
+          ],
+          "may_change": [
+            "今回workspace内への設計成果物の保存"
+          ],
+          "must_not_change": [
+            "対象systemのcode",
+            "対象systemの設定",
+            "運用data",
+            "承認済み要件"
+          ],
+          "out_of_scope": [
+            "実装",
+            "test実行",
+            "整数以外の挙動",
+            "保存",
+            "外部I/O",
+            "時間依存",
+            "既存caller移行"
+          ]
+        },
+        "verification_plan": [
+          {
+            "id": "T0",
+            "kind": "contract_test",
+            "spec_ref": "CP1/tests/T0",
+            "owner": "後続実装者",
+            "execution_condition": "別途実装・test実行の権限を得て、整数値を表現できる選定runtimeへOP1を実装した後。",
+            "oracle": "全契約test入力が整数で、非整数へ保証を拡張していない。",
+            "status": "planned",
+            "execution_status": "not_run"
+          },
+          {
+            "id": "T1",
+            "kind": "contract_test",
+            "spec_ref": "CP1/tests/T1",
+            "owner": "後続実装者",
+            "execution_condition": "別途実装・test実行の権限を得て、整数値を表現できる選定runtimeへOP1を実装した後。",
+            "oracle": "結果型が文字列で上記固定対応と完全一致する。",
+            "status": "planned",
+            "execution_status": "not_run"
+          },
+          {
+            "id": "T2",
+            "kind": "contract_test",
+            "spec_ref": "CP1/tests/T2",
+            "owner": "後続実装者",
+            "execution_condition": "別途実装・test実行の権限を得て、整数値を表現できる選定runtimeへOP1を実装した後。",
+            "oracle": "全100件で長さ2、両桁が数字、10×十の位+一の位=n。T1の固定例とも一致する。内部formatterをoracleに流用しない。",
+            "status": "planned",
+            "execution_status": "not_run"
+          },
+          {
+            "id": "T3",
+            "kind": "contract_test",
+            "spec_ref": "CP1/tests/T3",
+            "owner": "後続実装者",
+            "execution_condition": "別途実装・test実行の権限を得て、整数値を表現できる選定runtimeへOP1を実装した後。",
+            "oracle": "例外の型がValueError。例外messageは契約として固定しない。代表値に加え範囲条件の静的確認またはproperty testを後続で行う。",
+            "status": "planned",
+            "execution_status": "not_run"
+          },
+          {
+            "id": "T4",
+            "kind": "contract_test",
+            "spec_ref": "CP1/tests/T4",
+            "owner": "後続実装者",
+            "execution_condition": "別途実装・test実行の権限を得て、整数値を表現できる選定runtimeへOP1を実装した後。",
+            "oracle": "code上で外部effectへの依存がなく、呼出し前後で外部・共有状態の変更がない。観測だけでなく静的依存も確認する。",
+            "status": "planned",
+            "execution_status": "not_run"
+          },
+          {
+            "id": "BV1",
+            "kind": "boundary_review",
+            "owner": "後続reviewer",
+            "execution_condition": "このSpecをreview。実コードへの適用は後続実装後。",
+            "oracle": "帳票の知識は入力・結果・ValueErrorに限定。書式指定子、library型、variant flag、再試行key、保存機構が公開境界へ漏れず、T1〜T3が内部algorithmの変更で変わらない。",
+            "status": "planned",
+            "execution_status": "not_run"
+          },
+          {
+            "id": "SV1",
+            "kind": "independent_spec_review",
+            "owner": "要件ownerまたは独立reviewer",
+            "execution_condition": "E1〜E3、Spec、RC1〜RC7を照合する。",
+            "oracle": "承認済みの目的と範囲を満たし、条件authority・N/A・coverage・traceの参照が一致する。runtime未検証を分離している。",
+            "status": "planned",
+            "execution_status": "not_run"
+          }
+        ],
+        "traceability": [
+          {
+            "purpose_id": "P1",
+            "goal_id": "G1",
+            "requirement_id": "R1",
+            "model_elements": [],
+            "contract_ids": [
+              "C1",
+              "C2",
+              "C4"
+            ],
+            "boundary_operations": [
+              "OP1"
+            ],
+            "implementation_changes": [],
+            "verification_ids": [
+              "T0",
+              "T1",
+              "T2",
+              "T4"
+            ],
+            "evidence": [
+              "E1",
+              "E2",
+              "E3"
+            ],
+            "connections": [
+              {
+                "from_kind": "purpose",
+                "from_id": "P1",
+                "to_kind": "goal",
+                "to_id": "G1",
+                "rationale": "帳票表示の統一にはこの成功・拒否結果が必要。",
+                "validation_ids": [
+                  "T0",
+                  "T1",
+                  "T2",
+                  "T4"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "goal",
+                "from_id": "G1",
+                "to_kind": "requirement",
+                "to_id": "R1",
+                "rationale": "承認済みR1・R2が成功条件を観測可能にする。",
+                "validation_ids": [
+                  "T0",
+                  "T1",
+                  "T2",
+                  "T4"
+                ],
+                "evidence": [
+                  "E1"
+                ]
+              },
+              {
+                "from_kind": "requirement",
+                "from_id": "R1",
+                "to_kind": "contract",
+                "to_id": "C1",
+                "rationale": "R1をC1の呼出領域・表示・failure・副作用保証で具体化する。",
+                "validation_ids": [
+                  "T0"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "requirement",
+                "from_id": "R1",
+                "to_kind": "contract",
+                "to_id": "C2",
+                "rationale": "R1をC2の呼出領域・表示・failure・副作用保証で具体化する。",
+                "validation_ids": [
+                  "T1",
+                  "T2"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "requirement",
+                "from_id": "R1",
+                "to_kind": "contract",
+                "to_id": "C4",
+                "rationale": "R1をC4の呼出領域・表示・failure・副作用保証で具体化する。",
+                "validation_ids": [
+                  "T4"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "contract",
+                "from_id": "C1",
+                "to_kind": "boundary",
+                "to_id": "OP1",
+                "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+                "validation_ids": [
+                  "BV1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "BP1"
+                ]
+              },
+              {
+                "from_kind": "contract",
+                "from_id": "C2",
+                "to_kind": "boundary",
+                "to_id": "OP1",
+                "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+                "validation_ids": [
+                  "BV1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "BP1"
+                ]
+              },
+              {
+                "from_kind": "contract",
+                "from_id": "C4",
+                "to_kind": "boundary",
+                "to_id": "OP1",
+                "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+                "validation_ids": [
+                  "BV1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "BP1"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T0",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T0"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T0"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T1",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T1"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T2",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T2"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T2"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T4",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T4"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T4"
+                ]
+              }
+            ],
+            "not_applicable": [
+              {
+                "target_kind": "model",
+                "target_id_or_scope": "独立したdomain model成果物",
+                "reason": "承認済み整数値と無状態変換だけで契約化できる。状態モデルの追加は不要。",
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "target_kind": "change",
+                "target_id_or_scope": "対象systemへの変更",
+                "reason": "designのみ。実装・設定・data変更は禁止。",
+                "evidence": [
+                  "E3"
+                ]
+              }
+            ],
+            "status": "covered"
+          },
+          {
+            "purpose_id": "P1",
+            "goal_id": "G2",
+            "requirement_id": "R2",
+            "model_elements": [],
+            "contract_ids": [
+              "C1",
+              "C3",
+              "C4"
+            ],
+            "boundary_operations": [
+              "OP1"
+            ],
+            "implementation_changes": [],
+            "verification_ids": [
+              "T0",
+              "T3",
+              "T4"
+            ],
+            "evidence": [
+              "E1",
+              "E2",
+              "E3"
+            ],
+            "connections": [
+              {
+                "from_kind": "purpose",
+                "from_id": "P1",
+                "to_kind": "goal",
+                "to_id": "G2",
+                "rationale": "帳票表示の統一にはこの成功・拒否結果が必要。",
+                "validation_ids": [
+                  "T0",
+                  "T3",
+                  "T4"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "goal",
+                "from_id": "G2",
+                "to_kind": "requirement",
+                "to_id": "R2",
+                "rationale": "承認済みR1・R2が成功条件を観測可能にする。",
+                "validation_ids": [
+                  "T0",
+                  "T3",
+                  "T4"
+                ],
+                "evidence": [
+                  "E1"
+                ]
+              },
+              {
+                "from_kind": "requirement",
+                "from_id": "R2",
+                "to_kind": "contract",
+                "to_id": "C1",
+                "rationale": "R2をC1の呼出領域・表示・failure・副作用保証で具体化する。",
+                "validation_ids": [
+                  "T0"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "requirement",
+                "from_id": "R2",
+                "to_kind": "contract",
+                "to_id": "C3",
+                "rationale": "R2をC3の呼出領域・表示・failure・副作用保証で具体化する。",
+                "validation_ids": [
+                  "T3"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "requirement",
+                "from_id": "R2",
+                "to_kind": "contract",
+                "to_id": "C4",
+                "rationale": "R2をC4の呼出領域・表示・failure・副作用保証で具体化する。",
+                "validation_ids": [
+                  "T4"
+                ],
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "from_kind": "contract",
+                "from_id": "C1",
+                "to_kind": "boundary",
+                "to_id": "OP1",
+                "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+                "validation_ids": [
+                  "BV1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "BP1"
+                ]
+              },
+              {
+                "from_kind": "contract",
+                "from_id": "C3",
+                "to_kind": "boundary",
+                "to_id": "OP1",
+                "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+                "validation_ids": [
+                  "BV1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "BP1"
+                ]
+              },
+              {
+                "from_kind": "contract",
+                "from_id": "C4",
+                "to_kind": "boundary",
+                "to_id": "OP1",
+                "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+                "validation_ids": [
+                  "BV1"
+                ],
+                "evidence": [
+                  "CP1",
+                  "BP1"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T0",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T0"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T0"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T3",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T3"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T3"
+                ]
+              },
+              {
+                "from_kind": "boundary",
+                "from_id": "OP1",
+                "to_kind": "verification",
+                "to_id": "T4",
+                "rationale": "公開操作の観測だけで契約への適否を反証する。",
+                "validation_ids": [
+                  "T4"
+                ],
+                "evidence": [
+                  "CP1",
+                  "T4"
+                ]
+              }
+            ],
+            "not_applicable": [
+              {
+                "target_kind": "model",
+                "target_id_or_scope": "独立したdomain model成果物",
+                "reason": "承認済み整数値と無状態変換だけで契約化できる。状態モデルの追加は不要。",
+                "evidence": [
+                  "E1",
+                  "E2"
+                ]
+              },
+              {
+                "target_kind": "change",
+                "target_id_or_scope": "対象systemへの変更",
+                "reason": "designのみ。実装・設定・data変更は禁止。",
+                "evidence": [
+                  "E3"
+                ]
+              }
+            ],
+            "status": "covered"
+          }
+        ],
+        "human_approvals_required": [],
+        "function_artifact_refs": [
+          "CP1",
+          "BP1"
+        ],
+        "decision": {
+          "status": "pass",
+          "artifact_readiness": "ready",
+          "engineering_status": "planned",
+          "release_status": "not_applicable",
+          "decision_maturity": {
+            "status": "proposed",
+            "owner": "依頼者",
+            "scope": [
+              "今回のImplementation Specと実装上の責務配置"
+            ],
+            "evidence_status": "confirmed",
+            "approval_evidence": [],
+            "baseline_version": "not_applicable",
+            "change_control": "R1・R2またはscopeを変える場合はownerの再承認が必要。"
+          },
+          "next_phase": {
+            "name": "implementation",
+            "status": "awaiting_approval",
+            "reasons": [
+              "今回の依頼はdesignと成果物保存に限定。実装着手には別途依頼が必要。R1・R2の意味の再承認は不要。"
+            ],
+            "human_approvals_required": [
+              "後続の実装・test実行の作業権限"
+            ]
+          },
+          "evidence": [
+            "E1",
+            "E2",
+            "E3",
+            "FP-CONTRACT",
+            "FP-BOUNDARY",
+            "V-SPEC"
+          ],
+          "assumptions": [],
+          "unknowns": [],
+          "contradictions": [],
+          "failed_gates": [],
+          "unexecuted_validation": [
+            {
+              "id": "UV1",
+              "reason": "design依頼で実装とtest実行は対象外。",
+              "required_runner": "後続実装が動く言語runtimeと契約test runner",
+              "planned_commands": [
+                "後続実装後、T0〜T4のGiven/When/Thenとoracleをtestへ移し、選定runnerの全件実行commandを記録する。言語・project未指定のため実在しないcommandを固定しない。"
+              ],
+              "owner": "後続実装者",
+              "evidence": [
+                "E3",
+                "T0",
+                "T1",
+                "T2",
+                "T3",
+                "T4"
+              ]
+            },
+            {
+              "id": "UV2",
+              "reason": "独立評価者によるSpec照合は今回実行していない。",
+              "required_runner": "要件ownerまたは独立reviewer",
+              "planned_commands": [
+                "E1〜E3とRC1〜RC7を基準にSpecの契約・coverage・boundaryを静的reviewする。"
+              ],
+              "owner": "後続reviewer",
+              "evidence": [
+                "AI1",
+                "R1",
+                "R2"
+              ]
+            }
+          ],
+          "platform_validation": {
+            "required_platforms": [],
+            "executed": [],
+            "unexecuted": [],
+            "parity_result": "not_applicable",
+            "platform_specific_risks": []
+          },
+          "residual_risks": [
+            "実装・test実行・独立reviewの結果は未取得。設計のreadyは対象systemのruntime適合を意味しない。"
+          ],
+          "human_approvals_required": []
+        }
+      }
+    },
+    "platform_context": {
+      "host_platform": "windows",
+      "process_platform": "windows",
+      "artifact_filesystem": "unknown",
+      "target_platforms": [],
+      "shell": "powershell",
+      "architecture": "X64",
+      "filesystem": {
+        "case_sensitive": "unknown",
+        "path_style": "windows",
+        "executable_bit": "unknown"
+      },
+      "toolchain": {
+        "commands": [
+          "PowerShell"
+        ],
+        "versions": [
+          "7.6.6"
+        ]
+      },
+      "platform_requirements": [],
+      "unknowns": [],
+      "scope_note": "保存hostはWindows 10.0.26200。filesystem性質は未検証で今回の業務判断を分岐させない。対象関数のOS要件と実行検証はscope外。保存形式はUTF-8 BOMなし・LF。"
+    },
+    "core_result": {
+      "decision_maturity": {
+        "status": "approved",
+        "owner": "要件owner（入力により承認済み）",
+        "scope": [
+          "R1",
+          "R2",
+          "整数以外は対象外",
+          "帳票consumer",
+          "副作用なし",
+          "今回designのみ"
+        ],
+        "evidence_status": "confirmed",
+        "approval_evidence": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "baseline_version": "not_applicable",
+        "change_control": "入力にversioned baselineはない。frozenとは扱わない。"
+      },
+      "problem_readiness": "ready",
+      "problem_frame": {
+        "actor": "帳票consumerと後続実装者",
+        "context": "数量を帳票向けに表示する単一操作",
+        "desired_state": "承認済みの数量表示契約と境界を参照可能な正本にする",
+        "observed_barrier": "契約とconsumer境界を統合した成果物の作成依頼。現行障害の報告はない。",
+        "impact": "実装者がR1・R2を同じ意味で実現できる"
+      },
+      "interpretations": [
+        {
+          "id": "INT1",
+          "primary": "0〜99の整数を2桁の数量文字列として表示する",
+          "alternative": "範囲外も切詰めて表示する",
+          "discriminator": "R2が範囲外をValueErrorに固定している",
+          "evidence": [
+            "E1"
+          ]
+        }
+      ],
+      "premises": [
+        {
+          "statement": "業務意味とscopeはowner承認済み",
+          "evidence": [
+            "E1",
+            "E3"
+          ],
+          "falsification": "ownerがR1・R2の変更または承認取消を提示する",
+          "impact_if_false": "該当契約を改訂するまで後続実装を停止する",
+          "evidence_status": "confirmed",
+          "assessment": "supported"
+        },
+        {
+          "statement": "保存・外部I/O・時間依存・既存caller移行はない",
+          "evidence": [
+            "E2"
+          ],
+          "falsification": "状態更新・外部通信・移行対象callerが新たにscopeへ加わる",
+          "impact_if_false": "failure、retry、migrationを再評価する",
+          "evidence_status": "confirmed",
+          "assessment": "supported"
+        }
+      ],
+      "causal_chain": {
+        "applicability": "not_applicable",
+        "reason": "既存障害・負債・回帰の原因分析を求めていない。新規設計成果物が対象。",
+        "unmet_capability": "実装者が利用できる数量変換の契約・境界の正本",
+        "demand_evidence": [
+          "E3"
+        ],
+        "success_condition_ids": [
+          "G1",
+          "G2"
+        ]
+      },
+      "candidate_means": [
+        {
+          "id": "MEANS1",
+          "description": "display_quantity単一関数へ範囲判定と表示変換を集める",
+          "decision_maturity": "proposed",
+          "evidence": [
+            "E1",
+            "E2"
+          ]
+        }
+      ],
+      "abstraction_ladder": {
+        "concrete_start": "display_quantity",
+        "levels": [
+          "数量変換",
+          "帳票表示形式の統一"
+        ],
+        "stop_reason": "R1・R2をoracleへ落とせる高さに達した。それ以上の事業価値は今回の判断を変えない。"
+      },
+      "context_packet": {
+        "id": "CTX1",
+        "actors": [
+          "帳票consumer"
+        ],
+        "problem": "帳票から利用する数量変換の契約とconsumer境界を実装者が再利用できる正本として固定する必要がある。",
+        "purposes": [
+          {
+            "id": "P1",
+            "statement": "帳票の数量表示形式を統一する",
+            "evidence": [
+              "E2"
+            ]
+          }
+        ],
+        "success_conditions": [
+          {
+            "id": "G1",
+            "statement": "範囲内整数を同じ2桁文字列へ変換する",
+            "evidence": [
+              "R1"
+            ]
+          },
+          {
+            "id": "G2",
+            "statement": "範囲外整数はValueErrorとして区別する",
+            "evidence": [
+              "R2"
+            ]
+          }
+        ],
+        "context": {
+          "time_or_state": [
+            "時間・永続状態なし"
+          ],
+          "business_background": [
+            "帳票表示"
+          ],
+          "technical_background": [
+            "display_quantityという単一の公開操作。実装言語は指定しない。"
+          ]
+        },
+        "terminology": [
+          {
+            "term": "数量",
+            "meaning": "今回の入力は整数。表示可能範囲は0〜99。",
+            "alternative_meanings": [
+              "小数や文字列の数量は今回対象外"
+            ],
+            "evidence": [
+              "E1"
+            ]
+          },
+          {
+            "term": "2桁文字列",
+            "meaning": "0→\"00\"、9→\"09\"、10→\"10\"、99→\"99\"の数量表示",
+            "alternative_meanings": [
+              "範囲外を切詰める、またはmoduloで丸める意味ではない"
+            ],
+            "evidence": [
+              "E1"
+            ]
+          }
+        ],
+        "rules": [
+          {
+            "id": "R1",
+            "statement": "整数0〜99を2桁文字列に変換する",
+            "kind": "postcondition",
+            "owner": "要件owner",
+            "evidence_status": "confirmed"
+          },
+          {
+            "id": "R2",
+            "statement": "範囲外整数はValueError",
+            "kind": "policy",
+            "owner": "要件owner",
+            "evidence_status": "confirmed"
+          }
+        ],
+        "quality_lens": {
+          "definitions": [
+            {
+              "id": "QL1",
+              "quality": {
+                "reference_model": "project-defined",
+                "level": "project_defined",
+                "characteristic": "not_applicable",
+                "subcharacteristic": "not_applicable",
+                "standard_term": "not_applicable",
+                "display_name_ja": "数量の表示形式の統一",
+                "source_terms_ja": []
+              },
+              "evidence": [
+                "E1",
+                "E2"
+              ]
+            }
+          ],
+          "primary_ids": [
+            "QL1"
+          ],
+          "secondary_ids": [],
+          "constraint_ids": [],
+          "intentionally_not_optimized_ids": [],
+          "tradeoff_decisions": []
+        },
+        "change_boundary": {
+          "id": "CB1",
+          "must_preserve": [
+            "R1",
+            "R2",
+            "整数以外の挙動を規定しない",
+            "帳票の表示形式統一という目的"
+          ],
+          "may_change": [
+            "今回workspace内への設計成果物の保存"
+          ],
+          "must_not_change": [
+            "対象systemのcode",
+            "対象systemの設定",
+            "運用data",
+            "承認済み要件"
+          ],
+          "out_of_scope": [
+            "実装",
+            "test実行",
+            "整数以外の挙動",
+            "保存",
+            "外部I/O",
+            "時間依存",
+            "既存caller移行"
+          ]
+        },
+        "evidence": {
+          "confirmed": [
+            "E1",
+            "E2",
+            "E3"
+          ],
+          "inferred": [],
+          "assumptions": [],
+          "unknowns": [],
+          "contradictions": []
+        }
+      },
+      "selection_gates": [],
+      "platform_context": {
+        "host_platform": "windows",
+        "process_platform": "windows",
+        "artifact_filesystem": "unknown",
+        "target_platforms": [],
+        "shell": "powershell",
+        "architecture": "X64",
+        "filesystem": {
+          "case_sensitive": "unknown",
+          "path_style": "windows",
+          "executable_bit": "unknown"
+        },
+        "toolchain": {
+          "commands": [
+            "PowerShell"
+          ],
+          "versions": [
+            "7.6.6"
+          ]
+        },
+        "platform_requirements": [],
+        "unknowns": [],
+        "scope_note": "保存hostはWindows 10.0.26200。filesystem性質は未検証で今回の業務判断を分岐させない。対象関数のOS要件と実行検証はscope外。保存形式はUTF-8 BOMなし・LF。"
+      },
+      "platform_validation": {
+        "required_platforms": [],
+        "executed": [],
+        "unexecuted": [],
+        "parity_result": "not_applicable",
+        "platform_specific_risks": []
+      },
+      "traceability_seed": [
+        {
+          "purpose_id": "P1",
+          "goal_id": "G1",
+          "requirement_id": "R1"
+        },
+        {
+          "purpose_id": "P1",
+          "goal_id": "G2",
+          "requirement_id": "R2"
+        }
+      ],
+      "reasoning_traces": [
+        {
+          "id": "RT1",
+          "concrete_evidence": [
+            "E1",
+            "E2"
+          ],
+          "actor_or_owner": "帳票consumer",
+          "purpose_or_loss": "数量表示の統一",
+          "violated_rule_or_quality": "現行違反の主張なし。満たす規則はR1・R2。",
+          "decision_or_obligation": "表示変換をOP1へ集約しC2・C3を実装する",
+          "falsifier_or_counterexample": "0が\"0\"、100が\"00\"となる実装",
+          "validation": [
+            "T1",
+            "T2",
+            "T3",
+            "BV1"
+          ]
+        }
+      ],
+      "ai_restatement": {
+        "id": "AI1",
+        "statement": "帳票は整数数量をdisplay_quantityへ渡す。0〜99は2桁文字列、範囲外整数はValueError。表示変換の手順はcallerへ公開しない。今回は契約・境界・未実行test仕様を保存する。",
+        "comparison_basis": [
+          "E1",
+          "E2",
+          "E3",
+          "R1",
+          "R2",
+          "CB1"
+        ],
+        "proposed_status": "matched",
+        "differences": [],
+        "reviewed_by": {
+          "kind": "unresolved",
+          "identity": "独立reviewは未実行",
+          "review_status": "unresolved",
+          "evidence": []
+        },
+        "review_scope_note": "業務意味とscopeは入力で承認済み。復唱自体が人間に受理されたとは主張しない。新しい業務選択は行わない。"
+      },
+      "blockers": []
+    },
+    "requirement_catalog": [
+      {
+        "id": "R1",
+        "actor": "帳票consumer",
+        "context": "数量の表示形式の統一",
+        "trigger": "整数nが0〜99でdisplay_quantityを呼ぶ",
+        "expected_result": "数量nを表す2桁文字列",
+        "prohibited_results": [
+          "1桁文字列",
+          "数値型の返却",
+          "値を変える表示",
+          "範囲内でのValueError"
+        ],
+        "quality_constraint_ids": [
+          "QL1"
+        ],
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1",
+            "E2"
+          ]
+        },
+        "acceptance": [
+          "T1",
+          "T2"
+        ],
+        "existing_behavior": "must-preserve",
+        "decision_maturity": {
+          "status": "approved",
+          "owner": "要件owner（入力により承認済み）",
+          "scope": [
+            "R1",
+            "R2",
+            "整数以外は対象外",
+            "帳票consumer",
+            "副作用なし",
+            "今回designのみ"
+          ],
+          "evidence_status": "confirmed",
+          "approval_evidence": [
+            "E1",
+            "E2",
+            "E3"
+          ],
+          "baseline_version": "not_applicable",
+          "change_control": "入力にversioned baselineはない。frozenとは扱わない。"
+        }
+      },
+      {
+        "id": "R2",
+        "actor": "帳票consumer",
+        "context": "表示可能範囲を外れる整数入力",
+        "trigger": "整数nが0未満または99超でdisplay_quantityを呼ぶ",
+        "expected_result": "ValueErrorを送出する",
+        "prohibited_results": [
+          "値の切詰め",
+          "modulo変換",
+          "成功文字列の返却",
+          "別種の例外"
+        ],
+        "quality_constraint_ids": [
+          "QL1"
+        ],
+        "evidence": {
+          "status": "confirmed",
+          "sources": [
+            "E1"
+          ]
+        },
+        "acceptance": [
+          "T3"
+        ],
+        "existing_behavior": "must-preserve",
+        "decision_maturity": {
+          "status": "approved",
+          "owner": "要件owner（入力により承認済み）",
+          "scope": [
+            "R1",
+            "R2",
+            "整数以外は対象外",
+            "帳票consumer",
+            "副作用なし",
+            "今回designのみ"
+          ],
+          "evidence_status": "confirmed",
+          "approval_evidence": [
+            "E1",
+            "E2",
+            "E3"
+          ],
+          "baseline_version": "not_applicable",
+          "change_control": "入力にversioned baselineはない。frozenとは扱わない。"
+        }
+      }
+    ],
+    "rejection_criteria": [
+      {
+        "id": "RC1",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "condition": "帳票の数量表示以外を目的にする、またはscope外へ条件を追加する",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "core",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      },
+      {
+        "id": "RC2",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "condition": "要件・condition・oracleへのtraceが欠ける",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "verification",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      },
+      {
+        "id": "RC3",
+        "requirement_ids": [
+          "R1"
+        ],
+        "condition": "0〜99を2桁として返さない",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "contract",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      },
+      {
+        "id": "RC4",
+        "requirement_ids": [
+          "R2"
+        ],
+        "condition": "範囲外整数でValueError以外の挙動を返す",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "contract",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      },
+      {
+        "id": "RC5",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "condition": "consumerが書式指定子・内部手順・variant選択を知る必要がある",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "boundary",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      },
+      {
+        "id": "RC6",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "condition": "無承認の契約変更、system code・設定・運用data変更、実装・test実行を行う",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "verification",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      },
+      {
+        "id": "RC7",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ],
+        "condition": "未実行test、独立review、platform適合を検証済みと主張する",
+        "evidence_required": [
+          "E1",
+          "E2",
+          "E3",
+          "対応する契約test仕様と静的trace"
+        ],
+        "gate": "verification",
+        "decision_maturity": {
+          "status": "proposed",
+          "owner": "依頼者"
+        }
+      }
+    ],
+    "implementation_summary": [],
+    "validation": {
+      "executed": [
+        {
+          "id": "V-SPEC",
+          "kind": "自己静的点検",
+          "result": "参照・coverage・scope整合を点検。独立検証ではない。"
+        }
+      ],
+      "passed": [],
+      "failed": [],
+      "unexecuted": [
+        {
+          "id": "UV1",
+          "reason": "design依頼で実装とtest実行は対象外。",
+          "required_runner": "後続実装が動く言語runtimeと契約test runner",
+          "planned_commands": [
+            "後続実装後、T0〜T4のGiven/When/Thenとoracleをtestへ移し、選定runnerの全件実行commandを記録する。言語・project未指定のため実在しないcommandを固定しない。"
+          ],
+          "owner": "後続実装者",
+          "evidence": [
+            "E3",
+            "T0",
+            "T1",
+            "T2",
+            "T3",
+            "T4"
+          ]
+        },
+        {
+          "id": "UV2",
+          "reason": "独立評価者によるSpec照合は今回実行していない。",
+          "required_runner": "要件ownerまたは独立reviewer",
+          "planned_commands": [
+            "E1〜E3とRC1〜RC7を基準にSpecの契約・coverage・boundaryを静的reviewする。"
+          ],
+          "owner": "後続reviewer",
+          "evidence": [
+            "AI1",
+            "R1",
+            "R2"
+          ]
+        }
+      ],
+      "platform_validation": {
+        "required_platforms": [],
+        "executed": [],
+        "unexecuted": [],
+        "parity_result": "not_applicable",
+        "platform_specific_risks": []
+      }
+    },
+    "traceability": [
+      {
+        "purpose_id": "P1",
+        "goal_id": "G1",
+        "requirement_id": "R1",
+        "model_elements": [],
+        "contract_ids": [
+          "C1",
+          "C2",
+          "C4"
+        ],
+        "boundary_operations": [
+          "OP1"
+        ],
+        "implementation_changes": [],
+        "verification_ids": [
+          "T0",
+          "T1",
+          "T2",
+          "T4"
+        ],
+        "evidence": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "connections": [
+          {
+            "from_kind": "purpose",
+            "from_id": "P1",
+            "to_kind": "goal",
+            "to_id": "G1",
+            "rationale": "帳票表示の統一にはこの成功・拒否結果が必要。",
+            "validation_ids": [
+              "T0",
+              "T1",
+              "T2",
+              "T4"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "goal",
+            "from_id": "G1",
+            "to_kind": "requirement",
+            "to_id": "R1",
+            "rationale": "承認済みR1・R2が成功条件を観測可能にする。",
+            "validation_ids": [
+              "T0",
+              "T1",
+              "T2",
+              "T4"
+            ],
+            "evidence": [
+              "E1"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "R1",
+            "to_kind": "contract",
+            "to_id": "C1",
+            "rationale": "R1をC1の呼出領域・表示・failure・副作用保証で具体化する。",
+            "validation_ids": [
+              "T0"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "R1",
+            "to_kind": "contract",
+            "to_id": "C2",
+            "rationale": "R1をC2の呼出領域・表示・failure・副作用保証で具体化する。",
+            "validation_ids": [
+              "T1",
+              "T2"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "R1",
+            "to_kind": "contract",
+            "to_id": "C4",
+            "rationale": "R1をC4の呼出領域・表示・failure・副作用保証で具体化する。",
+            "validation_ids": [
+              "T4"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "C1",
+            "to_kind": "boundary",
+            "to_id": "OP1",
+            "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+            "validation_ids": [
+              "BV1"
+            ],
+            "evidence": [
+              "CP1",
+              "BP1"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "C2",
+            "to_kind": "boundary",
+            "to_id": "OP1",
+            "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+            "validation_ids": [
+              "BV1"
+            ],
+            "evidence": [
+              "CP1",
+              "BP1"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "C4",
+            "to_kind": "boundary",
+            "to_id": "OP1",
+            "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+            "validation_ids": [
+              "BV1"
+            ],
+            "evidence": [
+              "CP1",
+              "BP1"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T0",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T0"
+            ],
+            "evidence": [
+              "CP1",
+              "T0"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T1",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T1"
+            ],
+            "evidence": [
+              "CP1",
+              "T1"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T2",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T2"
+            ],
+            "evidence": [
+              "CP1",
+              "T2"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T4",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T4"
+            ],
+            "evidence": [
+              "CP1",
+              "T4"
+            ]
+          }
+        ],
+        "not_applicable": [
+          {
+            "target_kind": "model",
+            "target_id_or_scope": "独立したdomain model成果物",
+            "reason": "承認済み整数値と無状態変換だけで契約化できる。状態モデルの追加は不要。",
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "target_kind": "change",
+            "target_id_or_scope": "対象systemへの変更",
+            "reason": "designのみ。実装・設定・data変更は禁止。",
+            "evidence": [
+              "E3"
+            ]
+          }
+        ],
+        "status": "covered"
+      },
+      {
+        "purpose_id": "P1",
+        "goal_id": "G2",
+        "requirement_id": "R2",
+        "model_elements": [],
+        "contract_ids": [
+          "C1",
+          "C3",
+          "C4"
+        ],
+        "boundary_operations": [
+          "OP1"
+        ],
+        "implementation_changes": [],
+        "verification_ids": [
+          "T0",
+          "T3",
+          "T4"
+        ],
+        "evidence": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "connections": [
+          {
+            "from_kind": "purpose",
+            "from_id": "P1",
+            "to_kind": "goal",
+            "to_id": "G2",
+            "rationale": "帳票表示の統一にはこの成功・拒否結果が必要。",
+            "validation_ids": [
+              "T0",
+              "T3",
+              "T4"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "goal",
+            "from_id": "G2",
+            "to_kind": "requirement",
+            "to_id": "R2",
+            "rationale": "承認済みR1・R2が成功条件を観測可能にする。",
+            "validation_ids": [
+              "T0",
+              "T3",
+              "T4"
+            ],
+            "evidence": [
+              "E1"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "R2",
+            "to_kind": "contract",
+            "to_id": "C1",
+            "rationale": "R2をC1の呼出領域・表示・failure・副作用保証で具体化する。",
+            "validation_ids": [
+              "T0"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "R2",
+            "to_kind": "contract",
+            "to_id": "C3",
+            "rationale": "R2をC3の呼出領域・表示・failure・副作用保証で具体化する。",
+            "validation_ids": [
+              "T3"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "requirement",
+            "from_id": "R2",
+            "to_kind": "contract",
+            "to_id": "C4",
+            "rationale": "R2をC4の呼出領域・表示・failure・副作用保証で具体化する。",
+            "validation_ids": [
+              "T4"
+            ],
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "C1",
+            "to_kind": "boundary",
+            "to_id": "OP1",
+            "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+            "validation_ids": [
+              "BV1"
+            ],
+            "evidence": [
+              "CP1",
+              "BP1"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "C3",
+            "to_kind": "boundary",
+            "to_id": "OP1",
+            "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+            "validation_ids": [
+              "BV1"
+            ],
+            "evidence": [
+              "CP1",
+              "BP1"
+            ]
+          },
+          {
+            "from_kind": "contract",
+            "from_id": "C4",
+            "to_kind": "boundary",
+            "to_id": "OP1",
+            "rationale": "帳票が単一公開操作を呼べばこの保証を得られる責務境界とする。",
+            "validation_ids": [
+              "BV1"
+            ],
+            "evidence": [
+              "CP1",
+              "BP1"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T0",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T0"
+            ],
+            "evidence": [
+              "CP1",
+              "T0"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T3",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T3"
+            ],
+            "evidence": [
+              "CP1",
+              "T3"
+            ]
+          },
+          {
+            "from_kind": "boundary",
+            "from_id": "OP1",
+            "to_kind": "verification",
+            "to_id": "T4",
+            "rationale": "公開操作の観測だけで契約への適否を反証する。",
+            "validation_ids": [
+              "T4"
+            ],
+            "evidence": [
+              "CP1",
+              "T4"
+            ]
+          }
+        ],
+        "not_applicable": [
+          {
+            "target_kind": "model",
+            "target_id_or_scope": "独立したdomain model成果物",
+            "reason": "承認済み整数値と無状態変換だけで契約化できる。状態モデルの追加は不要。",
+            "evidence": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "target_kind": "change",
+            "target_id_or_scope": "対象systemへの変更",
+            "reason": "designのみ。実装・設定・data変更は禁止。",
+            "evidence": [
+              "E3"
+            ]
+          }
+        ],
+        "status": "covered"
+      }
+    ],
+    "findings": [],
+    "function_artifact_refs": [
+      {
+        "id": "CP1",
+        "path": "#/reproducible_development_result/mode_artifact/artifact/contract_package"
+      },
+      {
+        "id": "BP1",
+        "path": "#/reproducible_development_result/mode_artifact/artifact/boundary_package"
+      }
+    ],
+    "decision": {
+      "status": "pass",
+      "artifact_readiness": "ready",
+      "engineering_status": "planned",
+      "release_status": "not_applicable",
+      "decision_maturity": {
+        "status": "proposed",
+        "owner": "依頼者",
+        "scope": [
+          "今回のImplementation Specと実装上の責務配置"
+        ],
+        "evidence_status": "confirmed",
+        "approval_evidence": [],
+        "baseline_version": "not_applicable",
+        "change_control": "R1・R2またはscopeを変える場合はownerの再承認が必要。"
+      },
+      "next_phase": {
+        "name": "implementation",
+        "status": "awaiting_approval",
+        "reasons": [
+          "今回の依頼はdesignと成果物保存に限定。実装着手には別途依頼が必要。R1・R2の意味の再承認は不要。"
+        ],
+        "human_approvals_required": [
+          "後続の実装・test実行の作業権限"
+        ]
+      },
+      "evidence": [
+        "E1",
+        "E2",
+        "E3",
+        "FP-CONTRACT",
+        "FP-BOUNDARY",
+        "V-SPEC"
+      ],
+      "assumptions": [],
+      "unknowns": [],
+      "contradictions": [],
+      "failed_gates": [],
+      "unexecuted_validation": [
+        {
+          "id": "UV1",
+          "reason": "design依頼で実装とtest実行は対象外。",
+          "required_runner": "後続実装が動く言語runtimeと契約test runner",
+          "planned_commands": [
+            "後続実装後、T0〜T4のGiven/When/Thenとoracleをtestへ移し、選定runnerの全件実行commandを記録する。言語・project未指定のため実在しないcommandを固定しない。"
+          ],
+          "owner": "後続実装者",
+          "evidence": [
+            "E3",
+            "T0",
+            "T1",
+            "T2",
+            "T3",
+            "T4"
+          ]
+        },
+        {
+          "id": "UV2",
+          "reason": "独立評価者によるSpec照合は今回実行していない。",
+          "required_runner": "要件ownerまたは独立reviewer",
+          "planned_commands": [
+            "E1〜E3とRC1〜RC7を基準にSpecの契約・coverage・boundaryを静的reviewする。"
+          ],
+          "owner": "後続reviewer",
+          "evidence": [
+            "AI1",
+            "R1",
+            "R2"
+          ]
+        }
+      ],
+      "platform_validation": {
+        "required_platforms": [],
+        "executed": [],
+        "unexecuted": [],
+        "parity_result": "not_applicable",
+        "platform_specific_risks": []
+      },
+      "residual_risks": [
+        "実装・test実行・独立reviewの結果は未取得。設計のreadyは対象systemのruntime適合を意味しない。"
+      ],
+      "human_approvals_required": []
+    },
+    "next_action": "後続実装時に本Specを参照し、契約testを実装・実行する。現在は保存済み設計成果物として完了。"
+  }
+}

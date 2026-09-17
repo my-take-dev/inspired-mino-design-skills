@@ -1,0 +1,12 @@
+mode: "design"
+required_platforms: []
+raw_request: "数量変換の契約とconsumer境界をまとめて設計してください。後続の実装者が正本として使う成果物を保存し、回答は短くしてください。"
+confirmed_evidence:
+  - "owner承認済みR1: display_quantityは整数0〜99を2桁文字列に変換する。R2: 範囲外整数はValueError。整数以外は今回対象外。"
+  - "consumerは帳票。目的は表示形式を統一すること。保存、外部I/O、時間依存、既存callerの移行はない。"
+  - "業務意味と今回の範囲は承認済み。実装とtest実行は今回の依頼に含まない。"
+known_unknowns: []
+allowed_assumptions:
+  - "説明用の名称と今回成果物のlocal ID。"
+prohibited_changes:
+  - "対象systemのcode・設定・運用dataの変更"
