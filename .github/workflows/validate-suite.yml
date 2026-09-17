@@ -19,11 +19,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+
       - name: Record runtime evidence
         run: |
           printf 'GITHUB_SHA=%s\nRUNNER_OS=%s\nRUNNER_ARCH=%s\n' "$GITHUB_SHA" "$RUNNER_OS" "$RUNNER_ARCH"
           uname -a
           bash --version
+          python3 --version
           locale
           locale -a
           for command_name in awk od mktemp find grep sed sort tail tr wc; do
@@ -32,28 +37,28 @@ jobs:
 
       - name: Reject non-portable Bash and GNU sed constructs
         run: |
-          if grep -R -nE 'declare[[:space:]]+-A|mapfile|readarray|sed[[:space:]]+-i|0,/[^/]*/|-(mindepth|maxdepth)' .agents/skills/mino-core/scripts; then
+          if grep -R -nE 'declare[[:space:]]+-A|mapfile|readarray|sed[[:space:]]+-i|0,/[^/]*/|-(mindepth|maxdepth)' maintenance/scripts; then
             exit 1
           fi
 
       - name: Validate shell syntax
         run: |
-          for script_file in .agents/skills/mino-core/scripts/*.sh; do
+          for script_file in maintenance/scripts/*.sh; do
             bash -n "$script_file"
           done
 
       - name: Validate suite
-        run: bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
+        run: bash maintenance/scripts/validate-suite.sh --skills-root .agents/skills
 
       - name: Test validator fixtures
-        run: bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+        run: bash maintenance/scripts/test-validator-fixtures.sh --skills-root .agents/skills
 
   linux-bash-3-2:
     name: Linux Bash 3.2.57
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
-      BASH32_IMAGE: bash:3.2.57
+      BASH32_IMAGE: bash:3.2.57-alpine3.22
     steps:
       - uses: actions/checkout@v6
 
@@ -64,11 +69,17 @@ jobs:
           docker image inspect --format '{{json .RepoDigests}}' "$BASH32_IMAGE"
           docker run --rm "$BASH32_IMAGE" bash --version
 
+      - name: Build Bash 3.2 runtime with Python
+        run: |
+          docker build --build-arg "BASH32_IMAGE=$BASH32_IMAGE" --file .github/docker/bash32.Dockerfile --tag mino-bash32-python .github/docker
+          docker image inspect --format '{{.Id}}' mino-bash32-python
+          docker run --rm mino-bash32-python python3 --version
+
       - name: Validate suite with Bash 3.2
-        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace:ro" --workdir /workspace "$BASH32_IMAGE" bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
+        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace:ro" --workdir /workspace mino-bash32-python bash maintenance/scripts/validate-suite.sh --skills-root .agents/skills
 
       - name: Test validator fixtures with Bash 3.2
-        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace:ro" --workdir /workspace "$BASH32_IMAGE" bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+        run: docker run --rm --volume "$GITHUB_WORKSPACE:/workspace:ro" --workdir /workspace mino-bash32-python bash maintenance/scripts/test-validator-fixtures.sh --skills-root .agents/skills
 
   native-macos-bin-bash:
     name: Native macOS /bin/bash
@@ -80,6 +91,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
       - name: Record native runtime evidence
         run: |
           printf 'GITHUB_SHA=%s\nRUNNER_OS=%s\nRUNNER_ARCH=%s\n' "$GITHUB_SHA" "$RUNNER_OS" "$RUNNER_ARCH"
@@ -88,6 +103,7 @@ jobs:
           uname -a
           uname -m
           /bin/bash --version
+          python3 --version
           locale
           locale -a
           for command_name in awk od mktemp find grep sed sort tail tr wc; do
@@ -96,18 +112,55 @@ jobs:
 
       - name: Reject non-portable Bash and GNU sed constructs
         run: |
-          if grep -R -nE 'declare[[:space:]]+-A|mapfile|readarray|sed[[:space:]]+-i|0,/[^/]*/|-(mindepth|maxdepth)' .agents/skills/mino-core/scripts; then
+          if grep -R -nE 'declare[[:space:]]+-A|mapfile|readarray|sed[[:space:]]+-i|0,/[^/]*/|-(mindepth|maxdepth)' maintenance/scripts; then
             exit 1
           fi
 
       - name: Validate shell syntax
         run: |
-          for script_file in .agents/skills/mino-core/scripts/*.sh; do
+          for script_file in maintenance/scripts/*.sh; do
             /bin/bash -n "$script_file"
           done
 
       - name: Validate suite
-        run: /bin/bash .agents/skills/mino-core/scripts/validate-suite.sh --skills-root .agents/skills
+        run: /bin/bash maintenance/scripts/validate-suite.sh --skills-root .agents/skills
 
       - name: Test validator fixtures
-        run: /bin/bash .agents/skills/mino-core/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+        run: /bin/bash maintenance/scripts/test-validator-fixtures.sh --skills-root .agents/skills
+
+  native-windows:
+    name: Native Windows ${{ matrix.shell }}
+    runs-on: windows-2025
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [powershell, pwsh]
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    env:
+      PYTHONUTF8: '0'
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        id: python
+        with:
+          python-version: '3.12'
+
+      - name: Record native runtime evidence
+        run: |
+          $PSVersionTable
+          python --version
+          python -c "import locale,sys; print(locale.getencoding(), sys.flags.utf8_mode)"
+
+      - name: Validate suite
+        env:
+          MINO_PYTHON: ${{ steps.python.outputs.python-path }}
+        run: ./maintenance/scripts/validate-suite.ps1 -SkillsRoot .agents/skills
+
+      - name: Test validator fixtures
+        env:
+          MINO_PYTHON: ${{ steps.python.outputs.python-path }}
+        run: ./maintenance/scripts/test-validator-fixtures.ps1 -SkillsRoot .agents/skills
